@@ -110,7 +110,7 @@
 
 
 	// module
-	exports.push([module.id, "\n\nbody {\n  background: cyan;\n}", ""]);
+	exports.push([module.id, ".icon {\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n.icon svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n.mojs-player {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: cyan;\n  font-size: 12px;\n  font-size: 0.75rem;\n}\n\n", ""]);
 
 	// exports
 

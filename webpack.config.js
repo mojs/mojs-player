@@ -20,7 +20,7 @@ module.exports = {
     ]
   },
   postcss: function () {
-    return [ require('autoprefixer'), require('precss'), require('postcss-cssnext') ];
+    return [ require('precss'), require('postcss-cssnext') ];
   },
   output: {
     path:         __dirname + '/build',
