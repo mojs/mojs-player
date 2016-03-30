@@ -1,0 +1,15 @@
+
+@import 'assets/globals.postcss.css';
+@import 'blocks/icons.postcss.css';
+@import 'blocks/player.postcss.css';
+
+:root {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+body {
+  background-color: cyan;
+  font-size: calc(12 * $PX);
+}
+
