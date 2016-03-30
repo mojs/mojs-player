@@ -1,0 +1,15 @@
+
+.mojs-player {
+  background-color:   color(#3A0839 alpha(85%));
+  height:             calc( 40 * $PX );
+  width:              calc( 100 * $PX );
+  display:            inline-block;
+  
+  position:           fixed;
+  bottom:             calc( 1.5 * $GS );
+  left:               50%;
+  transform:          translateX( -50% );
+  border-radius:      $BRADIUS;
+  
+  box-shadow:         calc($PX) calc($PX) calc( 1*$PX ) rgba(0,0,0,.25)
+}
