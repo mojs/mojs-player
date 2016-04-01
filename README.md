@@ -13,4 +13,4 @@ Then
 webpack-dev-server
 ```
 
-Open `localhost:8080`
+Open `http://localhost:8080/webpack-dev-server/`
