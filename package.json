@@ -44,6 +44,7 @@
     "postcss-loader": "^0.8.2",
     "precss": "^1.4.0",
     "style-loader": "^0.13.1",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
   }
 }
