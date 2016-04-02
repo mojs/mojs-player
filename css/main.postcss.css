@@ -9,7 +9,7 @@
 }
 
 body {
-  background-color: cyan;
+  background-color: #f1f1f1;
   font-size: calc(12 * $PX);
 }
 
