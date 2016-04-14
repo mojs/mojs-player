@@ -108,6 +108,10 @@
 
 	var _handle2 = _interopRequireDefault(_handle);
 
+	var _track = __webpack_require__(119);
+
+	var _track2 = _interopRequireDefault(_track);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	__webpack_require__(115);
@@ -140,27 +144,46 @@
 
 
 	  Slider.prototype._render = function _render() {
+	    var _this2 = this;
+
 	    var p = this._props;
 
 	    this.el = document.createElement('div');
-	    this.track = document.createElement('div');
+	    // this.track  = document.createElement('div');
 
 	    this.el.classList.add('' + p.className);
-	    this.track.classList.add(p.className + '__track');
+	    // this.track .classList.add(`${p.className}__track`);
 
-	    this.el.appendChild(this.track);
+	    // this.el.appendChild( this.track );
 	    p.parent.appendChild(this.el);
+
+	    this.track = new _track2.default({
+	      parent: this.el
+	      // onProgress: (p) => { this._onHandleProgress( p ); }
+	    });
+	    this.el.appendChild(this.track.el);
 
 	    this.handle = new _handle2.default({
 	      parent: this.el,
 	      onProgress: function onProgress(p) {
-	        console.log(p);
+	        _this2._onHandleProgress(p);
 	      }
 	    });
-
 	    this.el.appendChild(this.handle.el);
 
 	    this.handle.setProgress(.5);
+	    this.track.setProgress(.5);
+	  };
+	  /*
+	    Method that is invoked on handle progress change.
+	    @private
+	    @param {Number} Progress [0...1].
+	  */
+
+
+	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
+
+	    // this._setTrackProgress( p );
 	  };
 
 	  return Slider;
@@ -1737,6 +1760,7 @@
 	  /*
 	    Method to set handle progress.
 	    @public
+	    @param {Number} Progress [0...1].
 	    @returns this.
 	  */
 
@@ -1752,14 +1776,26 @@
 	  /*
 	    Method to set handle shift.
 	    @public
-	    @returns this.
+	    @param {Number} Shift in `px`.
+	    @returns {Number}.
 	  */
 
 
 	  Handle.prototype._setShift = function _setShift(shift) {
 	    shift = _moJs2.default.h.clamp(shift, 0, this._maxWidth);
-	    this.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
+	    this._applyShift(shift);
 	    this._onProgress(shift);
+	    return shift;
+	  };
+	  /*
+	    Method to apply shift to the DOMElement.
+	    @private
+	    @param {Number} Shift in pixels.
+	  */
+
+
+	  Handle.prototype._applyShift = function _applyShift(shift) {
+	    this.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
 	  };
 	  /*
 	    Method to declare properties.
@@ -12647,7 +12683,7 @@
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n.timeline-slider {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:             1.875rem\n  /*outline:            1px solid cyan;*/\n}\n.timeline-slider__track {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n.timeline-slider__track:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -15px;\n  top:           -0.9375rem;\n  width:           100%;\n  height:           30px;\n  height:           1.875rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n.timeline-slider .handle {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           2\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n.timeline-slider {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:             1.875rem\n}\n.timeline-slider .handle {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           2\n}\n\n", ""]);
 
 	// exports
 
@@ -12688,6 +12724,143 @@
 
 	// module
 	exports.push([module.id, ".icon {\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n.icon svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n.mojs-player {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 119 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _handle = __webpack_require__(78);
+
+	var _handle2 = _interopRequireDefault(_handle);
+
+	var _hammerjs = __webpack_require__(79);
+
+	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
+	var _moJs = __webpack_require__(80);
+
+	var _moJs2 = _interopRequireDefault(_moJs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(120);
+
+	var Track = function (_Handle) {
+	  (0, _inherits3.default)(Track, _Handle);
+
+	  function Track() {
+	    (0, _classCallCheck3.default)(this, Track);
+	    return (0, _possibleConstructorReturn3.default)(this, _Handle.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Track.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: 'track',
+	      parent: document.body,
+	      onProgress: null
+	    };
+	  };
+	  /*
+	    Method to apply shift to the DOMElement.
+	    @private
+	    @overrides @ Handle.
+	    @param {Number} Shift in pixels.
+	  */
+
+
+	  Track.prototype._applyShift = function _applyShift(shift) {
+	    var transform = 'scaleX( ' + shift + ' ) translateZ(0)';
+	    console.log(transform);
+	    this.trackProgressEl.style.transform = transform;
+	  };
+	  /*
+	    Method to add DOM elements on render.
+	    @private
+	  */
+
+
+	  Track.prototype._addElements = function _addElements() {
+	    var p = this._props,
+	        track = document.createElement('div'),
+	        trackP = document.createElement('div');
+
+	    this.el = document.createElement('div');
+	    this.el.classList.add('' + p.className);
+
+	    track.classList.add(p.className + '__track');
+	    trackP.classList.add(p.className + '__track-progress');
+	    this.trackProgressEl = trackP;
+
+	    this.el.appendChild(track);
+	    this.el.appendChild(trackP);
+	  };
+
+	  return Track;
+	}(_handle2.default);
+
+	exports.default = Track;
+
+/***/ },
+/* 120 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(121);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(114)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./track.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./track.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 121 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(113)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".track {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n.track__track {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n.track__track:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n.track__track-progress {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  width:           0.0625rem;\n  background:           yellow;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
 
 	// exports
 

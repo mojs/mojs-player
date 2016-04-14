@@ -1,0 +1,55 @@
+
+@import '../assets/globals.postcss.css';
+
+$height: 40;
+.track {
+  position:           relative;
+  width:              100%;
+  height:             100%;
+  overflow:           hidden;
+  /*outline:            1px solid cyan;*/
+  
+  &__track {
+    position:         absolute;
+    top:              50%;
+    left:             0;
+    
+    width:            100%;
+    height:           calc( $PX );
+    
+    background:       #FFF;
+    box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5);
+    
+    &:after {
+      content:        '';
+      position:       absolute;
+      left:           0;
+      top:            calc( - $height/2 * $PX );
+      width:          100%;
+      height:         calc( $height * $PX );
+      cursor:         pointer;
+      /*background-color: yellow;*/
+    }
+  }
+
+  &__track-progress {
+    position:         absolute;
+    left:             0;
+    top:              50%;
+    margin-top:       calc( -1 * $PX );
+    height:           calc( 3*$PX );
+    width:            calc( 1*$PX );
+    background:       yellow;
+    z-index:          1;
+    transform-origin: left center;
+  }
+
+  /*$handleHeight: 13;
+  & .handle {
+    position:       absolute;
+    left:           0;
+    top:            50%;
+    z-index:        2;
+  }*/
+}
+
