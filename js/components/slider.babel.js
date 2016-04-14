@@ -34,8 +34,8 @@ class Slider extends Module {
     p.parent.appendChild( this.el );
 
     this.track = new Track({
-      parent: this.el
-      // onProgress: (p) => { this._onHandleProgress( p ); }
+      parent: this.el,
+      onProgress: (p) => { this._onTrackProgress( p ); }
     });
     this.el.appendChild( this.track.el );
 
@@ -54,9 +54,29 @@ class Slider extends Module {
     @param {Number} Progress [0...1].
   */
   _onHandleProgress ( p ) {
-
-    // this._setTrackProgress( p );
+    this.track.setProgress( p, false );
   }
+  /*
+    Method that is invoked on track progress change.
+    @private
+    @param {Number} Progress [0...1].
+  */
+  _onTrackProgress ( p ) {
+    this.handle.setProgress( p, false );
+  }
+  /*
+    Method to initialize HammerJS an set up all even listeners.
+    @private
+  */
+  // _hammerTime () {
+  //   let hammerTime = HamerJS(this.el);
+  //   hammerTime.on('pan', ( e ) => {
+  //     this._delta = e.deltaX;
+  //     this._setShift( this._shift + e.deltaX );
+  //   });
+
+  //   hammerTime.on('panend', ( e ) => { this._saveDelta(); });
+  // }
 }
 
 export default Slider;
