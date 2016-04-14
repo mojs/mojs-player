@@ -21,6 +21,7 @@ class Handle extends Module {
   /*
     Method to set handle progress.
     @public
+    @param {Number} Progress [0...1].
     @returns this.
   */
   setProgress ( progress ) {
@@ -34,12 +35,22 @@ class Handle extends Module {
   /*
     Method to set handle shift.
     @public
-    @returns this.
+    @param {Number} Shift in `px`.
+    @returns {Number}.
   */
   _setShift ( shift ) {
     shift = mojs.h.clamp( shift, 0, this._maxWidth );
-    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
+    this._applyShift( shift );
     this._onProgress( shift );
+    return shift;
+  }
+  /*
+    Method to apply shift to the DOMElement.
+    @private
+    @param {Number} Shift in pixels.
+  */
+  _applyShift ( shift ) {
+    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
   }
   /*
     Method to declare properties.
