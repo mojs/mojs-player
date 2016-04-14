@@ -1,0 +1,53 @@
+
+@import '../assets/globals.postcss.css';
+
+$handleHeight: 13;
+.handle {
+  margin-left:    calc( - $handleHeight/2 * $PX );
+  margin-top:     calc( - $handleHeight/2 * $PX );
+  
+  width:          calc( $handleHeight * $PX );
+  height:         calc( $handleHeight * $PX );
+  
+  cursor:         pointer;
+  transform:      translateX(0) translateZ(0);
+  
+  &__inner,
+  &__shadow {
+    position:       absolute;
+    left:           0;
+    top:            0;
+    z-index:        1;
+    
+    width:          100%;
+    height:         100%;
+    border-radius:  50%;
+    cursor:         pointer;
+    transform:      translateZ(0);
+  }
+  
+  &__inner {
+    background:     #FFF;
+  }
+
+  &__shadow {
+    box-shadow:     calc( $PX ) calc( $PX ) calc( 2*$PX ) black;
+    opacity:        .35;
+    z-index:        0;
+  }
+
+  &:hover &__inner,
+  &:hover &__shadow {
+    transform:      scale(1.1) translateZ(0);
+  }
+
+  &:active &__inner {
+    transform:      scale(1.2) translateZ(0);
+    /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/
+  }
+  &:active &__shadow {
+    opacity:        .85;
+    transform:      scale(1) translateZ(0);
+  }
+}
+

@@ -1,0 +1,43 @@
+
+@import '../assets/globals.postcss.css';
+/*@import './handle.postcss.css';*/
+
+$height: 30;
+.timeline-slider {
+  position:           relative;
+  width:              100%;
+  height:             calc( $height * $PX );
+  /*outline:            1px solid cyan;*/
+  
+  &__track {
+    position:         absolute;
+    top:              50%;
+    left:             0;
+    
+    width:            100%;
+    height:           calc( $PX );
+    
+    background:       #FFF;
+    box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5);
+    
+    &:after {
+      content:        '';
+      position:       absolute;
+      left:           0;
+      top:            calc(-($height/2) * $PX);
+      width:          100%;
+      height:         calc( $height * $PX);
+      cursor:         pointer;
+      /*background-color: yellow;*/
+    }
+  }
+
+  $handleHeight: 13;
+  & .handle {
+    position:       absolute;
+    left:           0;
+    top:            50%;
+    z-index:        2;
+  }
+}
+

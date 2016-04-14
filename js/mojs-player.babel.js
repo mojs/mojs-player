@@ -1,6 +1,9 @@
 
-require('css/main.postcss.css')
+import Slider from './components/slider';
 
+let slider = new Slider({ className: 'timeline-slider' });
+
+require('css/main.postcss.css')
 const Main = {
   /*
     Initialization method.

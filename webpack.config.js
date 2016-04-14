@@ -9,7 +9,7 @@ module.exports = {
   ],
   module: {
     loaders: [
-      { test: /\.(jsx|es6.js|babel.js)$/, exclude: /node_modules/, loaders: ['babel-loader?presets[]=es2015,plugins[]=transform-runtime'] },
+      { test: /\.(jsx|es6.js|babel.js)$/, exclude: /node_modules/, loaders: ['babel-loader?presets[]=es2015-loose,plugins[]=transform-runtime'] },
       { test: /\.jade$/, loaders: ['jade'] },
       { test: /\.(postcss.css)$/,  loader: "style-loader!css-loader!postcss-loader" },
       { test: /\.html$/, loader: 'raw-loader' },

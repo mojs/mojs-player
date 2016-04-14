@@ -2,6 +2,7 @@
 @import 'assets/globals.postcss.css';
 @import 'blocks/icons.postcss.css';
 @import 'blocks/player.postcss.css';
+/*@import 'blocks/timeline-slider.postcss.css'*/
 
 :root {
   font-size: 16px;
@@ -11,5 +12,7 @@
 body {
   background-color: #f1f1f1;
   font-size: calc(12 * $PX);
+  padding-top: 50px;
+  /*background-color: #333;*/
 }
 
