@@ -151,8 +151,16 @@
 	    this.el.appendChild(this.track);
 	    p.parent.appendChild(this.el);
 
-	    this.handle = new _handle2.default({ parent: this.el });
+	    this.handle = new _handle2.default({
+	      parent: this.el,
+	      onProgress: function onProgress(p) {
+	        console.log(p);
+	      }
+	    });
+
 	    this.el.appendChild(this.handle.el);
+
+	    this.handle.setProgress(.5);
 	  };
 
 	  return Slider;
@@ -1727,6 +1735,33 @@
 	    };
 	  };
 	  /*
+	    Method to set handle progress.
+	    @public
+	    @returns this.
+	  */
+
+
+	  Handle.prototype.setProgress = function setProgress(progress) {
+	    var shift = this._progressToShift(progress);
+	    this._setShift(shift);
+	    // calc delta and save it
+	    this._delta = shift - this._shift;
+	    this._saveDelta();
+	    return this;
+	  };
+	  /*
+	    Method to set handle shift.
+	    @public
+	    @returns this.
+	  */
+
+
+	  Handle.prototype._setShift = function _setShift(shift) {
+	    shift = _moJs2.default.h.clamp(shift, 0, this._maxWidth);
+	    this.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
+	    this._onProgress(shift);
+	  };
+	  /*
 	    Method to declare properties.
 	    @private
 	    @overrides @ Module.
@@ -1794,13 +1829,21 @@
 	    var hammerTime = (0, _hammerjs2.default)(this.el);
 	    hammerTime.on('pan', function (e) {
 	      _this2._delta = e.deltaX;
-	      var shift = _moJs2.default.h.clamp(_this2._shift + e.deltaX, 0, _this2._maxWidth);
-	      _this2.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
+	      _this2._setShift(_this2._shift + e.deltaX);
 	    });
 
 	    hammerTime.on('panend', function (e) {
-	      _this2._shift += _this2._delta;
+	      _this2._saveDelta();
 	    });
+	  };
+	  /*
+	    Method to add _delta to _shift.
+	    @private
+	  */
+
+
+	  Handle.prototype._saveDelta = function _saveDelta() {
+	    this._shift += this._delta;
 	  };
 	  /*
 	    Method to call onProgress callback.
@@ -1812,7 +1855,8 @@
 	  Handle.prototype._onProgress = function _onProgress(shift) {
 	    var p = this._props,
 	        progress = this._shiftToProgress(shift);
-	    if (typeof p.onProgress === 'function') {
+	    if (typeof p.onProgress === 'function' && this._progress !== progress) {
+	      this._progress = progress;
 	      p.onProgress.call(this, progress);
 	    }
 	  };
@@ -1825,7 +1869,18 @@
 
 
 	  Handle.prototype._shiftToProgress = function _shiftToProgress(shift) {
-	    return this._maxWidth / shift;
+	    return shift / this._maxWidth;
+	  };
+	  /*
+	    Method to progress shift to shift.
+	    @private
+	    @param   {Number} Progress [0...1].
+	    @returns {Number} Shift in `px`.
+	   */
+
+
+	  Handle.prototype._progressToShift = function _progressToShift(progress) {
+	    return progress * this._maxWidth;
 	  };
 
 	  return Handle;

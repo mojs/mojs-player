@@ -32,8 +32,14 @@ class Slider extends Module {
     this.el.appendChild( this.track );
     p.parent.appendChild( this.el );
 
-    this.handle = new Handle({ parent: this.el });
+    this.handle = new Handle({
+      parent: this.el,
+      onProgress: (p) => { console.log(p); }
+    });
+    
     this.el.appendChild( this.handle.el );
+
+    this.handle.setProgress(.5);
   }
 }
 

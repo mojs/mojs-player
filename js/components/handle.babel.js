@@ -4,6 +4,7 @@ import mojs    from 'mo-js';
 
 
 require('css/blocks/handle.postcss.css');
+
 class Handle extends Module {
   /*
     Method to declare _defaults.
@@ -16,6 +17,29 @@ class Handle extends Module {
       parent:     document.body,
       onProgress: null
     }
+  }
+  /*
+    Method to set handle progress.
+    @public
+    @returns this.
+  */
+  setProgress ( progress ) {
+    let shift = this._progressToShift( progress );
+    this._setShift( shift );
+    // calc delta and save it
+    this._delta = shift - this._shift;
+    this._saveDelta();
+    return this;
+  }
+  /*
+    Method to set handle shift.
+    @public
+    @returns this.
+  */
+  _setShift ( shift ) {
+    shift = mojs.h.clamp( shift, 0, this._maxWidth );
+    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
+    this._onProgress( shift );
   }
   /*
     Method to declare properties.
@@ -71,12 +95,16 @@ class Handle extends Module {
     let hammerTime = HamerJS(this.el);
     hammerTime.on('pan', ( e ) => {
       this._delta = e.deltaX;
-      let shift = mojs.h.clamp( this._shift + e.deltaX, 0, this._maxWidth );
-      this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
+      this._setShift( this._shift + e.deltaX );
     });
 
-    hammerTime.on('panend', ( e ) => { this._shift += this._delta; });
+    hammerTime.on('panend', ( e ) => { this._saveDelta(); });
   }
+  /*
+    Method to add _delta to _shift.
+    @private
+  */
+  _saveDelta () { this._shift += this._delta; }
   /*
     Method to call onProgress callback.
     @private
@@ -85,7 +113,8 @@ class Handle extends Module {
   _onProgress ( shift ) {
     let p        = this._props,
         progress = this._shiftToProgress( shift );
-    if ( typeof p.onProgress === 'function' ) {
+    if ( typeof p.onProgress === 'function' && this._progress !== progress) {
+      this._progress = progress;
       p.onProgress.call( this, progress );
     }
   }
@@ -96,7 +125,17 @@ class Handle extends Module {
     @returns {Number} Progress [0...1].
   */
   _shiftToProgress ( shift ) {
-    return this._maxWidth / shift;
+    return shift / this._maxWidth;
+  }
+  /*
+    Method to progress shift to shift.
+    @private
+    @param   {Number} Progress [0...1].
+    @returns {Number} Shift in `px`.
+
+  */
+  _progressToShift ( progress ) {
+    return progress*this._maxWidth;
   }
 }
 
