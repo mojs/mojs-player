@@ -39,7 +39,7 @@ $height: 40;
     margin-top:       calc( -1 * $PX );
     height:           calc( 3*$PX );
     width:            calc( 1*$PX );
-    background:       yellow;
+    background:       $c-orange;
     z-index:          1;
     transform-origin: left center;
   }

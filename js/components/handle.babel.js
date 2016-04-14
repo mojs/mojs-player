@@ -22,11 +22,12 @@ class Handle extends Module {
     Method to set handle progress.
     @public
     @param {Number} Progress [0...1].
+    @param {Boolean} If should invoke onProgress callback.
     @returns this.
   */
-  setProgress ( progress ) {
+  setProgress ( progress, isCallback = true ) {
     let shift = this._progressToShift( progress );
-    this._setShift( shift );
+    this._setShift( shift, isCallback );
     // calc delta and save it
     this._delta = shift - this._shift;
     this._saveDelta();
@@ -36,12 +37,13 @@ class Handle extends Module {
     Method to set handle shift.
     @public
     @param {Number} Shift in `px`.
+    @param {Boolean} If should invoke onProgress callback.
     @returns {Number}.
   */
-  _setShift ( shift ) {
+  _setShift ( shift, isCallback = true ) {
     shift = mojs.h.clamp( shift, 0, this._maxWidth );
     this._applyShift( shift );
-    this._onProgress( shift );
+    isCallback && this._onProgress( shift );
     return shift;
   }
   /*

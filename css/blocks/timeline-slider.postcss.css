@@ -15,5 +15,8 @@ $height: 30;
     top:            50%;
     z-index:        2;
   }
+  & .track {
+    z-index:        1;
+  }
 }
 

@@ -25,7 +25,6 @@ class Track extends Handle {
   */
   _applyShift ( shift ) {
     let transform = `scaleX( ${shift} ) translateZ(0)`;
-    console.log(transform);
     this.trackProgressEl.style.transform = transform;
   }
   /*
