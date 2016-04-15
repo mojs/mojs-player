@@ -1,5 +1,6 @@
 
 import Slider from './components/slider';
+import Polyfill from 'classlist-polyfill';
 
 let slider = new Slider({ className: 'timeline-slider' });
 

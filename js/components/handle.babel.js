@@ -2,7 +2,6 @@ import Module  from './module';
 import HamerJS from 'hammerjs';
 import mojs    from 'mo-js';
 
-
 require('css/blocks/handle.postcss.css');
 
 class Handle extends Module {
@@ -110,6 +109,8 @@ class Handle extends Module {
       this._delta = e.deltaX;
       this._setShift( this._shift + e.deltaX );
     });
+    
+    // hammerTime.on('tap', ( e ) => { console.log(e.center.x) });
 
     hammerTime.on('panend', ( e ) => { this._saveDelta(); });
   }
