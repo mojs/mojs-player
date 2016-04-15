@@ -9,6 +9,7 @@ module.exports = {
   ],
   module: {
     loaders: [
+      { test: /\.(json)$/, exclude: /node_modules/, loaders: ['json-loader'] },
       { test: /\.(jsx|es6.js|babel.js)$/, exclude: /node_modules/, loaders: ['babel-loader?presets[]=es2015-loose,plugins[]=transform-runtime'] },
       { test: /\.jade$/, loaders: ['jade'] },
       { test: /\.(postcss.css)$/,  loader: "style-loader!css-loader!postcss-loader" },
@@ -20,7 +21,7 @@ module.exports = {
     ]
   },
   postcss: function () {
-    return [ require('precss'), require('postcss-cssnext') ];
+    return [ require('precss'), require('postcss-cssnext'), require('postcss-modules') ];
   },
   output: {
     path:         __dirname + '/build',
@@ -34,7 +35,7 @@ module.exports = {
     target: 'node',
     extensions: [
       '', '.js', '.es6', '.babel.js', '.coffee',
-      '.postcss.css', '.css',
+      '.postcss.css', '.css', '.json'
     ]
   }
 };

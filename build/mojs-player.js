@@ -59,7 +59,7 @@
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	var _classlistPolyfill = __webpack_require__(122);
+	var _classlistPolyfill = __webpack_require__(123);
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
@@ -67,7 +67,7 @@
 
 	var slider = new _slider2.default({ className: 'timeline-slider' });
 
-	__webpack_require__(120);
+	__webpack_require__(124);
 	var Main = {
 	  /*
 	    Initialization method.
@@ -112,13 +112,14 @@
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _track = __webpack_require__(115);
+	var _track = __webpack_require__(116);
 
 	var _track2 = _interopRequireDefault(_track);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(118);
+	__webpack_require__(120);
+	var CLASSES = __webpack_require__(122);
 
 	var Slider = function (_Module) {
 	  (0, _inherits3.default)(Slider, _Module);
@@ -155,14 +156,15 @@
 	    this.el = document.createElement('div');
 	    // this.track  = document.createElement('div');
 
-	    this.el.classList.add('' + p.className);
+	    this.el.classList.add('' + CLASSES.slider);
 	    // this.track .classList.add(`${p.className}__track`);
 
 	    // this.el.appendChild( this.track );
 	    p.parent.appendChild(this.el);
 
 	    this.track = new _track2.default({
-	      parent: this.el,
+	      // parent:    this.el,
+	      className: CLASSES.track,
 	      onProgress: function onProgress(p) {
 	        _this2._onTrackProgress(p);
 	      }
@@ -170,7 +172,8 @@
 	    this.el.appendChild(this.track.el);
 
 	    this.handle = new _handle2.default({
-	      parent: this.el,
+	      // parent: this.el,
+	      className: CLASSES.handle,
 	      onProgress: function onProgress(p) {
 	        _this2._onHandleProgress(p);
 	      }
@@ -1764,6 +1767,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	__webpack_require__(111);
+	var CLASSES = __webpack_require__(115);
 
 	var Handle = function (_Module) {
 	  (0, _inherits3.default)(Handle, _Module);
@@ -1781,7 +1785,7 @@
 
 	  Handle.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
-	      className: 'handle',
+	      className: '',
 	      parent: document.body,
 	      onProgress: null
 	    };
@@ -1881,9 +1885,11 @@
 
 	    this.el = document.createElement('div');
 
-	    inner.classList.add(p.className + '__inner');
-	    shadow.classList.add(p.className + '__shadow');
-	    this.el.classList.add('' + p.className);
+	    inner.classList.add('' + CLASSES.handle__inner);
+	    shadow.classList.add('' + CLASSES.handle__shadow);
+	    var classList = this.el.classList;
+	    classList.add('' + CLASSES.handle);
+	    classList.add('' + this._props.className);
 
 	    this.el.appendChild(shadow);
 	    this.el.appendChild(inner);
@@ -1902,8 +1908,6 @@
 	      _this2._delta = e.deltaX;
 	      _this2._setShift(_this2._shift + e.deltaX);
 	    });
-
-	    // hammerTime.on('tap', ( e ) => { console.log(e.center.x) });
 
 	    hammerTime.on('panend', function (e) {
 	      _this2._saveDelta();
@@ -12372,7 +12376,7 @@
 
 
 	// module
-	exports.push([module.id, ".handle {\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n.handle__inner, .handle__shadow {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n}\n.handle__inner {\n  background:    #FFF\n}\n.handle__shadow {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n}\n.handle:hover .handle__inner, .handle:hover .handle__shadow {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n}\n.handle:active .handle__inner {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n.handle:active .handle__shadow {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n}\n\n", ""]);
+	exports.push([module.id, "._handle_lk6b6_5 {\n  margin-left:    -6.5px;\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n._handle__inner_lk6b6_1, ._handle__shadow_lk6b6_1 {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n}\n._handle__inner_lk6b6_1 {\n  background:    #FFF\n}\n._handle__shadow_lk6b6_1 {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n}\n._handle_lk6b6_5:hover ._handle__inner_lk6b6_1, ._handle_lk6b6_5:hover ._handle__shadow_lk6b6_1 {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n}\n._handle_lk6b6_5:active ._handle__inner_lk6b6_1 {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_lk6b6_5:active ._handle__shadow_lk6b6_1 {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n}\n\n", ""]);
 
 	// exports
 
@@ -12687,6 +12691,16 @@
 
 /***/ },
 /* 115 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"handle": "_handle_lk6b6_5",
+		"handle__inner": "_handle__inner_lk6b6_1",
+		"handle__shadow": "_handle__shadow_lk6b6_1"
+	};
+
+/***/ },
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12719,7 +12733,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(116);
+	__webpack_require__(117);
+	var CLASSES = __webpack_require__(119);
 
 	var addTouchStartEvent = function addTouchStartEvent(el, fn) {
 	  if (window.navigator.msPointerEnabled) {
@@ -12748,7 +12763,7 @@
 
 	  Track.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
-	      className: 'track',
+	      className: '',
 	      parent: document.body,
 	      onProgress: null
 	    };
@@ -12777,10 +12792,12 @@
 	        trackP = document.createElement('div');
 
 	    this.el = document.createElement('div');
-	    this.el.classList.add('' + p.className);
+	    var classList = this.el.classList;
+	    classList.add('' + CLASSES.track);
+	    classList.add('' + this._props.className);
 
-	    track.classList.add(p.className + '__track');
-	    trackP.classList.add(p.className + '__track-progress');
+	    track.classList.add('' + CLASSES.track__track);
+	    trackP.classList.add('' + CLASSES['track__track-progress']);
 	    this.trackProgressEl = trackP;
 
 	    this.el.appendChild(track);
@@ -12791,8 +12808,26 @@
 	    var _this2 = this;
 
 	    _Handle.prototype._hammerTime.call(this);
+	    // let hammerTime = new HamerJS.Manager(this.el, {
+	    //   recognizers: [
+	    //       // RecognizerClass, [options], [recognizeWith, ...], [requireFailure, ...]
+	    //       [Hammer.Pan],
+	    //       [Hammer.Tap],
+	    //     ]
+	    // });
+
+	    // console.log(hammerTime)
+
+	    // // hammerTime.add( new Hammer.Tap )
+	    // // hammerTime.add( new Hammer.Pan )
+
+	    // hammerTime.on('hammer.input', ( e ) => {
+	    //   // console.log( e );
+	    //   console.log(e)
+	    //   this.setProgress( this._shiftToProgress( e.center.x ) );
+	    // });
+
 	    addTouchStartEvent(this.el, function (e) {
-	      console.log(e.layerX);
 	      _this2.setProgress(_this2._shiftToProgress(e.layerX));
 	    });
 	  };
@@ -12803,13 +12838,13 @@
 	exports.default = Track;
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(117);
+	var content = __webpack_require__(118);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(114)(content, {});
@@ -12829,58 +12864,28 @@
 	}
 
 /***/ },
-/* 117 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(113)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ".track {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n.track__track {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n.track__track:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n.track__track-progress {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(119);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./timeline-slider.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./timeline-slider.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 119 */
-/***/ function(module, exports, __webpack_require__) {
-
 	exports = module.exports = __webpack_require__(113)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n.timeline-slider {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:             1.875rem\n}\n.timeline-slider .handle {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           2\n}\n.timeline-slider .track {\n  z-index:           1\n}\n\n", ""]);
+	exports.push([module.id, "._track_zgt8y_5 {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n._track__track_zgt8y_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n._track__track_zgt8y_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n._track__track-progress_zgt8y_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
 
 	// exports
 
+
+/***/ },
+/* 119 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"track": "_track_zgt8y_5",
+		"track__track": "_track__track_zgt8y_1",
+		"track__track-progress": "_track__track-progress_zgt8y_1"
+	};
 
 /***/ },
 /* 120 */
@@ -12898,8 +12903,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./slider.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./slider.postcss.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -12917,13 +12922,23 @@
 
 
 	// module
-	exports.push([module.id, ".icon {\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n.icon svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n.mojs-player {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_18nti_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider_18nti_6 ._handle_18nti_12 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           2\n}\n._slider_18nti_6 ._track_18nti_18 {\n  z-index:           1\n}\n\n", ""]);
 
 	// exports
 
 
 /***/ },
 /* 122 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"slider": "_slider_18nti_6",
+		"handle": "_handle_18nti_12",
+		"track": "_track_18nti_18"
+	};
+
+/***/ },
+/* 123 */
 /***/ function(module, exports) {
 
 	/*
@@ -13165,6 +13180,46 @@
 	    }());
 	  }
 	}
+
+
+/***/ },
+/* 124 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(125);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(114)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 125 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(113)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon_1qwrf_1 {\n  width: 32px;\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n._icon_1qwrf_1 svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n._mojs-player_1qwrf_1 {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
+
+	// exports
 
 
 /***/ }
