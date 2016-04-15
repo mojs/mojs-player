@@ -3,7 +3,7 @@
 /*@import './handle.postcss.css';*/
 
 $height: 30;
-.timeline-slider {
+.slider {
   position:           relative;
   width:              100%;
   height:             calc( $height * $PX );

@@ -1,7 +1,7 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -43,8 +43,10 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.23.1",
+    "json-loader": "^0.5.4",
     "postcss-cssnext": "^2.5.1",
     "postcss-loader": "^0.8.2",
+    "postcss-modules": "^0.4.1",
     "precss": "^1.4.0",
     "style-loader": "^0.13.1"
   }

@@ -3,6 +3,7 @@ import HamerJS from 'hammerjs';
 import mojs    from 'mo-js';
 
 require('css/blocks/handle.postcss.css');
+let CLASSES = require('css/blocks/handle.postcss.css.json');
 
 class Handle extends Module {
   /*
@@ -12,7 +13,7 @@ class Handle extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className:  'handle',
+      className:  '',
       parent:     document.body,
       onProgress: null
     }
@@ -92,9 +93,11 @@ class Handle extends Module {
 
     this.el = document.createElement('div');
 
-    inner.classList.add(`${p.className}__inner`);
-    shadow.classList.add(`${p.className}__shadow`);
-    this.el.classList.add( `${p.className}` );
+    inner.classList.add( `${ CLASSES.handle__inner }` );
+    shadow.classList.add( `${ CLASSES.handle__shadow }` );
+    let classList = this.el.classList;
+    classList.add( `${ CLASSES.handle }` );
+    classList.add( `${ this._props.className }` );
     
     this.el.appendChild( shadow );
     this.el.appendChild( inner );
@@ -109,8 +112,6 @@ class Handle extends Module {
       this._delta = e.deltaX;
       this._setShift( this._shift + e.deltaX );
     });
-    
-    // hammerTime.on('tap', ( e ) => { console.log(e.center.x) });
 
     hammerTime.on('panend', ( e ) => { this._saveDelta(); });
   }
