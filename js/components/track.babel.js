@@ -4,6 +4,17 @@ import mojs    from 'mo-js';
 
 require('css/blocks/track.postcss.css');
 
+var addTouchStartEvent = function (el, fn) {
+  if (window.navigator.msPointerEnabled) {
+      el.addEventListener('MSPointerDown', fn);
+    } else if ( window.ontouchstart !== undefined ) {
+      el.addEventListener('touchstart', fn);
+      el.addEventListener('mousedown', fn);
+    } else {
+      el.addEventListener('mousedown', fn);
+    }
+}
+
 class Track extends Handle {
   /*
     Method to declare _defaults.
@@ -45,6 +56,14 @@ class Track extends Handle {
     
     this.el.appendChild( track );
     this.el.appendChild( trackP );
+  }
+
+  _hammerTime () {
+    super._hammerTime();
+    addTouchStartEvent( this.el, (e) => {
+      console.log(e.layerX)
+      this.setProgress( this._shiftToProgress( e.layerX ) );
+    });
   }
 }
 

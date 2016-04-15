@@ -59,6 +59,10 @@
 
 	var _slider2 = _interopRequireDefault(_slider);
 
+	var _classlistPolyfill = __webpack_require__(122);
+
+	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var slider = new _slider2.default({ className: 'timeline-slider' });
@@ -1898,6 +1902,8 @@
 	      _this2._delta = e.deltaX;
 	      _this2._setShift(_this2._shift + e.deltaX);
 	    });
+
+	    // hammerTime.on('tap', ( e ) => { console.log(e.center.x) });
 
 	    hammerTime.on('panend', function (e) {
 	      _this2._saveDelta();
@@ -12715,6 +12721,17 @@
 
 	__webpack_require__(116);
 
+	var addTouchStartEvent = function addTouchStartEvent(el, fn) {
+	  if (window.navigator.msPointerEnabled) {
+	    el.addEventListener('MSPointerDown', fn);
+	  } else if (window.ontouchstart !== undefined) {
+	    el.addEventListener('touchstart', fn);
+	    el.addEventListener('mousedown', fn);
+	  } else {
+	    el.addEventListener('mousedown', fn);
+	  }
+	};
+
 	var Track = function (_Handle) {
 	  (0, _inherits3.default)(Track, _Handle);
 
@@ -12770,6 +12787,16 @@
 	    this.el.appendChild(trackP);
 	  };
 
+	  Track.prototype._hammerTime = function _hammerTime() {
+	    var _this2 = this;
+
+	    _Handle.prototype._hammerTime.call(this);
+	    addTouchStartEvent(this.el, function (e) {
+	      console.log(e.layerX);
+	      _this2.setProgress(_this2._shiftToProgress(e.layerX));
+	    });
+	  };
+
 	  return Track;
 	}(_handle2.default);
 
@@ -12810,7 +12837,7 @@
 
 
 	// module
-	exports.push([module.id, ".track {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n.track__track {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n.track__track:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n.track__track-progress {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  width:           0.0625rem;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
+	exports.push([module.id, ".track {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n.track__track {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n.track__track:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n.track__track-progress {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
 
 	// exports
 
@@ -12893,6 +12920,251 @@
 	exports.push([module.id, ".icon {\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n.icon svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n.mojs-player {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
 
 	// exports
+
+
+/***/ },
+/* 122 */
+/***/ function(module, exports) {
+
+	/*
+	 * classList.js: Cross-browser full element.classList implementation.
+	 * 2014-07-23
+	 *
+	 * By Eli Grey, http://eligrey.com
+	 * Public Domain.
+	 * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+	 */
+
+	/*global self, document, DOMException */
+
+	/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
+
+	/* Copied from MDN:
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+	 */
+
+	if ("document" in window.self) {
+
+	  // Full polyfill for browsers with no classList support
+	  if (!("classList" in document.createElement("_"))) {
+
+	  (function (view) {
+
+	    "use strict";
+
+	    if (!('Element' in view)) return;
+
+	    var
+	        classListProp = "classList"
+	      , protoProp = "prototype"
+	      , elemCtrProto = view.Element[protoProp]
+	      , objCtr = Object
+	      , strTrim = String[protoProp].trim || function () {
+	        return this.replace(/^\s+|\s+$/g, "");
+	      }
+	      , arrIndexOf = Array[protoProp].indexOf || function (item) {
+	        var
+	            i = 0
+	          , len = this.length
+	        ;
+	        for (; i < len; i++) {
+	          if (i in this && this[i] === item) {
+	            return i;
+	          }
+	        }
+	        return -1;
+	      }
+	      // Vendors: please allow content code to instantiate DOMExceptions
+	      , DOMEx = function (type, message) {
+	        this.name = type;
+	        this.code = DOMException[type];
+	        this.message = message;
+	      }
+	      , checkTokenAndGetIndex = function (classList, token) {
+	        if (token === "") {
+	          throw new DOMEx(
+	              "SYNTAX_ERR"
+	            , "An invalid or illegal string was specified"
+	          );
+	        }
+	        if (/\s/.test(token)) {
+	          throw new DOMEx(
+	              "INVALID_CHARACTER_ERR"
+	            , "String contains an invalid character"
+	          );
+	        }
+	        return arrIndexOf.call(classList, token);
+	      }
+	      , ClassList = function (elem) {
+	        var
+	            trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+	          , classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+	          , i = 0
+	          , len = classes.length
+	        ;
+	        for (; i < len; i++) {
+	          this.push(classes[i]);
+	        }
+	        this._updateClassName = function () {
+	          elem.setAttribute("class", this.toString());
+	        };
+	      }
+	      , classListProto = ClassList[protoProp] = []
+	      , classListGetter = function () {
+	        return new ClassList(this);
+	      }
+	    ;
+	    // Most DOMException implementations don't allow calling DOMException's toString()
+	    // on non-DOMExceptions. Error's toString() is sufficient here.
+	    DOMEx[protoProp] = Error[protoProp];
+	    classListProto.item = function (i) {
+	      return this[i] || null;
+	    };
+	    classListProto.contains = function (token) {
+	      token += "";
+	      return checkTokenAndGetIndex(this, token) !== -1;
+	    };
+	    classListProto.add = function () {
+	      var
+	          tokens = arguments
+	        , i = 0
+	        , l = tokens.length
+	        , token
+	        , updated = false
+	      ;
+	      do {
+	        token = tokens[i] + "";
+	        if (checkTokenAndGetIndex(this, token) === -1) {
+	          this.push(token);
+	          updated = true;
+	        }
+	      }
+	      while (++i < l);
+
+	      if (updated) {
+	        this._updateClassName();
+	      }
+	    };
+	    classListProto.remove = function () {
+	      var
+	          tokens = arguments
+	        , i = 0
+	        , l = tokens.length
+	        , token
+	        , updated = false
+	        , index
+	      ;
+	      do {
+	        token = tokens[i] + "";
+	        index = checkTokenAndGetIndex(this, token);
+	        while (index !== -1) {
+	          this.splice(index, 1);
+	          updated = true;
+	          index = checkTokenAndGetIndex(this, token);
+	        }
+	      }
+	      while (++i < l);
+
+	      if (updated) {
+	        this._updateClassName();
+	      }
+	    };
+	    classListProto.toggle = function (token, force) {
+	      token += "";
+
+	      var
+	          result = this.contains(token)
+	        , method = result ?
+	          force !== true && "remove"
+	        :
+	          force !== false && "add"
+	      ;
+
+	      if (method) {
+	        this[method](token);
+	      }
+
+	      if (force === true || force === false) {
+	        return force;
+	      } else {
+	        return !result;
+	      }
+	    };
+	    classListProto.toString = function () {
+	      return this.join(" ");
+	    };
+
+	    if (objCtr.defineProperty) {
+	      var classListPropDesc = {
+	          get: classListGetter
+	        , enumerable: true
+	        , configurable: true
+	      };
+	      try {
+	        objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	      } catch (ex) { // IE 8 doesn't support enumerable:true
+	        if (ex.number === -0x7FF5EC54) {
+	          classListPropDesc.enumerable = false;
+	          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	        }
+	      }
+	    } else if (objCtr[protoProp].__defineGetter__) {
+	      elemCtrProto.__defineGetter__(classListProp, classListGetter);
+	    }
+
+	    }(window.self));
+
+	    } else {
+	    // There is full or partial native classList support, so just check if we need
+	    // to normalize the add/remove and toggle APIs.
+
+	    (function () {
+	      "use strict";
+
+	      var testElement = document.createElement("_");
+
+	      testElement.classList.add("c1", "c2");
+
+	      // Polyfill for IE 10/11 and Firefox <26, where classList.add and
+	      // classList.remove exist but support only one argument at a time.
+	      if (!testElement.classList.contains("c2")) {
+	        var createMethod = function(method) {
+	          var original = DOMTokenList.prototype[method];
+
+	          DOMTokenList.prototype[method] = function(token) {
+	            var i, len = arguments.length;
+
+	            for (i = 0; i < len; i++) {
+	              token = arguments[i];
+	              original.call(this, token);
+	            }
+	          };
+	        };
+	        createMethod('add');
+	        createMethod('remove');
+	      }
+
+	      testElement.classList.toggle("c3", false);
+
+	      // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+	      // support the second argument.
+	      if (testElement.classList.contains("c3")) {
+	        var _toggle = DOMTokenList.prototype.toggle;
+
+	        DOMTokenList.prototype.toggle = function(token, force) {
+	          if (1 in arguments && !this.contains(token) === !force) {
+	            return force;
+	          } else {
+	            return _toggle.call(this, token);
+	          }
+	        };
+
+	      }
+
+	      testElement = null;
+	    }());
+	  }
+	}
 
 
 /***/ }

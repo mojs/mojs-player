@@ -38,7 +38,7 @@ $height: 40;
     top:              50%;
     margin-top:       calc( -1 * $PX );
     height:           calc( 3*$PX );
-    width:            calc( 1*$PX );
+    width:            1px;
     background:       $c-orange;
     z-index:          1;
     transform-origin: left center;
