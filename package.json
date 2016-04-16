@@ -32,7 +32,8 @@
   "homepage": "https://github.com/legomushroom/mojs-player",
   "dependencies": {
     "classlist-polyfill": "^1.0.2",
-    "hammerjs": "^2.0.6"
+    "hammerjs": "^2.0.6",
+    "mo-js": "^0.147.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.5",

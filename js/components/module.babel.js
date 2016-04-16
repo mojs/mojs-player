@@ -62,11 +62,10 @@ class Module {
     this._props  = {};
     this._deltas = {};
     for (var key in this._defaults) {
-      // skip property if it is listed in _skipProps
+      // TODO skip property if it is listed in _skipProps
       // if (this._skipProps && this._skipProps[key]) { continue; }
       // copy the properties to the _o object
-      var value = ( this._o[key] != null ) ? this._o[key] : this._defaults[key];
-      this._assignProp( key, value );
+      this._assignProp( key, this._o[key] || this._defaults[key] );
     }
   }
 }

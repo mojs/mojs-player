@@ -36,7 +36,7 @@ class Track extends Handle {
     @private
     @overrides @ Handle
     @param {Number} Shift in `px`.
-    @param {Boolean} If should invoke onProgress callback.
+    @param {Boolean} It should invoke onProgress callback.
     @returns {Number}.
   */
   _setShift ( shift, isCallback = true ) {
