@@ -32,18 +32,21 @@ class PlayerSlider extends Module {
     this.leftBound = new Slider({
       isEl:    false,
       isTrack: false,
-      parent: this.el
+      parent: this.el,
+      onProgress: this._onLeftBoundProgress.bind(this)
     });
     this.track = new Slider({
       parent: this.el,
-      className: CLASSES.slider
+      className: CLASSES.slider,
+      onProgress: this._onTrackProgress.bind(this)
     });
 
     this.rightBound = new Slider({
       isEl:       false,
       isTrack:    false,
       parent:     this.el,
-      isInversed: true
+      isInversed: true,
+      onProgress: this._onRightBoundProgress.bind(this)
     });
 
     this.leftBound.setProgress( .25 );
@@ -51,6 +54,30 @@ class PlayerSlider extends Module {
     this.rightBound.setProgress( .75 );
 
     this._props.parent.appendChild( this.el );
+  }
+  /*
+    Method that should be called on track update.
+    @private
+    @param {Number} Track progress value [0...1].
+  */
+  _onTrackProgress ( p ) {
+    console.log( `track progress: ${p}` );
+  }
+  /*
+    Method that should be called on left bound update.
+    @private
+    @param {Number} Track progress value [0...1].
+  */
+  _onLeftBoundProgress ( p ) {
+    console.log( `left bound progress: ${p}` );
+  }
+  /*
+    Method that should be called on right bound update.
+    @private
+    @param {Number} Track progress value [0...1].
+  */
+  _onRightBoundProgress ( p ) {
+    console.log( `right bound progress: ${p}` );
   }
 }
 

@@ -17,7 +17,8 @@ class Slider extends Module {
       parent:     document.body,
       isEl:       true,
       isTrack:    true,
-      isInversed: false
+      isInversed: false,
+      onProgress: null
     }
   }
   /*
@@ -66,13 +67,32 @@ class Slider extends Module {
     @private
     @param {Number} Progress [0...1].
   */
-  _onHandleProgress ( p ) { this.track.setProgress( p, false ); }
+  _onHandleProgress ( p ) {
+    this.track.setProgress( p, false );
+    this._onProgress( p );
+  }
   /*
     Method that is invoked on track progress change.
     @private
     @param {Number} Progress [0...1].
   */
-  _onTrackProgress ( p ) { this.handle.setProgress( p, false ); }
+  _onTrackProgress ( p ) {
+    this.handle.setProgress( p, false );
+    this._onProgress( p );
+  }
+  /*
+    Method to call onProgress callback.
+    @private
+    @param {Number} Progress value [0...1].
+  */
+  _onProgress ( progress ) {
+    let p        = this._props;
+
+    if ( typeof p.onProgress === 'function' && this._progress !== progress) {
+      this._progress = progress;
+      p.onProgress.call( this, progress );
+    }
+  }
 }
 
 export default Slider;
