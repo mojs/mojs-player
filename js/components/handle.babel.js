@@ -35,7 +35,7 @@ class Handle extends Module {
   }
   /*
     Method to set handle shift.
-    @public
+    @private
     @param {Number} Shift in `px`.
     @param {Boolean} If should invoke onProgress callback.
     @returns {Number}.

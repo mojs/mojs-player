@@ -13,10 +13,11 @@ class Slider extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className: '',
-      parent:    document.body,
-      isEl:      true,
-      isTrack:   true
+      className:  '',
+      parent:     document.body,
+      isEl:       true,
+      isTrack:    true,
+      isInversed: false
     }
   }
   /*
@@ -49,7 +50,8 @@ class Slider extends Module {
     this.track = new Track({
       className:  CLASSES.track,
       onProgress: this._onTrackProgress.bind(this),
-      isTrack:    this._props.isTrack
+      isTrack:    this._props.isTrack,
+      isInversed: this._props.isInversed
     });
     rootEl.appendChild( this.track.el );
 
