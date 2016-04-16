@@ -55,9 +55,9 @@
 
 	exports.__esModule = true;
 
-	var _slider = __webpack_require__(2);
+	var _playerSlider = __webpack_require__(126);
 
-	var _slider2 = _interopRequireDefault(_slider);
+	var _playerSlider2 = _interopRequireDefault(_playerSlider);
 
 	var _classlistPolyfill = __webpack_require__(123);
 
@@ -65,7 +65,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var slider = new _slider2.default({ className: 'timeline-slider' });
+	var playerSlider = new _playerSlider2.default();
 
 	__webpack_require__(124);
 	var Main = {
@@ -138,8 +138,22 @@
 	  Slider.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
 	      className: '',
-	      parent: document.body
+	      parent: document.body,
+	      isEl: true,
+	      isTrack: true
 	    };
+	  };
+	  /*
+	    Method to set slider progress.
+	    @public
+	    @param {Number} Progress to set.
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setProgress = function setProgress(progress) {
+	    this.handle.setProgress(progress);
+	    this.track.setProgress(progress);
 	  };
 	  /*
 	    Method to render the component.
@@ -149,39 +163,29 @@
 
 
 	  Slider.prototype._render = function _render() {
-	    var _this2 = this;
-
 	    var p = this._props;
 
-	    this.el = document.createElement('div');
-	    // this.track  = document.createElement('div');
+	    if (p.isEl) {
+	      this.el = document.createElement('div');
+	      this.el.classList.add('' + CLASSES.slider);
+	      this.el.classList.add('' + p.className);
+	      p.parent.appendChild(this.el);
+	    }
 
-	    this.el.classList.add('' + CLASSES.slider);
-	    // this.track .classList.add(`${p.className}__track`);
-
-	    // this.el.appendChild( this.track );
-	    p.parent.appendChild(this.el);
+	    var rootEl = p.isEl ? this.el : p.parent;
 
 	    this.track = new _track2.default({
-	      // parent:    this.el,
 	      className: CLASSES.track,
-	      onProgress: function onProgress(p) {
-	        _this2._onTrackProgress(p);
-	      }
+	      onProgress: this._onTrackProgress.bind(this),
+	      isTrack: this._props.isTrack
 	    });
-	    this.el.appendChild(this.track.el);
+	    rootEl.appendChild(this.track.el);
 
 	    this.handle = new _handle2.default({
-	      // parent: this.el,
 	      className: CLASSES.handle,
-	      onProgress: function onProgress(p) {
-	        _this2._onHandleProgress(p);
-	      }
+	      onProgress: this._onHandleProgress.bind(this)
 	    });
-	    this.el.appendChild(this.handle.el);
-
-	    this.handle.setProgress(.5);
-	    this.track.setProgress(.5);
+	    rootEl.appendChild(this.handle.el);
 	  };
 	  /*
 	    Method that is invoked on handle progress change.
@@ -203,20 +207,6 @@
 	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
 	    this.handle.setProgress(p, false);
 	  };
-	  /*
-	    Method to initialize HammerJS an set up all even listeners.
-	    @private
-	  */
-	  // _hammerTime () {
-	  //   let hammerTime = HamerJS(this.el);
-	  //   hammerTime.on('pan', ( e ) => {
-	  //     this._delta = e.deltaX;
-	  //     this._setShift( this._shift + e.deltaX );
-	  //   });
-
-	  //   hammerTime.on('panend', ( e ) => { this._saveDelta(); });
-	  // }
-
 
 	  return Slider;
 	}(_module2.default);
@@ -12765,7 +12755,8 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
-	      onProgress: null
+	      onProgress: null,
+	      isTrack: true
 	    };
 	  };
 	  /*
@@ -12788,7 +12779,6 @@
 
 	  Track.prototype._addElements = function _addElements() {
 	    var p = this._props,
-	        track = document.createElement('div'),
 	        trackP = document.createElement('div');
 
 	    this.el = document.createElement('div');
@@ -12796,11 +12786,17 @@
 	    classList.add('' + CLASSES.track);
 	    classList.add('' + this._props.className);
 
-	    track.classList.add('' + CLASSES.track__track);
 	    trackP.classList.add('' + CLASSES['track__track-progress']);
 	    this.trackProgressEl = trackP;
 
-	    this.el.appendChild(track);
+	    if (p.isTrack) {
+	      var track = document.createElement('div');
+	      track.classList.add('' + CLASSES.track__track);
+	      this.el.appendChild(track);
+	    } else {
+	      trackP.style.background = 'cyan';
+	    }
+
 	    this.el.appendChild(trackP);
 	  };
 
@@ -12872,7 +12868,7 @@
 
 
 	// module
-	exports.push([module.id, "._track_zgt8y_5 {\n  position:           relative;\n  width:              100%;\n  height:             100%;\n  overflow:           hidden\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n._track__track_zgt8y_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n._track__track_zgt8y_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n._track__track-progress_zgt8y_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n\n", ""]);
+	exports.push([module.id, "._track_1m4ub_5 {\n  position:           relative;\n  /*width:              100%;*/\n  height:             100%\n  /*overflow:           hidden;*/\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n._track__track_1m4ub_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n._track__track_1m4ub_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n._track__track-progress_1m4ub_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n._track__track-progress_1m4ub_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n\n", ""]);
 
 	// exports
 
@@ -12882,9 +12878,9 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"track": "_track_zgt8y_5",
-		"track__track": "_track__track_zgt8y_1",
-		"track__track-progress": "_track__track-progress_zgt8y_1"
+		"track": "_track_1m4ub_5",
+		"track__track": "_track__track_1m4ub_1",
+		"track__track-progress": "_track__track-progress_1m4ub_1"
 	};
 
 /***/ },
@@ -12922,7 +12918,7 @@
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_18nti_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider_18nti_6 ._handle_18nti_12 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           2\n}\n._slider_18nti_6 ._track_18nti_18 {\n  z-index:           1\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_1w61l_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider_1w61l_6 ._handle_1w61l_12 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           3\n}\n._slider_1w61l_6 ._track_1w61l_18 {\n  z-index:           2\n}\n\n", ""]);
 
 	// exports
 
@@ -12932,9 +12928,9 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"slider": "_slider_18nti_6",
-		"handle": "_handle_18nti_12",
-		"track": "_track_18nti_18"
+		"slider": "_slider_1w61l_6",
+		"handle": "_handle_1w61l_12",
+		"track": "_track_1w61l_18"
 	};
 
 /***/ },
@@ -13221,6 +13217,145 @@
 
 	// exports
 
+
+/***/ },
+/* 126 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _slider = __webpack_require__(2);
+
+	var _slider2 = _interopRequireDefault(_slider);
+
+	var _module = __webpack_require__(77);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(127);
+	var CLASSES = __webpack_require__(129);
+	var SLIDER_CLASSES = __webpack_require__(122);
+
+	var PlayerSlider = function (_Module) {
+	  (0, _inherits3.default)(PlayerSlider, _Module);
+
+	  function PlayerSlider() {
+	    (0, _classCallCheck3.default)(this, PlayerSlider);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: CLASSES['player-slider'],
+	      parent: document.body
+	    };
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Module
+	    @returns this
+	  */
+
+
+	  // isEl:      true
+
+	  PlayerSlider.prototype._render = function _render() {
+	    this.el = document.createElement('div');
+	    this.el.classList.add('' + this._props.className);
+	    this.el.classList.add('' + SLIDER_CLASSES.slider);
+
+	    this.leftBound = new _slider2.default({
+	      isEl: false,
+	      isTrack: false,
+	      parent: this.el
+	    });
+	    this.track = new _slider2.default({
+	      parent: this.el,
+	      className: CLASSES.slider
+	    });
+
+	    this.leftBound.setProgress(.25);
+	    this.track.setProgress(.5);
+
+	    this._props.parent.appendChild(this.el);
+	  };
+
+	  return PlayerSlider;
+	}(_module2.default);
+
+	exports.default = PlayerSlider;
+
+/***/ },
+/* 127 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(128);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(114)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 128 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(113)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_fh7me_6 {\n\n}\n._player-slider_fh7me_6 > div {\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 2\n}\n._player-slider_fh7me_6 ._slider_fh7me_15 {\n    z-index: 1\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 129 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"player-slider": "_player-slider_fh7me_6",
+		"slider": "_slider_fh7me_15"
+	};
 
 /***/ }
 /******/ ]);

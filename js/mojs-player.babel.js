@@ -1,8 +1,8 @@
 
-import Slider from './components/slider';
+import PlayerSlider from './components/player-slider';
 import Polyfill from 'classlist-polyfill';
 
-let slider = new Slider({ className: 'timeline-slider' });
+let playerSlider = new PlayerSlider();
 
 require('css/main.postcss.css')
 const Main = {
