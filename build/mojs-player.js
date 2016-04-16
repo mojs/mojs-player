@@ -173,9 +173,9 @@
 	      onProgress: this._onRightBoundProgress.bind(this)
 	    });
 
-	    this.leftBound.setProgress(.25);
 	    this.track.setProgress(.5);
 	    this.rightBound.setProgress(.75);
+	    this.leftBound.setProgress(.25);
 
 	    this._props.parent.appendChild(this.el);
 	  };
@@ -197,7 +197,8 @@
 
 
 	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
-	    console.log('left bound progress: ' + p);
+	    this.track.setMinBound(p);
+	    this.rightBound.setMinBound(p);
 	  };
 	  /*
 	    Method that should be called on right bound update.
@@ -207,7 +208,8 @@
 
 
 	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
-	    console.log('right bound progress: ' + p);
+	    this.track.setMaxBound(p);
+	    this.leftBound.setMaxBound(p);
 	  };
 
 	  return PlayerSlider;
@@ -1680,6 +1682,47 @@
 	  Slider.prototype.setProgress = function setProgress(progress) {
 	    this.handle.setProgress(progress);
 	    this.track.setProgress(progress);
+	    return this;
+	  };
+	  /*
+	    Method to set bounds of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setBounds = function setBounds(min, max) {
+	    this.handle.setBounds(min, max);
+	    this.track.setBounds(min, max);
+	    return this;
+	  };
+	  /*
+	    Method to set min bound of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setMinBound = function setMinBound(min) {
+	    this.handle.setMinBound(min);
+	    this.track.setMinBound(min);
+	    return this;
+	  };
+	  /*
+	    Method to set max bound of progress.
+	    @public
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setMaxBound = function setMaxBound(max) {
+	    this.handle.setMaxBound(max);
+	    this.track.setMaxBound(max);
+	    return this;
 	  };
 	  /*
 	    Method to render the component.
@@ -1928,6 +1971,8 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
+	      minBound: 0,
+	      maxBound: 1,
 	      onProgress: null
 	    };
 	  };
@@ -1951,31 +1996,48 @@
 	    return this;
 	  };
 	  /*
-	    Method to set handle shift.
-	    @private
-	    @param {Number} Shift in `px`.
-	    @param {Boolean} If should invoke onProgress callback.
-	    @returns {Number}.
+	    Method to set bounds of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
 	  */
 
 
-	  Handle.prototype._setShift = function _setShift(shift) {
-	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-	    shift = _moJs2.default.h.clamp(shift, 0, this._maxWidth);
-	    this._applyShift(shift);
-	    isCallback && this._onProgress(shift);
-	    return shift;
+	  Handle.prototype.setBounds = function setBounds(min, max) {
+	    this.setMinBound(min);
+	    this.setMaxBound(max);
+	    return this;
 	  };
 	  /*
-	    Method to apply shift to the DOMElement.
-	    @private
-	    @param {Number} Shift in pixels.
+	    Method to set min bound of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @returns this.
 	  */
 
 
-	  Handle.prototype._applyShift = function _applyShift(shift) {
-	    this.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
+	  Handle.prototype.setMinBound = function setMinBound(min) {
+	    this._props.minBound = Math.max(min, 0);
+	    if (this._progress < min) {
+	      this.setProgress(min);
+	    }
+	    return this;
+	  };
+	  /*
+	    Method to set max bound of progress.
+	    @public
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Handle.prototype.setMaxBound = function setMaxBound(max) {
+	    this._props.maxBound = Math.min(max, 1);
+	    if (this._progress > max) {
+	      this.setProgress(max);
+	    }
+	    return this;
 	  };
 	  /*
 	    Method to declare properties.
@@ -1992,6 +2054,37 @@
 	    // `delta` deviation from the current `shift`
 	    this._delta = 0;
 	    this._getMaxWidth();
+	  };
+	  /*
+	    Method to set handle shift.
+	    @private
+	    @param {Number} Shift in `px`.
+	    @param {Boolean} If should invoke onProgress callback.
+	    @returns {Number}.
+	  */
+
+
+	  Handle.prototype._setShift = function _setShift(shift) {
+	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+	    var p = this._props,
+	        minBound = p.minBound * this._maxWidth,
+	        maxBound = p.maxBound * this._maxWidth;
+
+	    shift = _moJs2.default.h.clamp(shift, minBound, maxBound);
+	    this._applyShift(shift);
+	    isCallback && this._onProgress(shift);
+	    return shift;
+	  };
+	  /*
+	    Method to apply shift to the DOMElement.
+	    @private
+	    @param {Number} Shift in pixels.
+	  */
+
+
+	  Handle.prototype._applyShift = function _applyShift(shift) {
+	    this.el.style.transform = 'translateX( ' + shift + 'px ) translateZ(0)';
 	  };
 	  /*
 	    Method to get max width of the parent.
