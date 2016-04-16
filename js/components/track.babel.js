@@ -24,11 +24,23 @@ class Track extends Handle {
   */
   _declareDefaults () {
     this._defaults = {
-      className:  '',
-      parent:     document.body,
-      onProgress: null,
-      isTrack:    true
+      className:    '',
+      parent:       document.body,
+      onProgress:   null,
+      isTrack:      true,
+      isInversed:   false
     }
+  }
+  /*
+    Method to set handle shift.
+    @private
+    @overrides @ Handle
+    @param {Number} Shift in `px`.
+    @param {Boolean} If should invoke onProgress callback.
+    @returns {Number}.
+  */
+  _setShift ( shift, isCallback = true ) {
+    return super._setShift( shift, isCallback );
   }
   /*
     Method to apply shift to the DOMElement.
@@ -37,6 +49,7 @@ class Track extends Handle {
     @param {Number} Shift in pixels.
   */
   _applyShift ( shift ) {
+    if ( this._props.isInversed ) { shift = this._maxWidth - shift; }
     let transform = `scaleX( ${shift} ) translateZ(0)`;
     this.trackProgressEl.style.transform = transform;
   }
@@ -48,49 +61,41 @@ class Track extends Handle {
     let p      = this._props,
         trackP = document.createElement('div');
 
-
+    // main element
     this.el = document.createElement('div');
     let classList = this.el.classList;
     classList.add( `${ CLASSES.track }` )
     classList.add( `${ this._props.className }` );
-
+    
+    // progress track
     trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
     this.trackProgressEl = trackP;
+    this.el.appendChild( trackP );
 
+    // track
     if ( p.isTrack ) {
       let track  = document.createElement('div');
       track.classList.add(`${ CLASSES.track__track }`);
       this.el.appendChild( track );
-    } else {
+
+    // temporary
+    } else if ( !p.isInversed ) {
       trackP.style.background = 'cyan';
     }
+    if ( p.isInversed ) {
+      classList.add( `${ CLASSES[ 'is-inversed' ] }` );  
+      trackP.style.background = 'deeppink';
+    }
     
-    this.el.appendChild( trackP );
   }
 
   _hammerTime () {
     super._hammerTime();
-    // let hammerTime = new HamerJS.Manager(this.el, {
-    //   recognizers: [
-    //       // RecognizerClass, [options], [recognizeWith, ...], [requireFailure, ...]
-    //       [Hammer.Pan],
-    //       [Hammer.Tap],
-    //     ]
-    // });
-
-    // console.log(hammerTime)
-
-    // // hammerTime.add( new Hammer.Tap )
-    // // hammerTime.add( new Hammer.Pan )
-
-    // hammerTime.on('hammer.input', ( e ) => {
-    //   // console.log( e );
-    //   console.log(e)
-    //   this.setProgress( this._shiftToProgress( e.center.x ) );
-    // });
-
     addTouchStartEvent( this.el, (e) => {
-      this.setProgress( this._shiftToProgress( e.layerX ) );
+      let x = e.layerX;
+      x = ( this._props.isInversed && e.layerX < 0 )
+        ? this._maxWidth + x : x;
+      this.setProgress( this._shiftToProgress( x ) );
     });
   }
 }

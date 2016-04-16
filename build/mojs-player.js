@@ -55,11 +55,11 @@
 
 	exports.__esModule = true;
 
-	var _playerSlider = __webpack_require__(126);
+	var _playerSlider = __webpack_require__(2);
 
 	var _playerSlider2 = _interopRequireDefault(_playerSlider);
 
-	var _classlistPolyfill = __webpack_require__(123);
+	var _classlistPolyfill = __webpack_require__(127);
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
@@ -67,7 +67,7 @@
 
 	var playerSlider = new _playerSlider2.default();
 
-	__webpack_require__(124);
+	__webpack_require__(128);
 	var Main = {
 	  /*
 	    Initialization method.
@@ -104,28 +104,25 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(77);
+	var _slider = __webpack_require__(77);
+
+	var _slider2 = _interopRequireDefault(_slider);
+
+	var _module = __webpack_require__(78);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _handle = __webpack_require__(78);
-
-	var _handle2 = _interopRequireDefault(_handle);
-
-	var _track = __webpack_require__(116);
-
-	var _track2 = _interopRequireDefault(_track);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(120);
-	var CLASSES = __webpack_require__(122);
+	__webpack_require__(124);
+	var CLASSES = __webpack_require__(126);
+	var SLIDER_CLASSES = __webpack_require__(123);
 
-	var Slider = function (_Module) {
-	  (0, _inherits3.default)(Slider, _Module);
+	var PlayerSlider = function (_Module) {
+	  (0, _inherits3.default)(PlayerSlider, _Module);
 
-	  function Slider() {
-	    (0, _classCallCheck3.default)(this, Slider);
+	  function PlayerSlider() {
+	    (0, _classCallCheck3.default)(this, PlayerSlider);
 	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
 
@@ -135,83 +132,55 @@
 	    @overrides @ Module
 	  */
 
-	  Slider.prototype._declareDefaults = function _declareDefaults() {
+	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      isEl: true,
-	      isTrack: true
+	      className: CLASSES['player-slider'],
+	      parent: document.body
 	    };
 	  };
 	  /*
-	    Method to set slider progress.
-	    @public
-	    @param {Number} Progress to set.
-	    @returns this.
-	  */
-
-
-	  Slider.prototype.setProgress = function setProgress(progress) {
-	    this.handle.setProgress(progress);
-	    this.track.setProgress(progress);
-	  };
-	  /*
-	    Method to render the component.
+	    Initial render method.
 	    @private
 	    @overrides @ Module
+	    @returns this
 	  */
 
 
-	  Slider.prototype._render = function _render() {
-	    var p = this._props;
+	  // isEl:      true
 
-	    if (p.isEl) {
-	      this.el = document.createElement('div');
-	      this.el.classList.add('' + CLASSES.slider);
-	      this.el.classList.add('' + p.className);
-	      p.parent.appendChild(this.el);
-	    }
+	  PlayerSlider.prototype._render = function _render() {
+	    this.el = document.createElement('div');
+	    this.el.classList.add('' + this._props.className);
+	    this.el.classList.add('' + SLIDER_CLASSES.slider);
 
-	    var rootEl = p.isEl ? this.el : p.parent;
-
-	    this.track = new _track2.default({
-	      className: CLASSES.track,
-	      onProgress: this._onTrackProgress.bind(this),
-	      isTrack: this._props.isTrack
+	    this.leftBound = new _slider2.default({
+	      isEl: false,
+	      isTrack: false,
+	      parent: this.el
 	    });
-	    rootEl.appendChild(this.track.el);
-
-	    this.handle = new _handle2.default({
-	      className: CLASSES.handle,
-	      onProgress: this._onHandleProgress.bind(this)
+	    this.track = new _slider2.default({
+	      parent: this.el,
+	      className: CLASSES.slider
 	    });
-	    rootEl.appendChild(this.handle.el);
-	  };
-	  /*
-	    Method that is invoked on handle progress change.
-	    @private
-	    @param {Number} Progress [0...1].
-	  */
 
+	    this.rightBound = new _slider2.default({
+	      isEl: false,
+	      isTrack: false,
+	      parent: this.el,
+	      isInversed: true
+	    });
 
-	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
-	    this.track.setProgress(p, false);
-	  };
-	  /*
-	    Method that is invoked on track progress change.
-	    @private
-	    @param {Number} Progress [0...1].
-	  */
+	    this.leftBound.setProgress(.25);
+	    this.track.setProgress(.5);
+	    this.rightBound.setProgress(.75);
 
-
-	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
-	    this.handle.setProgress(p, false);
+	    this._props.parent.appendChild(this.el);
 	  };
 
-	  return Slider;
+	  return PlayerSlider;
 	}(_module2.default);
 
-	exports.default = Slider;
+	exports.default = PlayerSlider;
 
 /***/ },
 /* 3 */
@@ -1614,6 +1583,137 @@
 
 	exports.__esModule = true;
 
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(78);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _handle = __webpack_require__(79);
+
+	var _handle2 = _interopRequireDefault(_handle);
+
+	var _track = __webpack_require__(117);
+
+	var _track2 = _interopRequireDefault(_track);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(121);
+	var CLASSES = __webpack_require__(123);
+
+	var Slider = function (_Module) {
+	  (0, _inherits3.default)(Slider, _Module);
+
+	  function Slider() {
+	    (0, _classCallCheck3.default)(this, Slider);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Slider.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: '',
+	      parent: document.body,
+	      isEl: true,
+	      isTrack: true,
+	      isInversed: false
+	    };
+	  };
+	  /*
+	    Method to set slider progress.
+	    @public
+	    @param {Number} Progress to set.
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setProgress = function setProgress(progress) {
+	    this.handle.setProgress(progress);
+	    this.track.setProgress(progress);
+	  };
+	  /*
+	    Method to render the component.
+	    @private
+	    @overrides @ Module
+	  */
+
+
+	  Slider.prototype._render = function _render() {
+	    var p = this._props;
+
+	    if (p.isEl) {
+	      this.el = document.createElement('div');
+	      this.el.classList.add('' + CLASSES.slider);
+	      this.el.classList.add('' + p.className);
+	      p.parent.appendChild(this.el);
+	    }
+
+	    var rootEl = p.isEl ? this.el : p.parent;
+
+	    this.track = new _track2.default({
+	      className: CLASSES.track,
+	      onProgress: this._onTrackProgress.bind(this),
+	      isTrack: this._props.isTrack,
+	      isInversed: this._props.isInversed
+	    });
+	    rootEl.appendChild(this.track.el);
+
+	    this.handle = new _handle2.default({
+	      className: CLASSES.handle,
+	      onProgress: this._onHandleProgress.bind(this)
+	    });
+	    rootEl.appendChild(this.handle.el);
+	  };
+	  /*
+	    Method that is invoked on handle progress change.
+	    @private
+	    @param {Number} Progress [0...1].
+	  */
+
+
+	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
+	    this.track.setProgress(p, false);
+	  };
+	  /*
+	    Method that is invoked on track progress change.
+	    @private
+	    @param {Number} Progress [0...1].
+	  */
+
+
+	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
+	    this.handle.setProgress(p, false);
+	  };
+
+	  return Slider;
+	}(_module2.default);
+
+	exports.default = Slider;
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
 	var _typeof2 = __webpack_require__(5);
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
@@ -1723,7 +1823,7 @@
 	exports.default = Module;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1742,22 +1842,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(77);
+	var _module = __webpack_require__(78);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(79);
+	var _hammerjs = __webpack_require__(80);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _moJs = __webpack_require__(80);
+	var _moJs = __webpack_require__(81);
 
 	var _moJs2 = _interopRequireDefault(_moJs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(111);
-	var CLASSES = __webpack_require__(115);
+	__webpack_require__(112);
+	var CLASSES = __webpack_require__(116);
 
 	var Handle = function (_Module) {
 	  (0, _inherits3.default)(Handle, _Module);
@@ -1801,7 +1901,7 @@
 	  };
 	  /*
 	    Method to set handle shift.
-	    @public
+	    @private
 	    @param {Number} Shift in `px`.
 	    @param {Boolean} If should invoke onProgress callback.
 	    @returns {Number}.
@@ -1956,7 +2056,7 @@
 	exports.default = Handle;
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.6 - 2015-12-23
@@ -4530,76 +4630,76 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _shapesShapesMap = __webpack_require__(82);
+	var _shapesShapesMap = __webpack_require__(83);
 
 	var _shapesShapesMap2 = _interopRequireDefault(_shapesShapesMap);
 
-	var _burst = __webpack_require__(92);
+	var _burst = __webpack_require__(93);
 
 	var _burst2 = _interopRequireDefault(_burst);
 
-	var _transit = __webpack_require__(93);
+	var _transit = __webpack_require__(94);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _swirl = __webpack_require__(106);
+	var _swirl = __webpack_require__(107);
 
 	var _swirl2 = _interopRequireDefault(_swirl);
 
-	var _stagger = __webpack_require__(107);
+	var _stagger = __webpack_require__(108);
 
 	var _stagger2 = _interopRequireDefault(_stagger);
 
-	var _spriter = __webpack_require__(108);
+	var _spriter = __webpack_require__(109);
 
 	var _spriter2 = _interopRequireDefault(_spriter);
 
-	var _motionPath = __webpack_require__(109);
+	var _motionPath = __webpack_require__(110);
 
 	var _motionPath2 = _interopRequireDefault(_motionPath);
 
-	var _tweenTween = __webpack_require__(96);
+	var _tweenTween = __webpack_require__(97);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(104);
+	var _tweenTimeline = __webpack_require__(105);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var _tweenTweener = __webpack_require__(97);
+	var _tweenTweener = __webpack_require__(98);
 
 	var _tweenTweener2 = _interopRequireDefault(_tweenTweener);
 
-	var _tweenTweenable = __webpack_require__(95);
+	var _tweenTweenable = __webpack_require__(96);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _thenable = __webpack_require__(94);
+	var _thenable = __webpack_require__(95);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
-	var _tunable = __webpack_require__(105);
+	var _tunable = __webpack_require__(106);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _module2 = __webpack_require__(84);
+	var _module2 = __webpack_require__(85);
 
 	var _module3 = _interopRequireDefault(_module2);
 
 	var _tweenTweener3 = _interopRequireDefault(_tweenTweener);
 
-	var _easingEasing = __webpack_require__(100);
+	var _easingEasing = __webpack_require__(101);
 
 	var _easingEasing2 = _interopRequireDefault(_easingEasing);
 
@@ -4635,7 +4735,7 @@
 	}
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -5295,29 +5395,29 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var Bit, BitsMap, Circle, Cross, Equal, Line, Polygon, Rect, Zigzag, h;
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
-	  Circle = __webpack_require__(85);
+	  Circle = __webpack_require__(86);
 
-	  Line = __webpack_require__(86);
+	  Line = __webpack_require__(87);
 
-	  Zigzag = __webpack_require__(87);
+	  Zigzag = __webpack_require__(88);
 
-	  Rect = __webpack_require__(88);
+	  Rect = __webpack_require__(89);
 
-	  Polygon = __webpack_require__(89);
+	  Polygon = __webpack_require__(90);
 
-	  Cross = __webpack_require__(90);
+	  Cross = __webpack_require__(91);
 
-	  Equal = __webpack_require__(91);
+	  Equal = __webpack_require__(92);
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
 	  BitsMap = (function() {
 	    function BitsMap() {}
@@ -5352,7 +5452,7 @@
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5371,11 +5471,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _module2 = __webpack_require__(84);
+	var _module2 = __webpack_require__(85);
 
 	var _module3 = _interopRequireDefault(_module2);
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -5566,7 +5666,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5581,7 +5681,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	/*
 	  Base class for module. Extends and parses defaults.
@@ -6004,7 +6104,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6015,7 +6115,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Circle = (function(_super) {
 	    __extends(Circle, _super);
@@ -6057,7 +6157,7 @@
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6068,7 +6168,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Line = (function(_super) {
 	    __extends(Line, _super);
@@ -6099,7 +6199,7 @@
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6110,7 +6210,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Zigzag = (function(_super) {
 	    __extends(Zigzag, _super);
@@ -6162,7 +6262,7 @@
 
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6173,7 +6273,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Rect = (function(_super) {
 	    __extends(Rect, _super);
@@ -6220,7 +6320,7 @@
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6231,9 +6331,9 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
 	  Polygon = (function(_super) {
 	    __extends(Polygon, _super);
@@ -6294,7 +6394,7 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6305,7 +6405,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Cross = (function(_super) {
 	    __extends(Cross, _super);
@@ -6355,7 +6455,7 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -6366,7 +6466,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(83)["default"] || __webpack_require__(83);
+	  Bit = __webpack_require__(84)["default"] || __webpack_require__(84);
 
 	  Equal = (function(_super) {
 	    __extends(Equal, _super);
@@ -6417,7 +6517,7 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6436,23 +6536,23 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _transit = __webpack_require__(93);
+	var _transit = __webpack_require__(94);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _tweenTimeline = __webpack_require__(104);
+	var _tweenTimeline = __webpack_require__(105);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var _swirl = __webpack_require__(106);
+	var _swirl = __webpack_require__(107);
 
 	var _swirl2 = _interopRequireDefault(_swirl);
 
-	var _tunable = __webpack_require__(105);
+	var _tunable = __webpack_require__(106);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -6975,7 +7075,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6994,27 +7094,27 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _module2 = __webpack_require__(84);
+	var _module2 = __webpack_require__(85);
 
 	var _module3 = _interopRequireDefault(_module2);
 
-	var _thenable = __webpack_require__(94);
+	var _thenable = __webpack_require__(95);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
-	var _tunable = __webpack_require__(105);
+	var _tunable = __webpack_require__(106);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _tweenTweenable = __webpack_require__(95);
+	var _tweenTweenable = __webpack_require__(96);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _tweenTween = __webpack_require__(96);
+	var _tweenTween = __webpack_require__(97);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(104);
+	var _tweenTimeline = __webpack_require__(105);
 
 	// TODO
 	//  - refactor
@@ -7024,9 +7124,9 @@
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var h = __webpack_require__(81);
-	var Bit = __webpack_require__(83);
-	var shapesMap = __webpack_require__(82);
+	var h = __webpack_require__(82);
+	var Bit = __webpack_require__(84);
+	var shapesMap = __webpack_require__(83);
 
 	var Transit = (function (_Tunable) {
 	  _inherits(Transit, _Tunable);
@@ -7543,7 +7643,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7564,11 +7664,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _tweenTweenable = __webpack_require__(95);
+	var _tweenTweenable = __webpack_require__(96);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	/*
 	  The Thenable class adds .then public method and
@@ -7848,7 +7948,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7867,15 +7967,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _tween = __webpack_require__(96);
+	var _tween = __webpack_require__(97);
 
 	var _tween2 = _interopRequireDefault(_tween);
 
-	var _timeline = __webpack_require__(104);
+	var _timeline = __webpack_require__(105);
 
 	var _timeline2 = _interopRequireDefault(_timeline);
 
-	var _module2 = __webpack_require__(84);
+	var _module2 = __webpack_require__(85);
 
 	/*
 	  Class to define a module ancestor
@@ -8065,7 +8165,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// import h from '../h';
@@ -8085,19 +8185,19 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweener = __webpack_require__(97);
+	var _tweener = __webpack_require__(98);
 
 	var _tweener2 = _interopRequireDefault(_tweener);
 
-	var _easingEasing = __webpack_require__(100);
+	var _easingEasing = __webpack_require__(101);
 
 	var _easingEasing2 = _interopRequireDefault(_easingEasing);
 
-	var _module2 = __webpack_require__(84);
+	var _module2 = __webpack_require__(85);
 
 	var _module3 = _interopRequireDefault(_module2);
 
@@ -9283,7 +9383,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9298,11 +9398,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	__webpack_require__(98);
-
 	__webpack_require__(99);
 
-	var _h = __webpack_require__(81);
+	__webpack_require__(100);
+
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -9434,7 +9534,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 98 */
+/* 99 */
 /***/ function(module, exports) {
 
 	
@@ -9473,7 +9573,7 @@
 
 
 /***/ },
-/* 99 */
+/* 100 */
 /***/ function(module, exports) {
 
 	
@@ -9500,19 +9600,19 @@
 
 
 /***/ },
-/* 100 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var Easing, PathEasing, bezier, easing, h, mix;
 
-	  bezier = __webpack_require__(101);
+	  bezier = __webpack_require__(102);
 
-	  PathEasing = __webpack_require__(102);
+	  PathEasing = __webpack_require__(103);
 
-	  mix = __webpack_require__(103);
+	  mix = __webpack_require__(104);
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
 	  Easing = (function() {
 	    function Easing() {}
@@ -9803,14 +9903,14 @@
 
 
 /***/ },
-/* 101 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function() {
 	  var BezierEasing, bezierEasing, h,
 	    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
 
 	  /**
@@ -9983,13 +10083,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 102 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var PathEasing, h;
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
 	  PathEasing = (function() {
 	    PathEasing.prototype._vars = function() {
@@ -10222,7 +10322,7 @@
 
 
 /***/ },
-/* 103 */
+/* 104 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -10298,7 +10398,7 @@
 
 
 /***/ },
-/* 104 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10317,15 +10417,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweener = __webpack_require__(97);
+	var _tweener = __webpack_require__(98);
 
 	var _tweener2 = _interopRequireDefault(_tweener);
 
-	var _tween = __webpack_require__(96);
+	var _tween = __webpack_require__(97);
 
 	var _tween2 = _interopRequireDefault(_tween);
 
@@ -10638,7 +10738,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 105 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10659,11 +10759,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _thenable = __webpack_require__(94);
+	var _thenable = __webpack_require__(95);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
@@ -10910,7 +11010,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 106 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10929,11 +11029,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _transit = __webpack_require__(93);
+	var _transit = __webpack_require__(94);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	/*
 	  *TODO:*
@@ -11141,7 +11241,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 107 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11152,11 +11252,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweenTimeline = __webpack_require__(104);
+	var _tweenTimeline = __webpack_require__(105);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
@@ -11291,7 +11391,7 @@
 	};
 
 /***/ },
-/* 108 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11306,15 +11406,15 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(81);
+	var _h = __webpack_require__(82);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweenTween = __webpack_require__(96);
+	var _tweenTween = __webpack_require__(97);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(104);
+	var _tweenTimeline = __webpack_require__(105);
 
 	/*
 	  Class for toggling opacity on bunch of elements
@@ -11568,20 +11668,20 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 109 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var MotionPath, Timeline, Tween, h, resize,
 	    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	  h = __webpack_require__(81);
+	  h = __webpack_require__(82);
 
-	  resize = __webpack_require__(110);
+	  resize = __webpack_require__(111);
 
-	  Tween = __webpack_require__(96)["default"];
+	  Tween = __webpack_require__(97)["default"];
 
-	  Timeline = __webpack_require__(104)["default"];
+	  Timeline = __webpack_require__(105)["default"];
 
 	  MotionPath = (function() {
 	    MotionPath.prototype.defaults = {
@@ -12106,7 +12206,7 @@
 
 
 /***/ },
-/* 110 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
@@ -12332,16 +12432,16 @@
 
 
 /***/ },
-/* 111 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(112);
+	var content = __webpack_require__(113);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
+	var update = __webpack_require__(115)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -12358,10 +12458,10 @@
 	}
 
 /***/ },
-/* 112 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(113)();
+	exports = module.exports = __webpack_require__(114)();
 	// imports
 
 
@@ -12372,7 +12472,7 @@
 
 
 /***/ },
-/* 113 */
+/* 114 */
 /***/ function(module, exports) {
 
 	/*
@@ -12428,7 +12528,7 @@
 
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -12680,7 +12780,7 @@
 
 
 /***/ },
-/* 115 */
+/* 116 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -12690,7 +12790,7 @@
 	};
 
 /***/ },
-/* 116 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12709,22 +12809,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _handle = __webpack_require__(78);
+	var _handle = __webpack_require__(79);
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _hammerjs = __webpack_require__(79);
+	var _hammerjs = __webpack_require__(80);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _moJs = __webpack_require__(80);
+	var _moJs = __webpack_require__(81);
 
 	var _moJs2 = _interopRequireDefault(_moJs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(117);
-	var CLASSES = __webpack_require__(119);
+	__webpack_require__(118);
+	var CLASSES = __webpack_require__(120);
 
 	var addTouchStartEvent = function addTouchStartEvent(el, fn) {
 	  if (window.navigator.msPointerEnabled) {
@@ -12756,8 +12856,24 @@
 	      className: '',
 	      parent: document.body,
 	      onProgress: null,
-	      isTrack: true
+	      isTrack: true,
+	      isInversed: false
 	    };
+	  };
+	  /*
+	    Method to set handle shift.
+	    @private
+	    @overrides @ Handle
+	    @param {Number} Shift in `px`.
+	    @param {Boolean} If should invoke onProgress callback.
+	    @returns {Number}.
+	  */
+
+
+	  Track.prototype._setShift = function _setShift(shift) {
+	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+	    return _Handle.prototype._setShift.call(this, shift, isCallback);
 	  };
 	  /*
 	    Method to apply shift to the DOMElement.
@@ -12768,6 +12884,9 @@
 
 
 	  Track.prototype._applyShift = function _applyShift(shift) {
+	    if (this._props.isInversed) {
+	      shift = this._maxWidth - shift;
+	    }
 	    var transform = 'scaleX( ' + shift + ' ) translateZ(0)';
 	    this.trackProgressEl.style.transform = transform;
 	  };
@@ -12781,50 +12900,41 @@
 	    var p = this._props,
 	        trackP = document.createElement('div');
 
+	    // main element
 	    this.el = document.createElement('div');
 	    var classList = this.el.classList;
 	    classList.add('' + CLASSES.track);
 	    classList.add('' + this._props.className);
 
+	    // progress track
 	    trackP.classList.add('' + CLASSES['track__track-progress']);
 	    this.trackProgressEl = trackP;
+	    this.el.appendChild(trackP);
 
+	    // track
 	    if (p.isTrack) {
 	      var track = document.createElement('div');
 	      track.classList.add('' + CLASSES.track__track);
 	      this.el.appendChild(track);
-	    } else {
-	      trackP.style.background = 'cyan';
-	    }
 
-	    this.el.appendChild(trackP);
+	      // temporary
+	    } else if (!p.isInversed) {
+	        trackP.style.background = 'cyan';
+	      }
+	    if (p.isInversed) {
+	      classList.add('' + CLASSES['is-inversed']);
+	      trackP.style.background = 'deeppink';
+	    }
 	  };
 
 	  Track.prototype._hammerTime = function _hammerTime() {
 	    var _this2 = this;
 
 	    _Handle.prototype._hammerTime.call(this);
-	    // let hammerTime = new HamerJS.Manager(this.el, {
-	    //   recognizers: [
-	    //       // RecognizerClass, [options], [recognizeWith, ...], [requireFailure, ...]
-	    //       [Hammer.Pan],
-	    //       [Hammer.Tap],
-	    //     ]
-	    // });
-
-	    // console.log(hammerTime)
-
-	    // // hammerTime.add( new Hammer.Tap )
-	    // // hammerTime.add( new Hammer.Pan )
-
-	    // hammerTime.on('hammer.input', ( e ) => {
-	    //   // console.log( e );
-	    //   console.log(e)
-	    //   this.setProgress( this._shiftToProgress( e.center.x ) );
-	    // });
-
 	    addTouchStartEvent(this.el, function (e) {
-	      _this2.setProgress(_this2._shiftToProgress(e.layerX));
+	      var x = e.layerX;
+	      x = _this2._props.isInversed && e.layerX < 0 ? _this2._maxWidth + x : x;
+	      _this2.setProgress(_this2._shiftToProgress(x));
 	    });
 	  };
 
@@ -12834,16 +12944,16 @@
 	exports.default = Track;
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(118);
+	var content = __webpack_require__(119);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
+	var update = __webpack_require__(115)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -12860,40 +12970,41 @@
 	}
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(113)();
+	exports = module.exports = __webpack_require__(114)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "._track_1m4ub_5 {\n  position:           relative;\n  /*width:              100%;*/\n  height:             100%\n  /*overflow:           hidden;*/\n  /*outline:            1px solid cyan;*/\n\n  /*$handleHeight: 13;\n  & .handle {\n    position:       absolute;\n    left:           0;\n    top:            50%;\n    z-index:        2;\n  }*/\n}\n._track__track_1m4ub_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n}\n._track__track_1m4ub_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n._track__track-progress_1m4ub_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n}\n._track__track-progress_1m4ub_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n}\n\n", ""]);
+	exports.push([module.id, "._track_4qrqq_5 {\n  position:           relative;\n  /*width:              100%;*/\n  height:             100%\n  /*overflow:           hidden;*/\n  /*outline:            1px solid cyan;*/\n\n}\n._track__track_4qrqq_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n}\n._track__track_4qrqq_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track__track-progress_4qrqq_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n}\n._track__track-progress_4qrqq_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track_4qrqq_5._is-inversed_4qrqq_57 {\n  left:           auto;\n  right:           0\n\n}\n._track_4qrqq_5._is-inversed_4qrqq_57 ._track__track-progress_4qrqq_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n}\n\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"track": "_track_1m4ub_5",
-		"track__track": "_track__track_1m4ub_1",
-		"track__track-progress": "_track__track-progress_1m4ub_1"
+		"track": "_track_4qrqq_5",
+		"track__track": "_track__track_4qrqq_1",
+		"track__track-progress": "_track__track-progress_4qrqq_1",
+		"is-inversed": "_is-inversed_4qrqq_57"
 	};
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(121);
+	var content = __webpack_require__(122);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
+	var update = __webpack_require__(115)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -12910,10 +13021,10 @@
 	}
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(113)();
+	exports = module.exports = __webpack_require__(114)();
 	// imports
 
 
@@ -12924,7 +13035,7 @@
 
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -12934,7 +13045,56 @@
 	};
 
 /***/ },
-/* 123 */
+/* 124 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(125);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 125 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_fh7me_6 {\n\n}\n._player-slider_fh7me_6 > div {\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 2\n}\n._player-slider_fh7me_6 ._slider_fh7me_15 {\n    z-index: 1\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 126 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"player-slider": "_player-slider_fh7me_6",
+		"slider": "_slider_fh7me_15"
+	};
+
+/***/ },
+/* 127 */
 /***/ function(module, exports) {
 
 	/*
@@ -13179,16 +13339,16 @@
 
 
 /***/ },
-/* 124 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(125);
+	var content = __webpack_require__(129);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
+	var update = __webpack_require__(115)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -13205,10 +13365,10 @@
 	}
 
 /***/ },
-/* 125 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(113)();
+	exports = module.exports = __webpack_require__(114)();
 	// imports
 
 
@@ -13217,145 +13377,6 @@
 
 	// exports
 
-
-/***/ },
-/* 126 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _slider = __webpack_require__(2);
-
-	var _slider2 = _interopRequireDefault(_slider);
-
-	var _module = __webpack_require__(77);
-
-	var _module2 = _interopRequireDefault(_module);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(127);
-	var CLASSES = __webpack_require__(129);
-	var SLIDER_CLASSES = __webpack_require__(122);
-
-	var PlayerSlider = function (_Module) {
-	  (0, _inherits3.default)(PlayerSlider, _Module);
-
-	  function PlayerSlider() {
-	    (0, _classCallCheck3.default)(this, PlayerSlider);
-	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare _defaults.
-	    @private
-	    @overrides @ Module
-	  */
-
-	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: CLASSES['player-slider'],
-	      parent: document.body
-	    };
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Module
-	    @returns this
-	  */
-
-
-	  // isEl:      true
-
-	  PlayerSlider.prototype._render = function _render() {
-	    this.el = document.createElement('div');
-	    this.el.classList.add('' + this._props.className);
-	    this.el.classList.add('' + SLIDER_CLASSES.slider);
-
-	    this.leftBound = new _slider2.default({
-	      isEl: false,
-	      isTrack: false,
-	      parent: this.el
-	    });
-	    this.track = new _slider2.default({
-	      parent: this.el,
-	      className: CLASSES.slider
-	    });
-
-	    this.leftBound.setProgress(.25);
-	    this.track.setProgress(.5);
-
-	    this._props.parent.appendChild(this.el);
-	  };
-
-	  return PlayerSlider;
-	}(_module2.default);
-
-	exports.default = PlayerSlider;
-
-/***/ },
-/* 127 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(128);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(114)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-slider.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 128 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(113)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_fh7me_6 {\n\n}\n._player-slider_fh7me_6 > div {\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 2\n}\n._player-slider_fh7me_6 ._slider_fh7me_15 {\n    z-index: 1\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 129 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"player-slider": "_player-slider_fh7me_6",
-		"slider": "_slider_fh7me_15"
-	};
 
 /***/ }
 /******/ ]);

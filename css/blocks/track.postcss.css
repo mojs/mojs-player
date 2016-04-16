@@ -54,12 +54,14 @@ $height: 40;
     }
   }
 
-  /*$handleHeight: 13;
-  & .handle {
-    position:       absolute;
-    left:           0;
-    top:            50%;
-    z-index:        2;
-  }*/
+  &.is-inversed {
+    left:             auto;
+    right:            0;
+  }
+
+  &.is-inversed &__track-progress {
+    transform-origin: right center;
+  }
+
 }
 

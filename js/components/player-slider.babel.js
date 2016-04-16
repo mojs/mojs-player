@@ -39,9 +39,16 @@ class PlayerSlider extends Module {
       className: CLASSES.slider
     });
 
+    this.rightBound = new Slider({
+      isEl:       false,
+      isTrack:    false,
+      parent:     this.el,
+      isInversed: true
+    });
+
     this.leftBound.setProgress( .25 );
     this.track.setProgress( .5 );
-
+    this.rightBound.setProgress( .75 );
 
     this._props.parent.appendChild( this.el );
   }
