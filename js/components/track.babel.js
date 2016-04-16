@@ -26,7 +26,8 @@ class Track extends Handle {
     this._defaults = {
       className:  '',
       parent:     document.body,
-      onProgress: null
+      onProgress: null,
+      isTrack:    true
     }
   }
   /*
@@ -44,20 +45,26 @@ class Track extends Handle {
     @private
   */
   _addElements () {
-    var p      = this._props,
-        track  = document.createElement('div'),
+    let p      = this._props,
         trackP = document.createElement('div');
+
 
     this.el = document.createElement('div');
     let classList = this.el.classList;
     classList.add( `${ CLASSES.track }` )
     classList.add( `${ this._props.className }` );
 
-    track.classList.add(`${ CLASSES.track__track }`);
     trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
     this.trackProgressEl = trackP;
+
+    if ( p.isTrack ) {
+      let track  = document.createElement('div');
+      track.classList.add(`${ CLASSES.track__track }`);
+      this.el.appendChild( track );
+    } else {
+      trackP.style.background = 'cyan';
+    }
     
-    this.el.appendChild( track );
     this.el.appendChild( trackP );
   }
 

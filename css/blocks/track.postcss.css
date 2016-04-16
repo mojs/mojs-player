@@ -4,9 +4,9 @@
 $height: 40;
 .track {
   position:           relative;
-  width:              100%;
+  /*width:              100%;*/
   height:             100%;
-  overflow:           hidden;
+  /*overflow:           hidden;*/
   /*outline:            1px solid cyan;*/
   
   &__track {
@@ -42,6 +42,16 @@ $height: 40;
     background:       $c-orange;
     z-index:          1;
     transform-origin: left center;
+    &:after {
+      content:        '';
+      position:       absolute;
+      left:           0;
+      top:            calc( - $height/2 * $PX );
+      width:          100%;
+      height:         calc( $height * $PX );
+      cursor:         pointer;
+      /*background-color: yellow;*/
+    }
   }
 
   /*$handleHeight: 13;

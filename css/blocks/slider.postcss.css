@@ -13,10 +13,10 @@ $height: 30;
     position:       absolute;
     left:           0;
     top:            50%;
-    z-index:        2;
+    z-index:        3;
   }
   & .track {
-    z-index:        1;
+    z-index:        2;
   }
 }
 
