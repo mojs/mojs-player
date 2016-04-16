@@ -156,18 +156,21 @@
 	    this.leftBound = new _slider2.default({
 	      isEl: false,
 	      isTrack: false,
-	      parent: this.el
+	      parent: this.el,
+	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
 	    this.track = new _slider2.default({
 	      parent: this.el,
-	      className: CLASSES.slider
+	      className: CLASSES.slider,
+	      onProgress: this._onTrackProgress.bind(this)
 	    });
 
 	    this.rightBound = new _slider2.default({
 	      isEl: false,
 	      isTrack: false,
 	      parent: this.el,
-	      isInversed: true
+	      isInversed: true,
+	      onProgress: this._onRightBoundProgress.bind(this)
 	    });
 
 	    this.leftBound.setProgress(.25);
@@ -175,6 +178,36 @@
 	    this.rightBound.setProgress(.75);
 
 	    this._props.parent.appendChild(this.el);
+	  };
+	  /*
+	    Method that should be called on track update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+
+
+	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {
+	    console.log('track progress: ' + p);
+	  };
+	  /*
+	    Method that should be called on left bound update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+
+
+	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
+	    console.log('left bound progress: ' + p);
+	  };
+	  /*
+	    Method that should be called on right bound update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+
+
+	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
+	    console.log('right bound progress: ' + p);
 	  };
 
 	  return PlayerSlider;
@@ -1632,7 +1665,8 @@
 	      parent: document.body,
 	      isEl: true,
 	      isTrack: true,
-	      isInversed: false
+	      isInversed: false,
+	      onProgress: null
 	    };
 	  };
 	  /*
@@ -1689,6 +1723,7 @@
 
 	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
 	    this.track.setProgress(p, false);
+	    this._onProgress(p);
 	  };
 	  /*
 	    Method that is invoked on track progress change.
@@ -1699,6 +1734,22 @@
 
 	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
 	    this.handle.setProgress(p, false);
+	    this._onProgress(p);
+	  };
+	  /*
+	    Method to call onProgress callback.
+	    @private
+	    @param {Number} Progress value [0...1].
+	  */
+
+
+	  Slider.prototype._onProgress = function _onProgress(progress) {
+	    var p = this._props;
+
+	    if (typeof p.onProgress === 'function' && this._progress !== progress) {
+	      this._progress = progress;
+	      p.onProgress.call(this, progress);
+	    }
 	  };
 
 	  return Slider;
