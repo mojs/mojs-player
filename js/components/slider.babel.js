@@ -30,6 +30,41 @@ class Slider extends Module {
   setProgress ( progress ) {
     this.handle.setProgress( progress );
     this.track.setProgress( progress );
+    return this;
+  }
+  /*
+    Method to set bounds of progress.
+    @public
+    @param {Number} Min bound to set [0...1].
+    @param {Number} Max bound to set [0...1].
+    @returns this.
+  */
+  setBounds ( min, max ) {
+    this.handle.setBounds( min, max );
+    this.track.setBounds( min, max );
+    return this;
+  }
+  /*
+    Method to set min bound of progress.
+    @public
+    @param {Number} Min bound to set [0...1].
+    @returns this.
+  */
+  setMinBound ( min ) {
+    this.handle.setMinBound( min );
+    this.track.setMinBound( min );
+    return this;
+  }
+  /*
+    Method to set max bound of progress.
+    @public
+    @param {Number} Max bound to set [0...1].
+    @returns this.
+  */
+  setMaxBound ( max ) {
+    this.handle.setMaxBound( max );
+    this.track.setMaxBound( max );
+    return this;
   }
   /*
     Method to render the component.

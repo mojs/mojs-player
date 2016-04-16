@@ -49,10 +49,10 @@ class PlayerSlider extends Module {
       onProgress: this._onRightBoundProgress.bind(this)
     });
 
-    this.leftBound.setProgress( .25 );
     this.track.setProgress( .5 );
     this.rightBound.setProgress( .75 );
-
+    this.leftBound.setProgress( .25 );
+    
     this._props.parent.appendChild( this.el );
   }
   /*
@@ -69,7 +69,8 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onLeftBoundProgress ( p ) {
-    console.log( `left bound progress: ${p}` );
+    this.track.setMinBound( p );
+    this.rightBound.setMinBound( p );
   }
   /*
     Method that should be called on right bound update.
@@ -77,7 +78,8 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onRightBoundProgress ( p ) {
-    console.log( `right bound progress: ${p}` );
+    this.track.setMaxBound( p );
+    this.leftBound.setMaxBound( p );
   }
 }
 

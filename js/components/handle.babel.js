@@ -15,6 +15,8 @@ class Handle extends Module {
     this._defaults = {
       className:  '',
       parent:     document.body,
+      minBound:   0,
+      maxBound:   1,
       onProgress: null
     }
   }
@@ -34,25 +36,38 @@ class Handle extends Module {
     return this;
   }
   /*
-    Method to set handle shift.
-    @private
-    @param {Number} Shift in `px`.
-    @param {Boolean} If should invoke onProgress callback.
-    @returns {Number}.
+    Method to set bounds of progress.
+    @public
+    @param {Number} Min bound to set [0...1].
+    @param {Number} Max bound to set [0...1].
+    @returns this.
   */
-  _setShift ( shift, isCallback = true ) {
-    shift = mojs.h.clamp( shift, 0, this._maxWidth );
-    this._applyShift( shift );
-    isCallback && this._onProgress( shift );
-    return shift;
+  setBounds ( min, max ) {
+    this.setMinBound( min );
+    this.setMaxBound( max );
+    return this;
   }
   /*
-    Method to apply shift to the DOMElement.
-    @private
-    @param {Number} Shift in pixels.
+    Method to set min bound of progress.
+    @public
+    @param {Number} Min bound to set [0...1].
+    @returns this.
   */
-  _applyShift ( shift ) {
-    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
+  setMinBound ( min ) {
+    this._props.minBound = Math.max( min, 0 );
+    if ( this._progress < min ) { this.setProgress( min ); }
+    return this;
+  }
+  /*
+    Method to set max bound of progress.
+    @public
+    @param {Number} Max bound to set [0...1].
+    @returns this.
+  */
+  setMaxBound ( max ) {
+    this._props.maxBound = Math.min( max, 1 );
+    if ( this._progress > max ) { this.setProgress( max ); }
+    return this;
   }
   /*
     Method to declare properties.
@@ -67,6 +82,31 @@ class Handle extends Module {
     // `delta` deviation from the current `shift`
     this._delta    = 0;
     this._getMaxWidth();
+  }
+  /*
+    Method to set handle shift.
+    @private
+    @param {Number} Shift in `px`.
+    @param {Boolean} If should invoke onProgress callback.
+    @returns {Number}.
+  */
+  _setShift ( shift, isCallback = true ) {
+    let p        = this._props,
+        minBound = p.minBound*this._maxWidth,
+        maxBound = p.maxBound*this._maxWidth;
+
+    shift = mojs.h.clamp( shift, minBound, maxBound );
+    this._applyShift( shift );
+    isCallback && this._onProgress( shift );
+    return shift;
+  }
+  /*
+    Method to apply shift to the DOMElement.
+    @private
+    @param {Number} Shift in pixels.
+  */
+  _applyShift ( shift ) {
+    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
   }
   /*
     Method to get max width of the parent.
