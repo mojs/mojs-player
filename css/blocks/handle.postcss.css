@@ -49,5 +49,30 @@ $handleHeight: 13;
     opacity:        .85;
     transform:      scale(1) translateZ(0);
   }
+  
+  $width:  12;
+  $height: 20;
+  &.is-bound {
+    width:          calc( $width * $PX );
+    height:         calc( $height * $PX );
+    margin-left:    calc( - $width * $PX );
+    margin-top:     calc( - $height/2 * $PX );
+  }
+  &.is-bound &__inner {
+    background:     $c-orange;
+  }
+  &.is-bound &__inner,
+  &.is-bound &__shadow {
+    border-radius:  $BRADIUS;
+  }
+
+
+  &.is-inversed {
+    margin-left:    0;
+  }
+  &.is-inversed &__shadow {
+    box-shadow:     calc( - $PX ) calc( $PX ) calc( 2*$PX ) black;
+  }
+
 }
 

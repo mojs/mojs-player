@@ -27,7 +27,7 @@ class Track extends Handle {
       className:    '',
       parent:       document.body,
       onProgress:   null,
-      isTrack:      true,
+      isBound:      false,
       isInversed:   false
     }
   }
@@ -66,6 +66,10 @@ class Track extends Handle {
     let classList = this.el.classList;
     classList.add( `${ CLASSES.track }` )
     classList.add( `${ this._props.className }` );
+    if ( p.isInversed ) { classList.add( `${ CLASSES[ 'is-inversed' ] }` ); }
+    if ( p.isBound ) {
+      classList.add(`${ CLASSES['is-bound'] }`);
+    }
     
     // progress track
     trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
@@ -73,18 +77,10 @@ class Track extends Handle {
     this.el.appendChild( trackP );
 
     // track
-    if ( p.isTrack ) {
+    if ( !p.isBound ) {
       let track  = document.createElement('div');
       track.classList.add(`${ CLASSES.track__track }`);
       this.el.appendChild( track );
-
-    // temporary
-    } else if ( !p.isInversed ) {
-      trackP.style.background = 'cyan';
-    }
-    if ( p.isInversed ) {
-      classList.add( `${ CLASSES[ 'is-inversed' ] }` );  
-      trackP.style.background = 'deeppink';
     }
     
   }

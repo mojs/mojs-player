@@ -13,11 +13,13 @@ class Handle extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className:  '',
-      parent:     document.body,
-      minBound:   0,
-      maxBound:   1,
-      onProgress: null
+      className:    '',
+      parent:       document.body,
+      minBound:     0,
+      maxBound:     1,
+      isBound:      false,
+      isInversed:   false,
+      onProgress:   null
     }
   }
   /*
@@ -138,6 +140,8 @@ class Handle extends Module {
     let classList = this.el.classList;
     classList.add( `${ CLASSES.handle }` );
     classList.add( `${ this._props.className }` );
+    if ( p.isBound ) { classList.add( `${ CLASSES['is-bound'] }` ); }
+    if ( p.isInversed ) { classList.add( `${ CLASSES['is-inversed'] }` ); }
     
     this.el.appendChild( shadow );
     this.el.appendChild( inner );
