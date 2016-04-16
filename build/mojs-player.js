@@ -154,8 +154,7 @@
 	    this.el.classList.add('' + SLIDER_CLASSES.slider);
 
 	    this.leftBound = new _slider2.default({
-	      isEl: false,
-	      isTrack: false,
+	      isBound: true,
 	      parent: this.el,
 	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
@@ -166,15 +165,14 @@
 	    });
 
 	    this.rightBound = new _slider2.default({
-	      isEl: false,
-	      isTrack: false,
+	      isBound: true,
 	      parent: this.el,
 	      isInversed: true,
 	      onProgress: this._onRightBoundProgress.bind(this)
 	    });
 
-	    this.track.setProgress(.5);
 	    this.rightBound.setProgress(.75);
+	    this.track.setProgress(.5);
 	    this.leftBound.setProgress(.25);
 
 	    this._props.parent.appendChild(this.el);
@@ -1665,8 +1663,7 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
-	      isEl: true,
-	      isTrack: true,
+	      isBound: false,
 	      isInversed: false,
 	      onProgress: null
 	    };
@@ -1734,26 +1731,28 @@
 	  Slider.prototype._render = function _render() {
 	    var p = this._props;
 
-	    if (p.isEl) {
+	    if (!p.isBound) {
 	      this.el = document.createElement('div');
 	      this.el.classList.add('' + CLASSES.slider);
 	      this.el.classList.add('' + p.className);
 	      p.parent.appendChild(this.el);
 	    }
 
-	    var rootEl = p.isEl ? this.el : p.parent;
+	    var rootEl = !p.isBound ? this.el : p.parent;
 
 	    this.track = new _track2.default({
 	      className: CLASSES.track,
 	      onProgress: this._onTrackProgress.bind(this),
-	      isTrack: this._props.isTrack,
+	      isBound: this._props.isBound,
 	      isInversed: this._props.isInversed
 	    });
 	    rootEl.appendChild(this.track.el);
 
 	    this.handle = new _handle2.default({
 	      className: CLASSES.handle,
-	      onProgress: this._onHandleProgress.bind(this)
+	      onProgress: this._onHandleProgress.bind(this),
+	      isBound: this._props.isBound,
+	      isInversed: this._props.isInversed
 	    });
 	    rootEl.appendChild(this.handle.el);
 	  };
@@ -1973,6 +1972,8 @@
 	      parent: document.body,
 	      minBound: 0,
 	      maxBound: 1,
+	      isBound: false,
+	      isInversed: false,
 	      onProgress: null
 	    };
 	  };
@@ -2124,6 +2125,12 @@
 	    var classList = this.el.classList;
 	    classList.add('' + CLASSES.handle);
 	    classList.add('' + this._props.className);
+	    if (p.isBound) {
+	      classList.add('' + CLASSES['is-bound']);
+	    }
+	    if (p.isInversed) {
+	      classList.add('' + CLASSES['is-inversed']);
+	    }
 
 	    this.el.appendChild(shadow);
 	    this.el.appendChild(inner);
@@ -12610,7 +12617,7 @@
 
 
 	// module
-	exports.push([module.id, "._handle_lk6b6_5 {\n  margin-left:    -6.5px;\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n._handle__inner_lk6b6_1, ._handle__shadow_lk6b6_1 {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n}\n._handle__inner_lk6b6_1 {\n  background:    #FFF\n}\n._handle__shadow_lk6b6_1 {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n}\n._handle_lk6b6_5:hover ._handle__inner_lk6b6_1, ._handle_lk6b6_5:hover ._handle__shadow_lk6b6_1 {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n}\n._handle_lk6b6_5:active ._handle__inner_lk6b6_1 {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_lk6b6_5:active ._handle__shadow_lk6b6_1 {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n}\n\n", ""]);
+	exports.push([module.id, "._handle_1y7jt_5 {\n  margin-left:    -6.5px;\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n\n}\n._handle__inner_1y7jt_1, ._handle__shadow_1y7jt_1 {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n\n}\n._handle__inner_1y7jt_1 {\n  background:    #FFF\n\n}\n._handle__shadow_1y7jt_1 {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n\n}\n._handle_1y7jt_5:hover ._handle__inner_1y7jt_1, ._handle_1y7jt_5:hover ._handle__shadow_1y7jt_1 {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n\n}\n._handle_1y7jt_5:active ._handle__inner_1y7jt_1 {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n\n}\n._handle_1y7jt_5:active ._handle__shadow_1y7jt_1 {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 {\n  width:    12px;\n  width:    12px;\n  width:    0.75rem;\n  height:    20px;\n  height:    20px;\n  height:    1.25rem;\n  margin-left:    -12px;\n  margin-left:    -12px;\n  margin-left:    -0.75rem;\n  margin-top:    -10px;\n  margin-top:    -10px;\n  margin-top:    -0.625rem\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__inner_1y7jt_1 {\n  background:    #FF512F\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__inner_1y7jt_1, ._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__shadow_1y7jt_1 {\n  border-radius:    0.1875rem\n\n}\n._handle_1y7jt_5._is-inversed_1y7jt_70 {\n  margin-left:    0\n\n}\n._handle_1y7jt_5._is-inversed_1y7jt_70 ._handle__shadow_1y7jt_1 {\n  box-shadow:    -0.0625rem 0.0625rem 0.125rem black\n\n}\n\n", ""]);
 
 	// exports
 
@@ -12928,9 +12935,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_lk6b6_5",
-		"handle__inner": "_handle__inner_lk6b6_1",
-		"handle__shadow": "_handle__shadow_lk6b6_1"
+		"handle": "_handle_1y7jt_5",
+		"handle__inner": "_handle__inner_1y7jt_1",
+		"handle__shadow": "_handle__shadow_1y7jt_1",
+		"is-bound": "_is-bound_1y7jt_55",
+		"is-inversed": "_is-inversed_1y7jt_70"
 	};
 
 /***/ },
@@ -13000,7 +13009,7 @@
 	      className: '',
 	      parent: document.body,
 	      onProgress: null,
-	      isTrack: true,
+	      isBound: false,
 	      isInversed: false
 	    };
 	  };
@@ -13049,6 +13058,12 @@
 	    var classList = this.el.classList;
 	    classList.add('' + CLASSES.track);
 	    classList.add('' + this._props.className);
+	    if (p.isInversed) {
+	      classList.add('' + CLASSES['is-inversed']);
+	    }
+	    if (p.isBound) {
+	      classList.add('' + CLASSES['is-bound']);
+	    }
 
 	    // progress track
 	    trackP.classList.add('' + CLASSES['track__track-progress']);
@@ -13056,18 +13071,10 @@
 	    this.el.appendChild(trackP);
 
 	    // track
-	    if (p.isTrack) {
+	    if (!p.isBound) {
 	      var track = document.createElement('div');
 	      track.classList.add('' + CLASSES.track__track);
 	      this.el.appendChild(track);
-
-	      // temporary
-	    } else if (!p.isInversed) {
-	        trackP.style.background = 'cyan';
-	      }
-	    if (p.isInversed) {
-	      classList.add('' + CLASSES['is-inversed']);
-	      trackP.style.background = 'deeppink';
 	    }
 	  };
 
@@ -13122,7 +13129,7 @@
 
 
 	// module
-	exports.push([module.id, "._track_4qrqq_5 {\n  position:           relative;\n  /*width:              100%;*/\n  height:             100%\n  /*overflow:           hidden;*/\n  /*outline:            1px solid cyan;*/\n\n}\n._track__track_4qrqq_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n}\n._track__track_4qrqq_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track__track-progress_4qrqq_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  background:           #FF512F;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n}\n._track__track-progress_4qrqq_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track_4qrqq_5._is-inversed_4qrqq_57 {\n  left:           auto;\n  right:           0\n\n}\n._track_4qrqq_5._is-inversed_4qrqq_57 ._track__track-progress_4qrqq_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n}\n\n", ""]);
+	exports.push([module.id, "._track_piwlo_5 {\n  position:           relative;\n  /*width:              100%;*/\n  height:             100%\n  /*overflow:           hidden;*/\n  /*outline:            1px solid cyan;*/\n\n}\n._track__track_piwlo_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n}\n._track__track_piwlo_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track__track-progress_piwlo_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n}\n._track__track-progress_piwlo_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track_piwlo_5._is-inversed_piwlo_58 {\n  left:           auto;\n  right:           0\n\n}\n._track_piwlo_5._is-inversed_piwlo_58 ._track__track-progress_piwlo_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n}\n._track_piwlo_5._is-bound_piwlo_67 ._track__track-progress_piwlo_1 {\n  background:           #FF512F\n\n}\n\n", ""]);
 
 	// exports
 
@@ -13132,10 +13139,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"track": "_track_4qrqq_5",
-		"track__track": "_track__track_4qrqq_1",
-		"track__track-progress": "_track__track-progress_4qrqq_1",
-		"is-inversed": "_is-inversed_4qrqq_57"
+		"track": "_track_piwlo_5",
+		"track__track": "_track__track_piwlo_1",
+		"track__track-progress": "_track__track-progress_piwlo_1",
+		"is-inversed": "_is-inversed_piwlo_58",
+		"is-bound": "_is-bound_piwlo_67"
 	};
 
 /***/ },

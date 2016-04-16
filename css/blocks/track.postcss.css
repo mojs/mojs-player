@@ -39,7 +39,8 @@ $height: 40;
     margin-top:       calc( -1 * $PX );
     height:           calc( 3*$PX );
     width:            1px;
-    background:       $c-orange;
+    /*background:       $c-orange;*/
+    background:       $c-white;
     z-index:          1;
     transform-origin: left center;
     &:after {
@@ -61,6 +62,10 @@ $height: 40;
 
   &.is-inversed &__track-progress {
     transform-origin: right center;
+  }
+
+  &.is-bound &__track-progress {
+    background:       $c-orange;
   }
 
 }

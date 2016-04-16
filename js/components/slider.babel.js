@@ -15,8 +15,7 @@ class Slider extends Module {
     this._defaults = {
       className:  '',
       parent:     document.body,
-      isEl:       true,
-      isTrack:    true,
+      isBound:    false,
       isInversed: false,
       onProgress: null
     }
@@ -74,26 +73,28 @@ class Slider extends Module {
   _render () {
     var p = this._props;
     
-    if ( p.isEl ) {
+    if ( !p.isBound ) {
       this.el = document.createElement('div');
       this.el.classList.add(`${CLASSES.slider}`);
       this.el.classList.add(`${p.className}`);
       p.parent.appendChild( this.el );
     }
 
-    let rootEl = ( p.isEl ) ? this.el : p.parent;
+    let rootEl = ( !p.isBound ) ? this.el : p.parent;
 
     this.track = new Track({
       className:  CLASSES.track,
       onProgress: this._onTrackProgress.bind(this),
-      isTrack:    this._props.isTrack,
+      isBound:    this._props.isBound,
       isInversed: this._props.isInversed
     });
     rootEl.appendChild( this.track.el );
 
     this.handle = new Handle({
       className:  CLASSES.handle,
-      onProgress: this._onHandleProgress.bind(this)
+      onProgress: this._onHandleProgress.bind(this),
+      isBound:    this._props.isBound,
+      isInversed: this._props.isInversed
     });
     rootEl.appendChild( this.handle.el );
   }
