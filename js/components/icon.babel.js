@@ -1,0 +1,49 @@
+import Slider from './slider';
+import Module from './module';
+
+require('css/blocks/icon.postcss.css');
+let CLASSES = require('css/blocks/icon.postcss.css.json');
+
+class Icon extends Module {
+  /*
+    Method to declare _defaults.
+    @private
+    @overrides @ Module
+  */
+  _declareDefaults () {
+    this._defaults = {
+      className: '',
+      parent:    document.body,
+      shape:     '',
+    }
+    this.NS = 'http://www.w3.org/2000/svg';
+  }
+  /*
+    Initial render method.
+    @private
+    @overrides @ Module
+    @returns this
+  */
+  _render () {
+    var p = this._props;
+    this.el = document.createElement( 'div' );
+    p.className && this.el.classList.add( `${ p.className }` );
+    this.el.classList.add( `${ CLASSES.icon }` );
+    this._renderIcon();
+    p.parent.appendChild( this.el );
+  }
+  /*
+    Method to render svg icon into the el.
+    @private
+  */
+  _renderIcon () {
+    let svg = document.createElementNS( this.NS, 'svg' ),
+        use = document.createElementNS( this.NS, 'use' );
+
+    use.setAttribute( 'xlink:href', `#${ this._props.shape }-icon-shape` );
+    svg.appendChild( use );
+    this.el.appendChild( svg );
+  }
+}
+
+export default Icon;
