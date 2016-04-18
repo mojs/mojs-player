@@ -22,6 +22,50 @@ class Module {
     this._defaults = { };
   }
   /*
+    Method to add pointer down even listener to el.
+    @param {Object}   HTMLElement to add event listener on.
+    @param {Function} Event listener callback.
+  */
+  _addPointerDownEvent (el, fn) {
+    if (window.navigator.msPointerEnabled) {
+        el.addEventListener('MSPointerDown', fn);
+      } else if ( window.ontouchstart !== undefined ) {
+        el.addEventListener('touchstart', fn);
+        el.addEventListener('mousedown', fn);
+      } else {
+        el.addEventListener('mousedown', fn);
+      }
+  }
+  /*
+    Method to add pointer up even listener to el.
+    @param {Object}   HTMLElement to add event listener on.
+    @param {Function} Event listener callback.
+  */
+  _addPointerUpEvent (el, fn) {
+    if (window.navigator.msPointerEnabled) {
+      el.addEventListener('MSPointerUp', fn);
+    } else if ( window.ontouchstart !== undefined ) {
+      el.addEventListener('touchend', fn);
+      el.addEventListener('mouseup', fn);
+    } else {
+      el.addEventListener('mouseup', fn);
+    }
+  }
+  /*
+    Method to check if variable holds link to a function.
+    @param {Function?} A variable to check.
+    @returns {Boolean} If passed variable is a function.
+  */
+  _isFunction ( fn ) { return ( typeof fn === 'function' ); }
+  /*
+    Method to a function or silently fail.
+    @param {Function?} A variable to check.
+    @param {Array like} Arguments.
+  */
+  _callIfFunction ( fn, args ) {
+    this._isFunction( fn ) && fn.apply( this, args );
+  }
+  /*
     Method to declare module's variables.
     @private
   */

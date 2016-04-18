@@ -63,7 +63,7 @@
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
-	var _icon = __webpack_require__(130);
+	var _icon = __webpack_require__(128);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
@@ -71,9 +71,20 @@
 
 	var playerSlider = new _playerSlider2.default();
 
-	var icon = new _icon2.default({ 'shape': 'stop' });
+	var icon = new _icon2.default({
+	  'shape': 'stop',
+	  onPointerDown: function onPointerDown() {
+	    console.log('pointer down');
+	  },
+	  onPointerUp: function onPointerUp() {
+	    console.log('pointer up');
+	  },
+	  onDoubleTap: function onDoubleTap() {
+	    console.log('double tap');
+	  }
+	});
 
-	__webpack_require__(128);
+	__webpack_require__(132);
 	var Main = {
 	  /*
 	    Initialization method.
@@ -1854,6 +1865,60 @@
 	    this._defaults = {};
 	  };
 	  /*
+	    Method to add pointer down even listener to el.
+	    @param {Object}   HTMLElement to add event listener on.
+	    @param {Function} Event listener callback.
+	  */
+
+
+	  Module.prototype._addPointerDownEvent = function _addPointerDownEvent(el, fn) {
+	    if (window.navigator.msPointerEnabled) {
+	      el.addEventListener('MSPointerDown', fn);
+	    } else if (window.ontouchstart !== undefined) {
+	      el.addEventListener('touchstart', fn);
+	      el.addEventListener('mousedown', fn);
+	    } else {
+	      el.addEventListener('mousedown', fn);
+	    }
+	  };
+	  /*
+	    Method to add pointer up even listener to el.
+	    @param {Object}   HTMLElement to add event listener on.
+	    @param {Function} Event listener callback.
+	  */
+
+
+	  Module.prototype._addPointerUpEvent = function _addPointerUpEvent(el, fn) {
+	    if (window.navigator.msPointerEnabled) {
+	      el.addEventListener('MSPointerUp', fn);
+	    } else if (window.ontouchstart !== undefined) {
+	      el.addEventListener('touchend', fn);
+	      el.addEventListener('mouseup', fn);
+	    } else {
+	      el.addEventListener('mouseup', fn);
+	    }
+	  };
+	  /*
+	    Method to check if variable holds link to a function.
+	    @param {Function?} A variable to check.
+	    @returns {Boolean} If passed variable is a function.
+	  */
+
+
+	  Module.prototype._isFunction = function _isFunction(fn) {
+	    return typeof fn === 'function';
+	  };
+	  /*
+	    Method to a function or silently fail.
+	    @param {Function?} A variable to check.
+	    @param {Array like} Arguments.
+	  */
+
+
+	  Module.prototype._callIfFunction = function _callIfFunction(fn, args) {
+	    this._isFunction(fn) && fn.apply(this, args);
+	  };
+	  /*
 	    Method to declare module's variables.
 	    @private
 	  */
@@ -2179,7 +2244,7 @@
 	  Handle.prototype._onProgress = function _onProgress(shift) {
 	    var p = this._props,
 	        progress = this._shiftToProgress(shift);
-	    if (typeof p.onProgress === 'function' && this._progress !== progress) {
+	    if (this._isFunction(p.onProgress) && this._progress !== progress) {
 	      this._progress = progress;
 	      p.onProgress.call(this, progress);
 	    }
@@ -12985,17 +13050,6 @@
 	__webpack_require__(118);
 	var CLASSES = __webpack_require__(120);
 
-	var addTouchStartEvent = function addTouchStartEvent(el, fn) {
-	  if (window.navigator.msPointerEnabled) {
-	    el.addEventListener('MSPointerDown', fn);
-	  } else if (window.ontouchstart !== undefined) {
-	    el.addEventListener('touchstart', fn);
-	    el.addEventListener('mousedown', fn);
-	  } else {
-	    el.addEventListener('mousedown', fn);
-	  }
-	};
-
 	var Track = function (_Handle) {
 	  (0, _inherits3.default)(Track, _Handle);
 
@@ -13088,7 +13142,7 @@
 	    var _this2 = this;
 
 	    _Handle.prototype._hammerTime.call(this);
-	    addTouchStartEvent(this.el, function (e) {
+	    this._addPointerDownEvent(this.el, function (e) {
 	      var x = e.layerX;
 	      x = _this2._props.isInversed && e.layerX < 0 ? _this2._maxWidth + x : x;
 	      _this2.setProgress(_this2._shiftToProgress(x));
@@ -13500,46 +13554,6 @@
 /* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(129);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 129 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._icon_1qwrf_1 {\n  width: 32px;\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n._icon_1qwrf_1 svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n._mojs-player_1qwrf_1 {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 130 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	exports.__esModule = true;
@@ -13556,18 +13570,18 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _slider = __webpack_require__(77);
-
-	var _slider2 = _interopRequireDefault(_slider);
-
 	var _module = __webpack_require__(78);
 
 	var _module2 = _interopRequireDefault(_module);
 
+	var _hammerjs = __webpack_require__(80);
+
+	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(131);
-	var CLASSES = __webpack_require__(133);
+	__webpack_require__(129);
+	var CLASSES = __webpack_require__(131);
 
 	var Icon = function (_Module) {
 	  (0, _inherits3.default)(Icon, _Module);
@@ -13587,7 +13601,10 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
-	      shape: ''
+	      shape: '',
+	      onPointerDown: null,
+	      onPointerUp: null,
+	      onDoubleTap: null
 	    };
 	    this.NS = 'http://www.w3.org/2000/svg';
 	  };
@@ -13606,6 +13623,7 @@
 	    this.el.classList.add('' + CLASSES.icon);
 	    this._renderIcon();
 	    p.parent.appendChild(this.el);
+	    this._addListeners();
 	  };
 	  /*
 	    Method to render svg icon into the el.
@@ -13621,6 +13639,44 @@
 	    svg.appendChild(use);
 	    this.el.appendChild(svg);
 	  };
+	  /*
+	    Method to add event listeners to the icon.
+	    @private
+	  */
+
+
+	  Icon.prototype._addListeners = function _addListeners() {
+	    this._addPointerDownEvent(this.el, this._pointerDown.bind(this));
+	    this._addPointerUpEvent(this.el, this._pointerUp.bind(this));
+	    (0, _hammerjs2.default)(this.el).on('doubletap', this._doubleTap.bind(this));
+	  };
+	  /*
+	    Method to invoke onPointerDown callback if excist.
+	    @param {Object} Original event object.
+	  */
+
+
+	  Icon.prototype._pointerDown = function _pointerDown(e) {
+	    this._callIfFunction(this._props.onPointerDown);
+	  };
+	  /*
+	    Method to invoke onPointerUp callback if excist.
+	    @param {Object} Original event object.
+	  */
+
+
+	  Icon.prototype._pointerUp = function _pointerUp(e) {
+	    this._callIfFunction(this._props.onPointerUp);
+	  };
+	  /*
+	    Method to invoke onDoubleTap callback if excist.
+	    @param {Object} Original event object.
+	  */
+
+
+	  Icon.prototype._doubleTap = function _doubleTap(e) {
+	    this._callIfFunction(this._props.onDoubleTap);
+	  };
 
 	  return Icon;
 	}(_module2.default);
@@ -13628,13 +13684,13 @@
 	exports.default = Icon;
 
 /***/ },
-/* 131 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(132);
+	var content = __webpack_require__(130);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(115)(content, {});
@@ -13654,7 +13710,7 @@
 	}
 
 /***/ },
-/* 132 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(114)();
@@ -13662,18 +13718,58 @@
 
 
 	// module
-	exports.push([module.id, "._icon_18u32_5 {\n  position:   relative;\n  width:   12px;\n  width:   12px;\n  width:      0.75rem;\n  height:   12px;\n  height:   12px;\n  height:     0.75rem;\n  \n  cursor:     pointer\n}\n._icon_18u32_5 > svg {\n  position:   absolute;\n  left:   0;\n  top:   0;\n  width:   100%;\n  height:   100%;\n  background:   #333\n}\n._icon_18u32_5:hover {\n  opacity:   .85\n}\n\n", ""]);
+	exports.push([module.id, "._icon_1nzz7_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  \n  cursor:       pointer\n}\n._icon_1nzz7_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  background:     #333\n}\n._icon_1nzz7_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_1nzz7_5:hover {\n  opacity:     .85\n}\n\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 133 */
+/* 131 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"icon": "_icon_18u32_5"
+		"icon": "_icon_1nzz7_5"
 	};
+
+/***/ },
+/* 132 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(133);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 133 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon_1qwrf_1 {\n  width: 32px;\n  width: 32px;\n  width: 2rem;\n  height: 32px;\n  height: 32px;\n  height: 2rem;\n  display: block;\n  position: relative;\n}\n._icon_1qwrf_1 svg {\n  display: block;\n  position: absolute;\n  top: 0;\n  left: 0;\n  fill: inherit;\n  stroke: inherit;\n  width: 100%;\n  height: 100%;\n}\n._mojs-player_1qwrf_1 {\n  background-color: rgba(58, 8, 57, 0.85);\n  height: 40px;\n  height: 40px;\n  height: 2.5rem;\n  width: 100px;\n  width: 100px;\n  width: 6.25rem;\n  display: inline-block;\n  position: fixed;\n  bottom: 15px;\n  bottom: 15px;\n  bottom: 0.9375rem;\n  left: 50%;\n  -webkit-transform: translateX( -50% );\n          transform: translateX( -50% );\n  border-radius: 0.1875rem;\n  box-shadow: 0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.25);\n}\n/*@import 'blocks/timeline-slider.postcss.css'*/\n\n:root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

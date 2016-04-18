@@ -1,5 +1,5 @@
-import Slider from './slider';
-import Module from './module';
+import Module   from './module';
+import HammerJS from 'hammerjs'
 
 require('css/blocks/icon.postcss.css');
 let CLASSES = require('css/blocks/icon.postcss.css.json');
@@ -12,9 +12,12 @@ class Icon extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className: '',
-      parent:    document.body,
-      shape:     '',
+      className:       '',
+      parent:          document.body,
+      shape:           '',
+      onPointerDown:   null,
+      onPointerUp:     null,
+      onDoubleTap:     null
     }
     this.NS = 'http://www.w3.org/2000/svg';
   }
@@ -31,6 +34,7 @@ class Icon extends Module {
     this.el.classList.add( `${ CLASSES.icon }` );
     this._renderIcon();
     p.parent.appendChild( this.el );
+    this._addListeners();
   }
   /*
     Method to render svg icon into the el.
@@ -43,6 +47,36 @@ class Icon extends Module {
     use.setAttribute( 'xlink:href', `#${ this._props.shape }-icon-shape` );
     svg.appendChild( use );
     this.el.appendChild( svg );
+  }
+  /*
+    Method to add event listeners to the icon.
+    @private
+  */
+  _addListeners () {
+    this._addPointerDownEvent( this.el, this._pointerDown.bind( this ) );
+    this._addPointerUpEvent( this.el, this._pointerUp.bind( this ) );
+    HammerJS(this.el).on('doubletap', this._doubleTap.bind( this ) );
+  }
+  /*
+    Method to invoke onPointerDown callback if excist.
+    @param {Object} Original event object.
+  */
+  _pointerDown ( e ) {
+    this._callIfFunction( this._props.onPointerDown );
+  }
+  /*
+    Method to invoke onPointerUp callback if excist.
+    @param {Object} Original event object.
+  */
+  _pointerUp ( e ) {
+    this._callIfFunction( this._props.onPointerUp );
+  }
+  /*
+    Method to invoke onDoubleTap callback if excist.
+    @param {Object} Original event object.
+  */
+  _doubleTap ( e ) {
+    this._callIfFunction( this._props.onDoubleTap ); 
   }
 }
 

@@ -1,5 +1,5 @@
 import Module  from './module';
-import HamerJS from 'hammerjs';
+import HammerJS from 'hammerjs';
 import mojs    from 'mo-js';
 
 require('css/blocks/handle.postcss.css');
@@ -151,7 +151,7 @@ class Handle extends Module {
     @private
   */
   _hammerTime () {
-    let hammerTime = HamerJS(this.el);
+    let hammerTime = HammerJS(this.el);
     hammerTime.on('pan', ( e ) => {
       this._delta = e.deltaX;
       this._setShift( this._shift + e.deltaX );
@@ -172,7 +172,7 @@ class Handle extends Module {
   _onProgress ( shift ) {
     let p        = this._props,
         progress = this._shiftToProgress( shift );
-    if ( typeof p.onProgress === 'function' && this._progress !== progress) {
+    if ( this._isFunction( p.onProgress ) && this._progress !== progress) {
       this._progress = progress;
       p.onProgress.call( this, progress );
     }

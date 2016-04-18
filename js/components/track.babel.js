@@ -5,16 +5,6 @@ import mojs    from 'mo-js';
 require('css/blocks/track.postcss.css');
 let CLASSES = require('css/blocks/track.postcss.css.json');
 
-var addTouchStartEvent = function (el, fn) {
-  if (window.navigator.msPointerEnabled) {
-      el.addEventListener('MSPointerDown', fn);
-    } else if ( window.ontouchstart !== undefined ) {
-      el.addEventListener('touchstart', fn);
-      el.addEventListener('mousedown', fn);
-    } else {
-      el.addEventListener('mousedown', fn);
-    }
-}
 
 class Track extends Handle {
   /*
@@ -87,7 +77,7 @@ class Track extends Handle {
 
   _hammerTime () {
     super._hammerTime();
-    addTouchStartEvent( this.el, (e) => {
+    this._addPointerDownEvent( this.el, (e) => {
       let x = e.layerX;
       x = ( this._props.isInversed && e.layerX < 0 )
         ? this._maxWidth + x : x;

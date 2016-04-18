@@ -5,7 +5,19 @@ import Icon         from './components/icon'
 
 let playerSlider = new PlayerSlider;
 
-let icon = new Icon({ 'shape': 'stop' });
+let icon = new Icon({
+  'shape': 'stop',
+  onPointerDown () {
+    console.log('pointer down');
+  },
+  onPointerUp () {
+    console.log('pointer up');
+  },
+  onDoubleTap () {
+    console.log('double tap');
+  }
+
+});
 
 require('css/main.postcss.css')
 const Main = {
