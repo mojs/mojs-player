@@ -2,11 +2,14 @@
 import PlayerSlider from './components/player-slider';
 import Polyfill     from 'classlist-polyfill';
 import Icon         from './components/icon'
+import IconFork     from './components/icon-fork'
+// import SpeedControl from './components/speed-control'
 
-let playerSlider = new PlayerSlider;
+// let playerSlider = new PlayerSlider;
 
-let icon = new Icon({
-  'shape': 'stop',
+let icon = new IconFork({
+  'shape1': 'play',
+  'shape2': 'pause',
   onPointerDown () {
     console.log('pointer down');
   },
@@ -16,7 +19,6 @@ let icon = new Icon({
   onDoubleTap () {
     console.log('double tap');
   }
-
 });
 
 require('css/main.postcss.css')

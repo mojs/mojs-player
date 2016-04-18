@@ -1,0 +1,23 @@
+
+@import '../assets/globals.postcss.css';
+
+.icon-switch {
+  position:     relative;
+  display:      inline-block;
+  
+  & > .icon {
+    position: absolute;
+  }
+
+  &:after {
+    content:    "";
+    position:   absolute;
+    left:       0;
+    top:        0;
+    right:      0;
+    bottom:     0;
+    background: cyan;
+    z-index:    1;
+  }
+}
+
