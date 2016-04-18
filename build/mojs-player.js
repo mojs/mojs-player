@@ -63,9 +63,15 @@
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
+	var _icon = __webpack_require__(130);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var playerSlider = new _playerSlider2.default();
+
+	var icon = new _icon2.default({ 'shape': 'stop' });
 
 	__webpack_require__(128);
 	var Main = {
@@ -184,15 +190,15 @@
 	  */
 
 
-	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {
-	    console.log('track progress: ' + p);
-	  };
+	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {}
+	  // console.log( `track progress: ${p}` );
+
 	  /*
 	    Method that should be called on left bound update.
 	    @private
 	    @param {Number} Track progress value [0...1].
 	  */
-
+	  ;
 
 	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
 	    this.track.setMinBound(p);
@@ -13529,6 +13535,145 @@
 
 	// exports
 
+
+/***/ },
+/* 130 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _slider = __webpack_require__(77);
+
+	var _slider2 = _interopRequireDefault(_slider);
+
+	var _module = __webpack_require__(78);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(131);
+	var CLASSES = __webpack_require__(133);
+
+	var Icon = function (_Module) {
+	  (0, _inherits3.default)(Icon, _Module);
+
+	  function Icon() {
+	    (0, _classCallCheck3.default)(this, Icon);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Icon.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: '',
+	      parent: document.body,
+	      shape: ''
+	    };
+	    this.NS = 'http://www.w3.org/2000/svg';
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Module
+	    @returns this
+	  */
+
+
+	  Icon.prototype._render = function _render() {
+	    var p = this._props;
+	    this.el = document.createElement('div');
+	    p.className && this.el.classList.add('' + p.className);
+	    this.el.classList.add('' + CLASSES.icon);
+	    this._renderIcon();
+	    p.parent.appendChild(this.el);
+	  };
+	  /*
+	    Method to render svg icon into the el.
+	    @private
+	  */
+
+
+	  Icon.prototype._renderIcon = function _renderIcon() {
+	    var svg = document.createElementNS(this.NS, 'svg'),
+	        use = document.createElementNS(this.NS, 'use');
+
+	    use.setAttribute('xlink:href', '#' + this._props.shape + '-icon-shape');
+	    svg.appendChild(use);
+	    this.el.appendChild(svg);
+	  };
+
+	  return Icon;
+	}(_module2.default);
+
+	exports.default = Icon;
+
+/***/ },
+/* 131 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(132);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 132 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon_18u32_5 {\n  position:   relative;\n  width:   12px;\n  width:   12px;\n  width:      0.75rem;\n  height:   12px;\n  height:   12px;\n  height:     0.75rem;\n  \n  cursor:     pointer\n}\n._icon_18u32_5 > svg {\n  position:   absolute;\n  left:   0;\n  top:   0;\n  width:   100%;\n  height:   100%;\n  background:   #333\n}\n._icon_18u32_5:hover {\n  opacity:   .85\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 133 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"icon": "_icon_18u32_5"
+	};
 
 /***/ }
 /******/ ]);

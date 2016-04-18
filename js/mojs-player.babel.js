@@ -1,8 +1,11 @@
 
 import PlayerSlider from './components/player-slider';
-import Polyfill from 'classlist-polyfill';
+import Polyfill     from 'classlist-polyfill';
+import Icon         from './components/icon'
 
-let playerSlider = new PlayerSlider();
+let playerSlider = new PlayerSlider;
+
+let icon = new Icon({ 'shape': 'stop' });
 
 require('css/main.postcss.css')
 const Main = {

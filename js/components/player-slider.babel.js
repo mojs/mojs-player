@@ -59,7 +59,7 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onTrackProgress ( p ) {
-    console.log( `track progress: ${p}` );
+    // console.log( `track progress: ${p}` );
   }
   /*
     Method that should be called on left bound update.
