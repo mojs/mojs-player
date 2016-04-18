@@ -19,7 +19,8 @@ class Handle extends Module {
       maxBound:     1,
       isBound:      false,
       isInversed:   false,
-      onProgress:   null
+      direction:    'x',
+      onProgress:   null,
     }
   }
   /*
@@ -108,41 +109,57 @@ class Handle extends Module {
     @param {Number} Shift in pixels.
   */
   _applyShift ( shift ) {
-    this.el.style.transform = `translateX( ${shift}px ) translateZ(0)`;
+    let p = this._props;
+    this.el.style.transform = ( p.direction === 'x' )
+      ? `translateX( ${  shift }px ) translateZ(0)`
+      : `translateY( ${ -shift }px ) translateZ(0)`;
   }
   /*
     Method to get max width of the parent.
     @private
   */
-  _getMaxWidth () { this._maxWidth = this._props.parent.clientWidth; }
+  _getMaxWidth () {
+    let p      = this._props,
+        parent = p.parent;
+
+    this._maxWidth = ( p.direction === 'x' )
+      ? parent.clientWidth : parent.clientHeight ;
+  }
   /*
     Method to render the component.
     @private
     @overrides @ Module
   */
   _render () {
+    super._render();
     this._addElements();
     this._hammerTime();
+  }
+  /*
+    Method to classes on `this.el`.
+    @private
+    @overrides @ Module
+  */
+  _addMainClasses () {
+    super._addMainClasses();
+    
+    let p         = this._props,
+        classList = this.el.classList;
+
+    classList.add( CLASSES.handle );
+    if ( p.isBound ) { classList.add( CLASSES['is-bound'] ); }
+    if ( p.isInversed ) { classList.add( CLASSES['is-inversed'] ); }
   }
   /*
     Method to add DOM elements on render.
     @private
   */
   _addElements () {
-    var p      = this._props,
-        inner  = document.createElement('div'),
-        shadow = document.createElement('div');
-
-    this.el = document.createElement('div');
+    var inner  = this._createElement('div'),
+        shadow = this._createElement('div');
 
     inner.classList.add( `${ CLASSES.handle__inner }` );
     shadow.classList.add( `${ CLASSES.handle__shadow }` );
-    let classList = this.el.classList;
-    classList.add( `${ CLASSES.handle }` );
-    classList.add( `${ this._props.className }` );
-    if ( p.isBound ) { classList.add( `${ CLASSES['is-bound'] }` ); }
-    if ( p.isInversed ) { classList.add( `${ CLASSES['is-inversed'] }` ); }
-    
     this.el.appendChild( shadow );
     this.el.appendChild( inner );
   }
@@ -151,13 +168,14 @@ class Handle extends Module {
     @private
   */
   _hammerTime () {
-    let hammerTime = HammerJS(this.el);
-    hammerTime.on('pan', ( e ) => {
-      this._delta = e.deltaX;
-      this._setShift( this._shift + e.deltaX );
+    let p  = this._props,
+        hm = HammerJS(this.el);
+    hm.on('pan', ( e ) => {
+      this._delta = ( p.direction === 'x' ) ? e.deltaX : -e.deltaY;
+      this._setShift( this._shift + this._delta );
     });
 
-    hammerTime.on('panend', ( e ) => { this._saveDelta(); });
+    hm.on('panend', ( e ) => { this._saveDelta(); });
   }
   /*
     Method to add _delta to _shift.
@@ -172,9 +190,12 @@ class Handle extends Module {
   _onProgress ( shift ) {
     let p        = this._props,
         progress = this._shiftToProgress( shift );
-    if ( this._isFunction( p.onProgress ) && this._progress !== progress) {
+
+    if ( this._progress !== progress ) {
       this._progress = progress;
-      p.onProgress.call( this, progress );
+      if ( this._isFunction( p.onProgress ) ) {
+        p.onProgress.call( this, progress );
+      }
     }
   }
   /*

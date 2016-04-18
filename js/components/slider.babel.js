@@ -13,11 +13,13 @@ class Slider extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className:  '',
-      parent:     document.body,
-      isBound:    false,
-      isInversed: false,
-      onProgress: null
+      className:    '',
+      parent:       document.body,
+      isBound:      false,
+      isInversed:   false,
+      isProgress:   true,
+      onProgress:   null,
+      direction:    'x'
     }
   }
   /*
@@ -74,10 +76,13 @@ class Slider extends Module {
     var p = this._props;
     
     if ( !p.isBound ) {
-      this.el = document.createElement('div');
-      this.el.classList.add(`${CLASSES.slider}`);
-      this.el.classList.add(`${p.className}`);
-      p.parent.appendChild( this.el );
+      let el        = document.createElement('div'),
+          classList = el.classList;
+      this.el = el;
+      classList.add( CLASSES.slider );
+      ( p.direction === 'y' ) && classList.add( CLASSES[ 'is-y' ] );
+      p.className && classList.add( p.className );
+      p.parent.appendChild( el );
     }
 
     let rootEl = ( !p.isBound ) ? this.el : p.parent;
@@ -85,16 +90,21 @@ class Slider extends Module {
     this.track = new Track({
       className:  CLASSES.track,
       onProgress: this._onTrackProgress.bind(this),
-      isBound:    this._props.isBound,
-      isInversed: this._props.isInversed
+      isBound:    p.isBound,
+      isInversed: p.isInversed,
+      isProgress: p.isProgress,
+      parent:     p.parent,
+      direction:  p.direction
     });
     rootEl.appendChild( this.track.el );
 
     this.handle = new Handle({
       className:  CLASSES.handle,
       onProgress: this._onHandleProgress.bind(this),
-      isBound:    this._props.isBound,
-      isInversed: this._props.isInversed
+      isBound:    p.isBound,
+      isInversed: p.isInversed,
+      parent:     p.parent,
+      direction:  p.direction
     });
     rootEl.appendChild( this.handle.el );
   }

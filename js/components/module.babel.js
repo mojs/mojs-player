@@ -19,7 +19,10 @@ class Module {
     @private
   */
   _declareDefaults () {
-    this._defaults = { };
+    this._defaults = {
+      className:  '',
+      parent:     document.body,
+    };
   }
   /*
     Method to add pointer down even listener to el.
@@ -74,7 +77,26 @@ class Module {
     Method to render on initialization.
     @private
   */
-  _render () { }
+  _render () { this._addMainElement(); }
+  /*
+    Method to add `this.el` on the module.
+    @private
+  */
+  _addMainElement () {
+    let p = this._props;
+
+    this.el = this._createElement( 'div' );
+    this._addMainClasses();
+    p.parent.appendChild( this.el );
+  }
+  /*
+    Method to classes on `this.el`.
+    @private
+  */
+  _addMainClasses () {
+    let p = this._props;
+    p.className && this.el.classList.add( p.className );
+  }
   /*
     Method to set property on the module.
     @private
@@ -112,6 +134,13 @@ class Module {
       this._assignProp( key, this._o[key] || this._defaults[key] );
     }
   }
+  /*
+    Method to create HTMLElement from tag name.
+    @private
+    @param {String} Name of the tag to create `HTML` element.
+    @returns {Object} HtmlElement.
+  */
+  _createElement ( tagName ) { return document.createElement( tagName ); }
 }
 
 export default Module;

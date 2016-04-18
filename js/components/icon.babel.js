@@ -29,11 +29,9 @@ class Icon extends Module {
   */
   _render () {
     var p = this._props;
-    this.el = document.createElement( 'div' );
-    p.className && this.el.classList.add( `${ p.className }` );
-    this.el.classList.add( `${ CLASSES.icon }` );
+    super._render();
+    this.el.classList.add( CLASSES.icon );
     this._renderIcon();
-    p.parent.appendChild( this.el );
     this._addListeners();
   }
   /*

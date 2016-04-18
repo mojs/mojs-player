@@ -73,6 +73,5 @@ $handleHeight: 13;
   &.is-inversed &__shadow {
     box-shadow:     calc( - $PX ) calc( $PX ) calc( 2*$PX ) black;
   }
-
 }
 
