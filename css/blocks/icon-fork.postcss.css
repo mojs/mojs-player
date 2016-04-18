@@ -1,0 +1,21 @@
+
+@import '../assets/globals.postcss.css';
+
+.icon-fork {
+  & > .icon {
+    position:   absolute;
+    opacity:    0;
+  }
+  & > .icon:last-of-type {
+    position:   absolute;
+    opacity:    1;
+  }
+
+  &.is-on > .icon:first-of-type {
+    opacity:    1;
+  }
+  &.is-on > .icon:last-of-type {
+    opacity:    0;
+  }
+}
+

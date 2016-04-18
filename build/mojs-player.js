@@ -67,12 +67,19 @@
 
 	var _icon2 = _interopRequireDefault(_icon);
 
+	var _iconFork = __webpack_require__(134);
+
+	var _iconFork2 = _interopRequireDefault(_iconFork);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var playerSlider = new _playerSlider2.default();
+	// import SpeedControl from './components/speed-control'
 
-	var icon = new _icon2.default({
-	  'shape': 'stop',
+	// let playerSlider = new PlayerSlider;
+
+	var icon = new _iconFork2.default({
+	  'shape1': 'play',
+	  'shape2': 'pause',
 	  onPointerDown: function onPointerDown() {
 	    console.log('pointer down');
 	  },
@@ -12688,7 +12695,7 @@
 
 
 	// module
-	exports.push([module.id, "._handle_1y7jt_5 {\n  margin-left:    -6.5px;\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n\n}\n._handle__inner_1y7jt_1, ._handle__shadow_1y7jt_1 {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n\n}\n._handle__inner_1y7jt_1 {\n  background:    #FFF\n\n}\n._handle__shadow_1y7jt_1 {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n\n}\n._handle_1y7jt_5:hover ._handle__inner_1y7jt_1, ._handle_1y7jt_5:hover ._handle__shadow_1y7jt_1 {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n\n}\n._handle_1y7jt_5:active ._handle__inner_1y7jt_1 {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n\n}\n._handle_1y7jt_5:active ._handle__shadow_1y7jt_1 {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 {\n  width:    12px;\n  width:    12px;\n  width:    0.75rem;\n  height:    20px;\n  height:    20px;\n  height:    1.25rem;\n  margin-left:    -12px;\n  margin-left:    -12px;\n  margin-left:    -0.75rem;\n  margin-top:    -10px;\n  margin-top:    -10px;\n  margin-top:    -0.625rem\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__inner_1y7jt_1 {\n  background:    #FF512F\n\n}\n._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__inner_1y7jt_1, ._handle_1y7jt_5._is-bound_1y7jt_55 ._handle__shadow_1y7jt_1 {\n  border-radius:    0.1875rem\n\n}\n._handle_1y7jt_5._is-inversed_1y7jt_70 {\n  margin-left:    0\n\n}\n._handle_1y7jt_5._is-inversed_1y7jt_70 ._handle__shadow_1y7jt_1 {\n  box-shadow:    -0.0625rem 0.0625rem 0.125rem black\n\n}\n\n", ""]);
+	exports.push([module.id, "._handle_qflof_5 {\n  margin-left:    -6.5px;\n  margin-left:    -6.5px;\n  margin-left:    -0.40625rem;\n  margin-top:    -6.5px;\n  margin-top:    -6.5px;\n  margin-top:     -0.40625rem;\n  \n  width:    13px;\n  \n  width:    13px;\n  \n  width:          0.8125rem;\n  height:    13px;\n  height:    13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n\n}\n._handle__inner_qflof_1, ._handle__shadow_qflof_1 {\n  position:    absolute;\n  left:    0;\n  top:    0;\n  z-index:    1;\n  width:    100%;\n  height:    100%;\n  border-radius:    50%;\n  cursor:    pointer;\n  -webkit-transform:    translateZ(0);\n          transform:    translateZ(0)\n\n}\n._handle__inner_qflof_1 {\n  background:    #FFF\n\n}\n._handle__shadow_qflof_1 {\n  box-shadow:    0.0625rem 0.0625rem 0.125rem black;\n  opacity:    .35;\n  z-index:    0\n\n}\n._handle_qflof_5:hover ._handle__inner_qflof_1, ._handle_qflof_5:hover ._handle__shadow_qflof_1 {\n  -webkit-transform:    scale(1.1) translateZ(0);\n          transform:    scale(1.1) translateZ(0)\n\n}\n._handle_qflof_5:active ._handle__inner_qflof_1 {\n  -webkit-transform:    scale(1.2) translateZ(0);\n          transform:    scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n\n}\n._handle_qflof_5:active ._handle__shadow_qflof_1 {\n  opacity:    .85;\n  -webkit-transform:    scale(1) translateZ(0);\n          transform:    scale(1) translateZ(0)\n\n}\n._handle_qflof_5._is-bound_qflof_55 {\n  width:    9px;\n  width:    9px;\n  width:    0.5625rem;\n  height:    20px;\n  height:    20px;\n  height:    1.25rem;\n  margin-left:    -9px;\n  margin-left:    -9px;\n  margin-left:    -0.5625rem;\n  margin-top:    -10px;\n  margin-top:    -10px;\n  margin-top:    -0.625rem\n\n}\n._handle_qflof_5._is-bound_qflof_55 ._handle__inner_qflof_1 {\n  background:    #FF512F\n\n}\n._handle_qflof_5._is-bound_qflof_55 ._handle__inner_qflof_1, ._handle_qflof_5._is-bound_qflof_55 ._handle__shadow_qflof_1 {\n  border-radius:    0.1875rem\n\n}\n._handle_qflof_5._is-inversed_qflof_70 {\n  margin-left:    0\n\n}\n._handle_qflof_5._is-inversed_qflof_70 ._handle__shadow_qflof_1 {\n  box-shadow:    -0.0625rem 0.0625rem 0.125rem black\n\n}\n\n", ""]);
 
 	// exports
 
@@ -13006,11 +13013,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_1y7jt_5",
-		"handle__inner": "_handle__inner_1y7jt_1",
-		"handle__shadow": "_handle__shadow_1y7jt_1",
-		"is-bound": "_is-bound_1y7jt_55",
-		"is-inversed": "_is-inversed_1y7jt_70"
+		"handle": "_handle_qflof_5",
+		"handle__inner": "_handle__inner_qflof_1",
+		"handle__shadow": "_handle__shadow_qflof_1",
+		"is-bound": "_is-bound_qflof_55",
+		"is-inversed": "_is-inversed_qflof_70"
 	};
 
 /***/ },
@@ -13638,6 +13645,7 @@
 	    use.setAttribute('xlink:href', '#' + this._props.shape + '-icon-shape');
 	    svg.appendChild(use);
 	    this.el.appendChild(svg);
+	    // this.el.setAttribute( 'data-rand', (10*Math.random()).toFixed(0) )
 	  };
 	  /*
 	    Method to add event listeners to the icon.
@@ -13652,6 +13660,7 @@
 	  };
 	  /*
 	    Method to invoke onPointerDown callback if excist.
+	    @private
 	    @param {Object} Original event object.
 	  */
 
@@ -13661,6 +13670,7 @@
 	  };
 	  /*
 	    Method to invoke onPointerUp callback if excist.
+	    @private
 	    @param {Object} Original event object.
 	  */
 
@@ -13670,6 +13680,7 @@
 	  };
 	  /*
 	    Method to invoke onDoubleTap callback if excist.
+	    @private
 	    @param {Object} Original event object.
 	  */
 
@@ -13718,7 +13729,7 @@
 
 
 	// module
-	exports.push([module.id, "._icon_1nzz7_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  \n  cursor:       pointer\n}\n._icon_1nzz7_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  background:     #333\n}\n._icon_1nzz7_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_1nzz7_5:hover {\n  opacity:     .85\n}\n\n", ""]);
+	exports.push([module.id, "._icon_hsp2b_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  \n  cursor:       pointer\n\n  /*&:before {\n    content:    attr(data-rand);\n    position:   absolute;\n    left:       0;\n    top:        0;\n    right:      0;\n    bottom:     0;\n    z-index:    2;\n    color:      white;\n    font-size:  8px;\n  }*/\n}\n._icon_hsp2b_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  background:     #333\n}\n._icon_hsp2b_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_hsp2b_5:hover {\n  opacity:     .85\n}\n\n", ""]);
 
 	// exports
 
@@ -13728,7 +13739,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"icon": "_icon_1nzz7_5"
+		"icon": "_icon_hsp2b_5"
 	};
 
 /***/ },
@@ -13770,6 +13781,288 @@
 
 	// exports
 
+
+/***/ },
+/* 134 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _iconSwitch = __webpack_require__(138);
+
+	var _iconSwitch2 = _interopRequireDefault(_iconSwitch);
+
+	var _icon = __webpack_require__(128);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import HammerJS from 'hammerjs'
+
+	__webpack_require__(135);
+	var CLASSES = __webpack_require__(137);
+
+	var IconFork = function (_IconSwitch) {
+	  (0, _inherits3.default)(IconFork, _IconSwitch);
+
+	  function IconFork() {
+	    (0, _classCallCheck3.default)(this, IconFork);
+	    return (0, _possibleConstructorReturn3.default)(this, _IconSwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Icon
+	    @returns this
+	  */
+
+	  IconFork.prototype._render = function _render() {
+	    _IconSwitch.prototype._render.call(this);
+	    this.el.classList.add(CLASSES['icon-fork']);
+	    var p = this._props,
+	        parent = this.el,
+	        className = CLASSES.icon;
+
+	    this.icon1 = new _icon2.default({ shape: p.icon1, parent: parent, className: className });
+	    this.icon2 = new _icon2.default({ shape: p.icon2, parent: parent, className: className });
+	  };
+	  /*
+	    Method that should be called on state change.
+	    @private
+	    @override @ IconSwitch
+	  */
+
+
+	  IconFork.prototype._setState = function _setState() {
+	    var p = this._props,
+	        classList = this.el.classList,
+	        method = p.isOn ? 'add' : 'remove';
+
+	    classList[method](CLASSES['is-on']);
+	  };
+
+	  return IconFork;
+	}(_iconSwitch2.default);
+
+	exports.default = IconFork;
+
+/***/ },
+/* 135 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(136);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 136 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon-fork_m7uax_4 {\n}\n._icon-fork_m7uax_4 > ._icon_m7uax_4 {\n    position: absolute;\n    opacity: 0\n}\n._icon-fork_m7uax_4 > ._icon_m7uax_4:last-of-type {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_m7uax_4._is-on_m7uax_14 > ._icon_m7uax_4:first-of-type {\n    opacity: 1\n}\n._icon-fork_m7uax_4._is-on_m7uax_14 > ._icon_m7uax_4:last-of-type {\n    opacity: 0\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 137 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"icon-fork": "_icon-fork_m7uax_4",
+		"icon": "_icon_m7uax_4",
+		"is-on": "_is-on_m7uax_14"
+	};
+
+/***/ },
+/* 138 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _icon = __webpack_require__(128);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import HammerJS from 'hammerjs'
+
+	__webpack_require__(139);
+	var CLASSES = __webpack_require__(141);
+
+	var IconSwitch = function (_Icon) {
+	  (0, _inherits3.default)(IconSwitch, _Icon);
+
+	  function IconSwitch() {
+	    (0, _classCallCheck3.default)(this, IconSwitch);
+	    return (0, _possibleConstructorReturn3.default)(this, _Icon.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  IconSwitch.prototype._declareDefaults = function _declareDefaults() {
+	    _Icon.prototype._declareDefaults.call(this);
+	    this._defaults.isOn = false;
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Icon
+	    @returns this
+	  */
+
+
+	  IconSwitch.prototype._render = function _render() {
+	    this.el = document.createElement('div');
+	    this.el.classList.add(CLASSES['icon-switch']);
+
+	    this._props.parent.appendChild(this.el);
+
+	    this._addListeners();
+	    this._setState();
+	  };
+	  /*
+	    Method to invoke onPointerUp callback if excist.
+	    @private
+	    @overrides @ Icon
+	    @param {Object} Original event object.
+	  */
+
+
+	  IconSwitch.prototype._pointerUp = function _pointerUp(e) {
+	    this._changeState();
+	    _Icon.prototype._pointerUp.call(this, e);
+	  };
+	  /*
+	    Method to switch icons.
+	    @private
+	  */
+
+
+	  IconSwitch.prototype._changeState = function _changeState() {
+	    this._props.isOn = !this._props.isOn;
+	    this._setState();
+	  };
+	  /*
+	    Method that have been called on switch state change.
+	    @private
+	  */
+
+
+	  IconSwitch.prototype._setState = function _setState() {
+	    console.log('change');
+	  };
+
+	  return IconSwitch;
+	}(_icon2.default);
+
+	exports.default = IconSwitch;
+
+/***/ },
+/* 139 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(140);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-switch.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-switch.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 140 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon-switch_1tb8i_4 {\n  position:     relative;\n  display:      inline-block\n}\n._icon-switch_1tb8i_4 > ._icon_1tb8i_4 {\n  position:     absolute\n}\n._icon-switch_1tb8i_4:after {\n  content:     \"\";\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  background:     cyan;\n  z-index:     1\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 141 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"icon-switch": "_icon-switch_1tb8i_4",
+		"icon": "_icon_1tb8i_4"
+	};
 
 /***/ }
 /******/ ]);

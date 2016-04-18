@@ -29,6 +29,18 @@ $size: 12;
     z-index:    1;
   }
 
+  /*&:before {
+    content:    attr(data-rand);
+    position:   absolute;
+    left:       0;
+    top:        0;
+    right:      0;
+    bottom:     0;
+    z-index:    2;
+    color:      white;
+    font-size:  8px;
+  }*/
+
   &:hover {
     opacity:    .85;
   }

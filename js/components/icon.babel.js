@@ -47,6 +47,7 @@ class Icon extends Module {
     use.setAttribute( 'xlink:href', `#${ this._props.shape }-icon-shape` );
     svg.appendChild( use );
     this.el.appendChild( svg );
+    // this.el.setAttribute( 'data-rand', (10*Math.random()).toFixed(0) )
   }
   /*
     Method to add event listeners to the icon.
@@ -59,6 +60,7 @@ class Icon extends Module {
   }
   /*
     Method to invoke onPointerDown callback if excist.
+    @private
     @param {Object} Original event object.
   */
   _pointerDown ( e ) {
@@ -66,6 +68,7 @@ class Icon extends Module {
   }
   /*
     Method to invoke onPointerUp callback if excist.
+    @private
     @param {Object} Original event object.
   */
   _pointerUp ( e ) {
@@ -73,6 +76,7 @@ class Icon extends Module {
   }
   /*
     Method to invoke onDoubleTap callback if excist.
+    @private
     @param {Object} Original event object.
   */
   _doubleTap ( e ) {

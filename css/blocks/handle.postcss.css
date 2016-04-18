@@ -50,7 +50,7 @@ $handleHeight: 13;
     transform:      scale(1) translateZ(0);
   }
   
-  $width:  12;
+  $width:  9;
   $height: 20;
   &.is-bound {
     width:          calc( $width * $PX );
