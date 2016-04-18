@@ -18,5 +18,16 @@ $height: 30;
   & .track {
     z-index:        2;
   }
+
+  &.is-y {
+    width:          calc( $height * $PX );
+    height:         100%;
+    
+    .handle {
+      left:           50%;
+      top:            auto;
+      bottom:         0;
+    }
+  }
 }
 

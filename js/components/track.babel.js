@@ -17,8 +17,12 @@ class Track extends Handle {
       className:    '',
       parent:       document.body,
       onProgress:   null,
+      isProgress:   true, // if should render bold progress line
       isBound:      false,
-      isInversed:   false
+      isInversed:   false,
+      direction:    'x',
+      minBound:     0,
+      maxBound:     1,
     }
   }
   /*
@@ -39,32 +43,39 @@ class Track extends Handle {
     @param {Number} Shift in pixels.
   */
   _applyShift ( shift ) {
+    if ( !this._props.isProgress ) { return; }
     if ( this._props.isInversed ) { shift = this._maxWidth - shift; }
     let transform = `scaleX( ${shift} ) translateZ(0)`;
     this.trackProgressEl.style.transform = transform;
+  }
+  /*
+    Method to add classes on `this.el`.
+    @private
+    @overrides @ Handle.
+  */
+  _addMainClasses () {
+    let p         = this._props,
+        classList = this.el.classList;
+
+    classList.add( CLASSES.track );
+    if ( p.isInversed ) { classList.add( CLASSES[ 'is-inversed' ] ); }
+    if ( p.isBound )    { classList.add( CLASSES[ 'is-bound' ] ); }
+    if ( p.direction === 'y' ) { classList.add( CLASSES[ 'is-y' ] ); }
   }
   /*
     Method to add DOM elements on render.
     @private
   */
   _addElements () {
-    let p      = this._props,
-        trackP = document.createElement('div');
+    let p      = this._props;
 
-    // main element
-    this.el = document.createElement('div');
-    let classList = this.el.classList;
-    classList.add( `${ CLASSES.track }` )
-    classList.add( `${ this._props.className }` );
-    if ( p.isInversed ) { classList.add( `${ CLASSES[ 'is-inversed' ] }` ); }
-    if ( p.isBound ) {
-      classList.add(`${ CLASSES['is-bound'] }`);
+    if ( p.isProgress ) {
+      // progress track
+      let trackP = document.createElement('div');
+      trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
+      this.trackProgressEl = trackP;
+      this.el.appendChild( trackP );
     }
-    
-    // progress track
-    trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
-    this.trackProgressEl = trackP;
-    this.el.appendChild( trackP );
 
     // track
     if ( !p.isBound ) {
@@ -78,9 +89,12 @@ class Track extends Handle {
   _hammerTime () {
     super._hammerTime();
     this._addPointerDownEvent( this.el, (e) => {
-      let x = e.layerX;
-      x = ( this._props.isInversed && e.layerX < 0 )
-        ? this._maxWidth + x : x;
+      let p = this._props,
+          x = (this._props.direction === 'x' ) ? e.layerX : e.layerY;
+
+      if ( p.direction === 'y' ) { x = this._maxWidth - e.layerY; }
+      x = ( this._props.isInversed && x < 0 ) ? this._maxWidth + x : x;
+
       this.setProgress( this._shiftToProgress( x ) );
     });
   }

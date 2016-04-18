@@ -21,11 +21,8 @@ class IconSwitch extends Icon {
     @returns this
   */
   _render () {
-    this.el = document.createElement( 'div' );
+    super._render();
     this.el.classList.add( CLASSES[ 'icon-switch' ] );
-
-    this._props.parent.appendChild( this.el );
-
     this._addListeners();
     this._setState();
   }

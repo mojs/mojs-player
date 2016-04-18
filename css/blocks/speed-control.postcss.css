@@ -1,0 +1,28 @@
+
+@import '../assets/globals.postcss.css';
+
+.speed-control {
+  position:       relative;
+  display:        inline-block;
+  
+  $pad: 2;
+  &__slider {
+    position:         absolute;
+    background:       $c-purple;
+    width:            calc( 30 * $PX );
+    height:           calc( 80 * $PX );
+    padding-top:      calc( $pad * $GS );
+    padding-bottom:   calc( $pad * $GS );
+    
+    border-top-right-radius:   $BRADIUS;
+    border-top-left-radius:    $BRADIUS;
+  }
+  &__slider-inner{
+    width:            100%;
+    height:           100%;
+  }
+  &__icon {
+    border: 1px solid cyan;
+  }
+}
+
