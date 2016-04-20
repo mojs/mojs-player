@@ -19,7 +19,9 @@ class Slider extends Module {
       isInversed:   false,
       isProgress:   true,
       onProgress:   null,
-      direction:    'x'
+      direction:    'x',
+      snapPoint:    .5,
+      snapStrength: .1
     }
   }
   /*
@@ -88,23 +90,25 @@ class Slider extends Module {
     let rootEl = ( !p.isBound ) ? this.el : p.parent;
 
     this.track = new Track({
-      className:  CLASSES.track,
-      onProgress: this._onTrackProgress.bind(this),
-      isBound:    p.isBound,
-      isInversed: p.isInversed,
-      isProgress: p.isProgress,
-      parent:     p.parent,
-      direction:  p.direction
+      className:      CLASSES.track,
+      onProgress:     this._onTrackProgress.bind(this),
+      isBound:        p.isBound,
+      isInversed:     p.isInversed,
+      isProgress:     p.isProgress,
+      parent:         p.parent,
+      direction:      p.direction
     });
     rootEl.appendChild( this.track.el );
 
     this.handle = new Handle({
-      className:  CLASSES.handle,
-      onProgress: this._onHandleProgress.bind(this),
-      isBound:    p.isBound,
-      isInversed: p.isInversed,
-      parent:     p.parent,
-      direction:  p.direction
+      className:      CLASSES.handle,
+      onProgress:     this._onHandleProgress.bind(this),
+      isBound:        p.isBound,
+      isInversed:     p.isInversed,
+      parent:         p.parent,
+      direction:      p.direction,
+      snapPoint:      p.snapPoint,
+      snapStrength:   p.snapStrength
     });
     rootEl.appendChild( this.handle.el );
   }

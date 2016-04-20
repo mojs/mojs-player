@@ -3,9 +3,6 @@
 
 $handleHeight: 13;
 .handle {
-  margin-left:    calc( - $handleHeight/2 * $PX );
-  margin-top:     calc( - $handleHeight/2 * $PX );
-  
   width:          calc( $handleHeight * $PX );
   height:         calc( $handleHeight * $PX );
   

@@ -1,11 +1,11 @@
-import IconSwitch from './icon-switch';
+import ButtonSwitch from './button-switch';
 import Icon       from './icon';
 // import HammerJS from 'hammerjs'
 
 require('css/blocks/icon-fork.postcss.css');
 let CLASSES = require('css/blocks/icon-fork.postcss.css.json');
 
-class IconFork extends IconSwitch {
+class IconFork extends ButtonSwitch {
   /*
     Initial render method.
     @private

@@ -10,6 +10,9 @@ $height: 30;
   
   $handleHeight: 13;
   & .handle {
+    margin-left:    calc( - $handleHeight/2 * $PX );
+    margin-top:     calc( - $handleHeight/2 * $PX );
+  
     position:       absolute;
     left:           0;
     top:            50%;
@@ -27,6 +30,8 @@ $height: 30;
       left:           50%;
       top:            auto;
       bottom:         0;
+      margin-top:     0;
+      margin-bottom:  calc( -$handleHeight/2 * $PX );
     }
   }
 }

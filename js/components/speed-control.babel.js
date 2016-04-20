@@ -36,11 +36,21 @@ class SpeedControl extends Module {
     this.slider = new Slider({
       parent:       sliderIn,
       isProgress:   false,
-      direction:    'y'
+      direction:    'y',
+      onProgress:   this._onSliderProgress.bind( this ),
+      snapPoint:    .5,
+      snapStrength: .05
     });
 
     this.slider.setProgress( .5 );
-
+  }
+  /*
+    Method that is invoked on slider progress.
+    @private
+    @param {Number} Progress of the slider.
+  */
+  _onSliderProgress ( p ) {
+    // console.log( p );
   }
 }
 

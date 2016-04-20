@@ -15,9 +15,9 @@ class Icon extends Module {
       className:       '',
       parent:          document.body,
       shape:           '',
-      onPointerDown:   null,
-      onPointerUp:     null,
-      onDoubleTap:     null
+      // onPointerDown:   null,
+      // onPointerUp:     null,
+      // onDoubleTap:     null
     }
     this.NS = 'http://www.w3.org/2000/svg';
   }
@@ -29,10 +29,9 @@ class Icon extends Module {
   */
   _render () {
     var p = this._props;
-    super._render();
+    this._addMainElement();
     this.el.classList.add( CLASSES.icon );
     this._renderIcon();
-    this._addListeners();
   }
   /*
     Method to render svg icon into the el.
@@ -46,39 +45,6 @@ class Icon extends Module {
     svg.appendChild( use );
     this.el.appendChild( svg );
     // this.el.setAttribute( 'data-rand', (10*Math.random()).toFixed(0) )
-  }
-  /*
-    Method to add event listeners to the icon.
-    @private
-  */
-  _addListeners () {
-    this._addPointerDownEvent( this.el, this._pointerDown.bind( this ) );
-    this._addPointerUpEvent( this.el, this._pointerUp.bind( this ) );
-    HammerJS(this.el).on('doubletap', this._doubleTap.bind( this ) );
-  }
-  /*
-    Method to invoke onPointerDown callback if excist.
-    @private
-    @param {Object} Original event object.
-  */
-  _pointerDown ( e ) {
-    this._callIfFunction( this._props.onPointerDown );
-  }
-  /*
-    Method to invoke onPointerUp callback if excist.
-    @private
-    @param {Object} Original event object.
-  */
-  _pointerUp ( e ) {
-    this._callIfFunction( this._props.onPointerUp );
-  }
-  /*
-    Method to invoke onDoubleTap callback if excist.
-    @private
-    @param {Object} Original event object.
-  */
-  _doubleTap ( e ) {
-    this._callIfFunction( this._props.onDoubleTap ); 
   }
 }
 
