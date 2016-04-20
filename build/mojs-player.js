@@ -107,6 +107,10 @@
 
 	var _boundsButton2 = _interopRequireDefault(_boundsButton);
 
+	var _labelButton = __webpack_require__(175);
+
+	var _labelButton2 = _interopRequireDefault(_labelButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// let speedControl = new SpeedControl;
@@ -115,6 +119,7 @@
 	var stopButton = new _stopButton2.default();
 	var repeatButton = new _repeatButton2.default();
 	var boundsButton = new _boundsButton2.default();
+	var labelButton = new _labelButton2.default({ progress: .7 });
 
 	__webpack_require__(173);
 	var Main = {
@@ -15243,6 +15248,157 @@
 
 	// exports
 
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(3);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(4);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(69);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _buttonSwitch = __webpack_require__(141);
+
+	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(176);
+	var CLASSES = __webpack_require__(178);
+
+	var LabelButton = function (_ButtonSwitch) {
+	  (0, _inherits3.default)(LabelButton, _ButtonSwitch);
+
+	  function LabelButton() {
+	    (0, _classCallCheck3.default)(this, LabelButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ OpacitySwitch
+	  */
+
+	  LabelButton.prototype._declareDefaults = function _declareDefaults() {
+	    _ButtonSwitch.prototype._declareDefaults.call(this);
+	    this._defaults.title = 'speed';
+	    this._defaults.progress = .5;
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  LabelButton.prototype._render = function _render() {
+	    _ButtonSwitch.prototype._render.call(this);
+	    this._addClass(this.el, CLASSES['label-button']);
+	    this._addLabel();
+	    this._setLabelProgress(this._props.progress);
+	  };
+	  /*
+	    Method to add label to the `el`.
+	    @private
+	  */
+
+
+	  LabelButton.prototype._addLabel = function _addLabel() {
+	    this.label = this._createElement('div');
+	    this.label.classList.add(CLASSES['label-button__label']);
+	    this.el.appendChild(this.label);
+	  };
+	  /*
+	    Method to populate the label with progress text.
+	    @private
+	    @param {Number} Progress to set.
+	  */
+
+
+	  LabelButton.prototype._setLabelProgress = function _setLabelProgress(progress) {
+	    var text = progress.toFixed(2);
+	    // if text is 0/1 set the plain value with no toFixed
+	    switch (progress) {
+	      case 0:
+	      case 1:
+	        text = progress;
+	    }
+
+	    // remove the last zero
+	    var lastZero = /0$/;
+	    if (text.match(lastZero)) {
+	      text = text.replace(lastZero, '');
+	    }
+
+	    this.label.innerText = text + 'x';
+	  };
+
+	  return LabelButton;
+	}(_buttonSwitch2.default);
+
+	exports.default = LabelButton;
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(177);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._label-button_1p6kr_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white;\n  /*&__label {  }*/\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 178 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"label-button": "_label-button_1p6kr_4"
+	};
 
 /***/ }
 /******/ ]);

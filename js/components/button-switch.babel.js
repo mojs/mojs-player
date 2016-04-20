@@ -49,7 +49,7 @@ class ButtonSwitch extends Button {
     @private
   */
   _setState () {
-    console.log('change')
+    console.log('change');
   }
  
 }

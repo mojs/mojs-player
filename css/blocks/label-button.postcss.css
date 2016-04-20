@@ -1,0 +1,10 @@
+
+@import '../assets/globals.postcss.css';
+
+.label-button {
+  font-family:        Arial, sans-serif;
+  font-size:          calc( 9 * $PX );
+  letter-spacing:     calc( .5* $PX );
+  color:              white;
+  /*&__label {  }*/
+}
