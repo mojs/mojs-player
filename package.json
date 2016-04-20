@@ -1,7 +1,7 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "license": "MIT",
   "private": false,
   "scripts": {

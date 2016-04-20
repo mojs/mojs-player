@@ -20,7 +20,7 @@ let playButton   = new PlayButton();
 let stopButton   = new StopButton();
 let repeatButton = new RepeatButton();
 let boundsButton = new BoundsButton();
-let labelButton  = new LabelButton({ progress: .7 });
+let labelButton  = new LabelButton();
 
 require('css/main.postcss.css');
 const Main = {
