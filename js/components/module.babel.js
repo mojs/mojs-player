@@ -95,8 +95,19 @@ class Module {
   */
   _addMainClasses () {
     let p = this._props;
-    p.className && this.el.classList.add( p.className );
+    if ( p.className instanceof Array ) {
+      for (var i = 0; i < p.className.length; i++) {
+        this._addClass( this.el, p.className[i] );
+      }
+    } else { this._addClass( this.el, p.className ); }
   }
+  /*
+    Method to add a class on el.
+    @private
+    @param {Object} HTML element to add the class on.
+    @param {String} Class name to add.
+  */
+  _addClass ( el, className ) { className && el.classList.add( className ); }
   /*
     Method to set property on the module.
     @private
