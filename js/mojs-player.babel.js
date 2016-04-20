@@ -12,6 +12,7 @@ import StopButton     from './components/stop-button';
 import OpacitySwitch  from './components/opacity-switch';
 import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
+import LabelButton    from './components/label-button';
 
 // let speedControl = new SpeedControl;
 
@@ -19,6 +20,7 @@ let playButton   = new PlayButton();
 let stopButton   = new StopButton();
 let repeatButton = new RepeatButton();
 let boundsButton = new BoundsButton();
+let labelButton  = new LabelButton({ progress: .7 });
 
 require('css/main.postcss.css');
 const Main = {
