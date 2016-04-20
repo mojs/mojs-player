@@ -2062,11 +2062,10 @@
 	    this._props = {};
 	    this._deltas = {};
 	    for (var key in this._defaults) {
-	      // skip property if it is listed in _skipProps
+	      // TODO skip property if it is listed in _skipProps
 	      // if (this._skipProps && this._skipProps[key]) { continue; }
 	      // copy the properties to the _o object
-	      var value = this._o[key] != null ? this._o[key] : this._defaults[key];
-	      this._assignProp(key, value);
+	      this._assignProp(key, this._o[key] || this._defaults[key]);
 	    }
 	  };
 	  /*
@@ -13209,7 +13208,7 @@
 	    @private
 	    @overrides @ Handle
 	    @param {Number} Shift in `px`.
-	    @param {Boolean} If should invoke onProgress callback.
+	    @param {Boolean} It should invoke onProgress callback.
 	    @returns {Number}.
 	  */
 
@@ -13971,15 +13970,27 @@
 	  }
 
 	  /*
+	    Method to declare defaults for the module.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Button.prototype._declareDefaults = function _declareDefaults() {
+	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.title = '';
+	  };
+	  /*
 	    Initial render method.
 	    @private
 	    @overrides @ Module
 	    @returns this
 	  */
 
+
 	  Button.prototype._render = function _render() {
 	    this._addMainElement();
 	    this.el.classList.add(CLASSES.button);
+	    this.el.setAttribute('title', this._props.title);
 	    this._addListeners();
 	  };
 	  /*
@@ -14703,6 +14714,7 @@
 	    _IconFork.prototype._declareDefaults.call(this);
 	    this._defaults.icon1 = 'pause';
 	    this._defaults.icon2 = 'play';
+	    this._defaults.title = 'play/pause';
 	  };
 	  /*
 	    Method to render the module.
@@ -14809,6 +14821,7 @@
 	  StopButton.prototype._declareDefaults = function _declareDefaults() {
 	    _IconButton.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'stop';
+	    this._defaults.title = 'stop';
 	  };
 	  /*
 	    Initial render method.
@@ -15058,6 +15071,7 @@
 	    _OpacitySwitch.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'repeat';
 	    this._defaults.iconSize = 'x2';
+	    this._defaults.title = 'repeat';
 	  };
 	  /*
 	    Initial render method.
@@ -15171,6 +15185,7 @@
 	  BoundsButton.prototype._declareDefaults = function _declareDefaults() {
 	    _RepeatButton.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'bounds';
+	    this._defaults.title = 'progress bounds';
 	  };
 	  // /*
 	  //   Initial render method.

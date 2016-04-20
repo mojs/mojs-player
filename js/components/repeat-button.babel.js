@@ -13,6 +13,7 @@ class RepeatButton extends OpacitySwitch {
     super._declareDefaults();
     this._defaults.icon     = 'repeat';
     this._defaults.iconSize = 'x2';
+    this._defaults.title    = 'repeat';
   }
   /*
     Initial render method.

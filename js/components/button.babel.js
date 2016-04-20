@@ -6,6 +6,15 @@ let CLASSES = require('css/blocks/button.postcss.css.json');
 
 class Button extends Module {
   /*
+    Method to declare defaults for the module.
+    @private
+    @overrides @ Module
+  */
+  _declareDefaults () {
+    super._declareDefaults()
+    this._defaults.title = '';
+  }
+  /*
     Initial render method.
     @private
     @overrides @ Module
@@ -14,6 +23,7 @@ class Button extends Module {
   _render () {
     this._addMainElement();
     this.el.classList.add( CLASSES.button );
+    this.el.setAttribute( 'title', this._props.title );
     this._addListeners();
   }
   /*

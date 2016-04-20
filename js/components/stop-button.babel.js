@@ -7,6 +7,7 @@ class StopButton extends IconButton {
   _declareDefaults () {
     super._declareDefaults();
     this._defaults.icon = 'stop';
+    this._defaults.title = 'stop';
   }
   /*
     Initial render method.
