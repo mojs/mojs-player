@@ -8,7 +8,8 @@
   $pad: 2;
   &__slider {
     position:         absolute;
-    background:       $c-purple;
+    bottom:           100%;
+    left:             calc( 3 * $PX );
     width:            calc( 30 * $PX );
     height:           calc( 80 * $PX );
     padding-top:      calc( $pad * $GS );
@@ -16,11 +17,12 @@
     
     border-top-right-radius:   $BRADIUS;
     border-top-left-radius:    $BRADIUS;
-  }
-  &__slider-inner{
-    width:            100%;
-    height:           100%;
     
+    background:       $c-purple;
+    
+    $translateSize : calc( -99999999 * $PX );
+    transform:        translate($translateSize, $translateSize);
+
     &:before,
     &:after {
       content:        '';
@@ -38,8 +40,12 @@
       right:          $shift;
     }
   }
-  &__icon {
+  &__button {
     border: 1px solid cyan;
+  }
+
+  &.is-on &__slider {
+    transform: translate(0, 0);
   }
 }
 

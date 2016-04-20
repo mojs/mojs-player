@@ -41,7 +41,7 @@ class ButtonSwitch extends Button {
   */
   _changeState () {
     this._props.isOn = !this._props.isOn;
-    this._callIfFunction( this._props.onStateChange );
+    this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
     this._setState();
   }
   /*

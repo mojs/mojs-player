@@ -78,16 +78,22 @@ class Slider extends Module {
     var p = this._props;
     
     if ( !p.isBound ) {
-      let el        = document.createElement('div'),
+      let el        = this._createElement( 'div' ),
           classList = el.classList;
       this.el = el;
+      
+      this.inner = this._createElement( 'div' );
+      this.inner.classList.add( CLASSES[ 'slider__inner' ] )
+      this.el.appendChild( this.inner );
+
+
       classList.add( CLASSES.slider );
       ( p.direction === 'y' ) && classList.add( CLASSES[ 'is-y' ] );
       p.className && classList.add( p.className );
       p.parent.appendChild( el );
     }
 
-    let rootEl = ( !p.isBound ) ? this.el : p.parent;
+    let rootEl = ( !p.isBound ) ? this.inner : p.parent;
 
     this.track = new Track({
       className:      CLASSES.track,
@@ -95,7 +101,7 @@ class Slider extends Module {
       isBound:        p.isBound,
       isInversed:     p.isInversed,
       isProgress:     p.isProgress,
-      parent:         p.parent,
+      parent:         rootEl,
       direction:      p.direction
     });
     rootEl.appendChild( this.track.el );
@@ -105,7 +111,7 @@ class Slider extends Module {
       onProgress:     this._onHandleProgress.bind(this),
       isBound:        p.isBound,
       isInversed:     p.isInversed,
-      parent:         p.parent,
+      parent:         rootEl,
       direction:      p.direction,
       snapPoint:      p.snapPoint,
       snapStrength:   p.snapStrength

@@ -4,7 +4,7 @@
 .button {
   position:   relative;
   width:      calc( 35 * $PX );
-  height:     calc( 35 * $PX );
+  height:     calc( 40 * $PX );
   cursor:     pointer;
   fill:       #FFF;
   display:    inline-block;

@@ -86,7 +86,6 @@ class Handle extends Module {
     this._shift    = 0;
     // `delta` deviation from the current `shift`
     this._delta    = 0;
-    this._getMaxWidth();
   }
   /*
     Method to set handle shift.
@@ -125,7 +124,7 @@ class Handle extends Module {
         parent = p.parent;
 
     this._maxWidth = ( p.direction === 'x' )
-      ? parent.clientWidth : parent.clientHeight ;
+      ? parent.clientWidth : parent.clientHeight;
   }
   /*
     Method to render the component.
@@ -135,6 +134,7 @@ class Handle extends Module {
   _render () {
     super._render();
     this._addElements();
+    this._getMaxWidth();
     this._hammerTime();
   }
   /*
