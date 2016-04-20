@@ -20,7 +20,8 @@ let playButton   = new PlayButton();
 let stopButton   = new StopButton();
 let repeatButton = new RepeatButton();
 let boundsButton = new BoundsButton();
-let labelButton  = new LabelButton();
+// let labelButton  = new LabelButton();
+let speedControl = new SpeedControl();
 
 require('css/main.postcss.css');
 const Main = {

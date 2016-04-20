@@ -119,7 +119,8 @@
 	var stopButton = new _stopButton2.default();
 	var repeatButton = new _repeatButton2.default();
 	var boundsButton = new _boundsButton2.default();
-	var labelButton = new _labelButton2.default();
+	// let labelButton  = new LabelButton();
+	var speedControl = new _speedControl2.default();
 
 	__webpack_require__(177);
 	var Main = {
@@ -1788,16 +1789,21 @@
 	    var p = this._props;
 
 	    if (!p.isBound) {
-	      var el = document.createElement('div'),
+	      var el = this._createElement('div'),
 	          classList = el.classList;
 	      this.el = el;
+
+	      this.inner = this._createElement('div');
+	      this.inner.classList.add(CLASSES['slider__inner']);
+	      this.el.appendChild(this.inner);
+
 	      classList.add(CLASSES.slider);
 	      p.direction === 'y' && classList.add(CLASSES['is-y']);
 	      p.className && classList.add(p.className);
 	      p.parent.appendChild(el);
 	    }
 
-	    var rootEl = !p.isBound ? this.el : p.parent;
+	    var rootEl = !p.isBound ? this.inner : p.parent;
 
 	    this.track = new _track2.default({
 	      className: CLASSES.track,
@@ -1805,7 +1811,7 @@
 	      isBound: p.isBound,
 	      isInversed: p.isInversed,
 	      isProgress: p.isProgress,
-	      parent: p.parent,
+	      parent: rootEl,
 	      direction: p.direction
 	    });
 	    rootEl.appendChild(this.track.el);
@@ -1815,7 +1821,7 @@
 	      onProgress: this._onHandleProgress.bind(this),
 	      isBound: p.isBound,
 	      isInversed: p.isInversed,
-	      parent: p.parent,
+	      parent: rootEl,
 	      direction: p.direction,
 	      snapPoint: p.snapPoint,
 	      snapStrength: p.snapStrength
@@ -2067,10 +2073,9 @@
 	    this._props = {};
 	    this._deltas = {};
 	    for (var key in this._defaults) {
-	      // TODO skip property if it is listed in _skipProps
-	      // if (this._skipProps && this._skipProps[key]) { continue; }
+	      var value = this._o[key];
 	      // copy the properties to the _o object
-	      this._assignProp(key, this._o[key] || this._defaults[key]);
+	      this._assignProp(key, value != null ? value : this._defaults[key]);
 	    }
 	  };
 	  /*
@@ -2232,7 +2237,6 @@
 	    this._shift = 0;
 	    // `delta` deviation from the current `shift`
 	    this._delta = 0;
-	    this._getMaxWidth();
 	  };
 	  /*
 	    Method to set handle shift.
@@ -2288,6 +2292,7 @@
 	  Handle.prototype._render = function _render() {
 	    _Module.prototype._render.call(this);
 	    this._addElements();
+	    this._getMaxWidth();
 	    this._hammerTime();
 	  };
 	  /*
@@ -13398,7 +13403,7 @@
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_1v0e7_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider_1v0e7_6 ._handle_1v0e7_12 {\n  margin-left:           -6.5px;\n  margin-left:           -6.5px;\n  margin-left:           -0.40625rem;\n  margin-top:           -6.5px;\n  margin-top:           -6.5px;\n  margin-top:           -0.40625rem;\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           3\n}\n._slider_1v0e7_6 ._track_1v0e7_21 {\n  z-index:           2\n}\n._slider_1v0e7_6._is-y_1v0e7_25 {\n  width:           30px;\n  width:           30px;\n  width:           1.875rem;\n  height:           100%;\n}\n._slider_1v0e7_6._is-y_1v0e7_25 ._handle_1v0e7_12 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -0.40625rem\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_2xel6_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider__inner_2xel6_1 {\n  width:           100%;\n  height:           100%;\n  position:           relative\n}\n._slider_2xel6_6 ._handle_2xel6_18 {\n  margin-left:           -6.5px;\n  margin-left:           -6.5px;\n  margin-left:           -0.40625rem;\n  margin-top:           -6.5px;\n  margin-top:           -6.5px;\n  margin-top:           -0.40625rem;\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           3\n}\n._slider_2xel6_6 ._track_2xel6_27 {\n  z-index:           2\n}\n._slider_2xel6_6._is-y_2xel6_31 {\n  width:           30px;\n  width:           30px;\n  width:           1.875rem;\n  height:           100%;\n}\n._slider_2xel6_6._is-y_2xel6_31 ._handle_2xel6_18 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -0.40625rem\n}\n\n", ""]);
 
 	// exports
 
@@ -13408,10 +13413,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"slider": "_slider_1v0e7_6",
-		"handle": "_handle_1v0e7_12",
-		"track": "_track_1v0e7_21",
-		"is-y": "_is-y_1v0e7_25"
+		"slider": "_slider_2xel6_6",
+		"slider__inner": "_slider__inner_2xel6_1",
+		"handle": "_handle_2xel6_18",
+		"track": "_track_2xel6_27",
+		"is-y": "_is-y_2xel6_31"
 	};
 
 /***/ },
@@ -14083,7 +14089,7 @@
 
 
 	// module
-	exports.push([module.id, "._button_1bhnt_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   35px;\n  height:   35px;\n  height:     2.1875rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n}\n._button_1bhnt_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1bhnt_4:hover {\n  opacity:   .85;\n}\n._button_1bhnt_4:active {\n  opacity:   1;\n}\n\n", ""]);
+	exports.push([module.id, "._button_1q92c_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n}\n._button_1q92c_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1q92c_4:hover {\n  opacity:   .85;\n}\n._button_1q92c_4:active {\n  opacity:   1;\n}\n\n", ""]);
 
 	// exports
 
@@ -14093,7 +14099,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"button": "_button_1bhnt_4"
+		"button": "_button_1q92c_4"
 	};
 
 /***/ },
@@ -14305,7 +14311,7 @@
 
 	  ButtonSwitch.prototype._changeState = function _changeState() {
 	    this._props.isOn = !this._props.isOn;
-	    this._callIfFunction(this._props.onStateChange);
+	    this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
 	    this._setState();
 	  };
 	  /*
@@ -14446,17 +14452,19 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _icon = __webpack_require__(128);
+	var _labelButton = __webpack_require__(173);
 
-	var _icon2 = _interopRequireDefault(_icon);
+	var _labelButton2 = _interopRequireDefault(_labelButton);
 
 	var _slider = __webpack_require__(77);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _moJs = __webpack_require__(81);
 
-	// import HammerJS from 'hammerjs'
+	var _moJs2 = _interopRequireDefault(_moJs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	__webpack_require__(149);
 	var CLASSES = __webpack_require__(151);
@@ -14470,11 +14478,23 @@
 	  }
 
 	  /*
+	    Method to declare defaults for the module.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  SpeedControl.prototype._declareDefaults = function _declareDefaults() {
+	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.progress = .5;
+	    this._defaults.onSpeedChange = null;
+	  };
+	  /*
 	    Initial render method.
 	    @private
 	    @overrides @ Module
 	    @returns this
 	  */
+
 
 	  SpeedControl.prototype._render = function _render() {
 	    var p = this._props,
@@ -14487,15 +14507,17 @@
 	    this.el.classList.add(CLASSES[className]);
 	    // places for child components
 	    slider.classList.add(CLASSES[className + '__slider']);
-	    sliderIn.classList.add(CLASSES[className + '__slider-inner']);
-	    icon.classList.add(CLASSES[className + '__icon']);
-	    slider.appendChild(sliderIn);
+	    // sliderIn.classList.add( CLASSES[ `${ className }__slider-inner` ] );
+	    // slider.appendChild( sliderIn );
 	    this.el.appendChild(slider);
-	    this.el.appendChild(icon);
 	    // child components
-	    this.icon = new _icon2.default({ isText: true, parent: icon });
+	    this.labelButton = new _labelButton2.default({
+	      parent: this.el,
+	      className: CLASSES[className + '__icon'],
+	      onStateChange: this._onButtonStateChange.bind(this)
+	    });
 	    this.slider = new _slider2.default({
-	      parent: sliderIn,
+	      parent: slider,
 	      isProgress: false,
 	      direction: 'y',
 	      onProgress: this._onSliderProgress.bind(this),
@@ -14503,7 +14525,7 @@
 	      snapStrength: .05
 	    });
 
-	    this.slider.setProgress(.5);
+	    this.slider.setProgress(this._props.progress);
 	  };
 	  /*
 	    Method that is invoked on slider progress.
@@ -14513,7 +14535,61 @@
 
 
 	  SpeedControl.prototype._onSliderProgress = function _onSliderProgress(p) {
-	    // console.log( p );
+	    var props = this._props,
+	        args = [this._progressToSpeed(p), p];
+
+	    this._callIfFunction(props.onSpeedChange, args);
+	    this.labelButton.setLabelText(this._progressToLabel(props.progress = p));
+	  };
+	  /*
+	    Method that is invoked on button state change.
+	    @private
+	    @param {Boolean} State of the button switch.
+	  */
+
+
+	  SpeedControl.prototype._onButtonStateChange = function _onButtonStateChange(isOn) {
+	    var method = isOn ? 'add' : 'remove';
+	    this.el.classList[method](CLASSES['is-on']);
+	  };
+	  /*
+	    Method to recalc progress to label string.
+	    @private
+	    @param {Number} Progress [0...1].
+	    @returns {String} String for a label to set.
+	  */
+
+
+	  SpeedControl.prototype._progressToLabel = function _progressToLabel(progress) {
+	    var text = this._progressToSpeed(progress).toFixed(2),
+	        zeros = /\.+00$/;
+
+	    if (text.match(zeros)) {
+	      text = text.replace(zeros, '');
+	    }
+
+	    return text + 'x';
+	  };
+	  /*
+	    Method to recalc progress to speed.
+	    @private
+	    @param   {Number} Progress [0...1].
+	    @returns {Number} Speed [0...10].
+	  */
+
+
+	  SpeedControl.prototype._progressToSpeed = function _progressToSpeed(progress) {
+	    var speed = progress;
+	    if (progress === .5) {
+	      speed = 1;
+	    }
+	    if (progress > .5) {
+	      // normalize to 10
+	      speed = 1 + 18 * (progress - .5);
+	      // pipe thru cubic.in easing to have nice pricision for start numbers
+	      speed = 1 + 9 * _moJs2.default.easing.cubic.in(speed / 10);
+	    }
+	    return speed;
 	  };
 
 	  return SpeedControl;
@@ -14556,7 +14632,7 @@
 
 
 	// module
-	exports.push([module.id, "._speed-control_l3oet_4 {\n  position:       relative;\n  display:        inline-block\n}\n._speed-control__slider_l3oet_1 {\n  position:       absolute;\n  background:       #3A0839;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem\n}\n._speed-control__slider-inner_l3oet_1 {\n  width:       100%;\n  height:       100%\n}\n._speed-control__slider-inner_l3oet_1:before, ._speed-control__slider-inner_l3oet_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider-inner_l3oet_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider-inner_l3oet_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__icon_l3oet_1 {\n  border:       1px solid cyan\n}\n\n", ""]);
+	exports.push([module.id, "._speed-control_qz5vo_4 {\n  position:       relative;\n  display:        inline-block\n}\n._speed-control__slider_qz5vo_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem)\n}\n._speed-control__slider_qz5vo_1:before, ._speed-control__slider_qz5vo_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_qz5vo_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_qz5vo_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_qz5vo_1 {\n  border:       1px solid cyan\n}\n._speed-control_qz5vo_4._is-on_qz5vo_47 ._speed-control__slider_qz5vo_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
 
 	// exports
 
@@ -14566,10 +14642,10 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"speed-control": "_speed-control_l3oet_4",
-		"speed-control__slider": "_speed-control__slider_l3oet_1",
-		"speed-control__slider-inner": "_speed-control__slider-inner_l3oet_1",
-		"speed-control__icon": "_speed-control__icon_l3oet_1"
+		"speed-control": "_speed-control_qz5vo_4",
+		"speed-control__slider": "_speed-control__slider_qz5vo_1",
+		"speed-control__button": "_speed-control__button_qz5vo_1",
+		"is-on": "_is-on_qz5vo_47"
 	};
 
 /***/ },
@@ -15258,8 +15334,36 @@
 	  LabelButton.prototype._declareDefaults = function _declareDefaults() {
 	    _ButtonSwitch.prototype._declareDefaults.call(this);
 	    this._defaults.title = 'speed';
-	    this._defaults.progress = .5;
 	  };
+	  /*
+	    Method to populate the label with progress text.
+	    @public
+	    @param {String} Text to set.
+	  */
+
+
+	  LabelButton.prototype.setLabelText = function setLabelText(text) {
+	    // progress += .5;
+	    // let text = progress.toFixed(2);
+	    // // if text is 0/1 set the plain value with no toFixed
+	    // switch ( progress ) {
+	    //   case 0:
+	    //   case 1:
+	    //     text = `${ progress }`;
+	    // }
+
+	    // // remove the last zero
+	    // let lastZero = /0$/;
+	    // if ( text.match( lastZero ) ) { text = text.replace( lastZero, '' ); }
+
+	    this.label.innerText = text;
+	  };
+
+	  /*
+	    ^  PUBLIC  ^
+	    v PPRIVATE v
+	  */
+
 	  /*
 	    Initial render method.
 	    @private
@@ -15272,7 +15376,7 @@
 	    _ButtonSwitch.prototype._render.call(this);
 	    this._addClass(this.el, CLASSES['label-button']);
 	    this._addLabel();
-	    this._setLabelProgress(this._props.progress);
+	    // this.setLabelText( this._props.progress );
 	  };
 	  /*
 	    Method to add label to the `el`.
@@ -15284,30 +15388,6 @@
 	    this.label = this._createElement('div');
 	    this.label.classList.add(CLASSES['label-button__label']);
 	    this.el.appendChild(this.label);
-	  };
-	  /*
-	    Method to populate the label with progress text.
-	    @private
-	    @param {Number} Progress to set.
-	  */
-
-
-	  LabelButton.prototype._setLabelProgress = function _setLabelProgress(progress) {
-	    var text = progress.toFixed(2);
-	    // if text is 0/1 set the plain value with no toFixed
-	    switch (progress) {
-	      case 0:
-	      case 1:
-	        text = progress;
-	    }
-
-	    // remove the last zero
-	    var lastZero = /0$/;
-	    if (text.match(lastZero)) {
-	      text = text.replace(lastZero, '');
-	    }
-
-	    this.label.innerText = text + 'x';
 	  };
 
 	  return LabelButton;

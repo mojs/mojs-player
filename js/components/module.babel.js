@@ -139,10 +139,9 @@ class Module {
     this._props  = {};
     this._deltas = {};
     for (var key in this._defaults) {
-      // TODO skip property if it is listed in _skipProps
-      // if (this._skipProps && this._skipProps[key]) { continue; }
+      let value = this._o[key];
       // copy the properties to the _o object
-      this._assignProp( key, this._o[key] || this._defaults[key] );
+      this._assignProp( key, ( value != null ) ? value : this._defaults[key] );
     }
   }
   /*

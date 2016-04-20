@@ -8,6 +8,12 @@ $height: 30;
   width:              100%;
   height:             calc( $height * $PX );
   
+  &__inner {
+    width:            100%;
+    height:           100%;
+    position:         relative;
+  }
+  
   $handleHeight: 13;
   & .handle {
     margin-left:    calc( - $handleHeight/2 * $PX );
