@@ -87,7 +87,7 @@
 
 	var _playerButton2 = _interopRequireDefault(_playerButton);
 
-	var _playButton = __webpack_require__(158);
+	var _playButton = __webpack_require__(156);
 
 	var _playButton2 = _interopRequireDefault(_playButton);
 
@@ -97,7 +97,7 @@
 
 	var playButton = new _playButton2.default();
 
-	__webpack_require__(156);
+	__webpack_require__(160);
 	var Main = {
 	  /*
 	    Initialization method.
@@ -13738,9 +13738,6 @@
 	      parent: document.body,
 	      shape: ''
 	    };
-	    // onPointerDown:   null,
-	    // onPointerUp:     null,
-	    // onDoubleTap:     null
 	    this.NS = 'http://www.w3.org/2000/svg';
 	  };
 	  /*
@@ -13764,13 +13761,27 @@
 
 
 	  Icon.prototype._renderIcon = function _renderIcon() {
-	    var svg = document.createElementNS(this.NS, 'svg'),
-	        use = document.createElementNS(this.NS, 'use');
-
-	    use.setAttribute('xlink:href', '#' + this._props.shape + '-icon-shape');
-	    svg.appendChild(use);
+	    var svg = document.createElementNS(this.NS, 'svg');
+	    svg.setAttribute('viewBox', '0 0 32 32');
+	    this._addSVGHtml(svg, '<use xlink:href="#' + this._props.shape + '-icon-shape" />');
 	    this.el.appendChild(svg);
-	    // this.el.setAttribute( 'data-rand', (10*Math.random()).toFixed(0) )
+	  };
+	  /*
+	    Add HTML to SVG element.
+	    @private
+	    @param {Object} SVG node.
+	    @param {String} SVG content to add.
+	  */
+
+
+	  Icon.prototype._addSVGHtml = function _addSVGHtml(svg, content) {
+	    var receptacle = this._createElement('div'),
+	        svgfragment = '<svg> ' + content + ' </svg>';
+	    receptacle.innerHTML = svgfragment;
+	    var nodes = Array.prototype.slice.call(receptacle.childNodes[0].childNodes);
+	    for (var i = 0; i < nodes.length; i++) {
+	      svg.appendChild(nodes[i]);
+	    }
 	  };
 
 	  return Icon;
@@ -13813,7 +13824,7 @@
 
 
 	// module
-	exports.push([module.id, "._icon_hsp2b_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  \n  cursor:       pointer\n\n  /*&:before {\n    content:    attr(data-rand);\n    position:   absolute;\n    left:       0;\n    top:        0;\n    right:      0;\n    bottom:     0;\n    z-index:    2;\n    color:      white;\n    font-size:  8px;\n  }*/\n}\n._icon_hsp2b_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  background:     #333\n}\n._icon_hsp2b_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_hsp2b_5:hover {\n  opacity:     .85\n}\n\n", ""]);
+	exports.push([module.id, "._icon_1tdh8_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  \n  cursor:       pointer\n\n  /*&:before {\n    content:    attr(data-rand);\n    position:   absolute;\n    left:       0;\n    top:        0;\n    right:      0;\n    bottom:     0;\n    z-index:    2;\n    color:      white;\n    font-size:  8px;\n  }*/\n}\n._icon_1tdh8_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  fill:     inherit\n}\n._icon_1tdh8_5 > svg > use {\n  fill:     inherit\n}\n._icon_1tdh8_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_1tdh8_5:hover {\n  opacity:     .85\n}\n\n", ""]);
 
 	// exports
 
@@ -13823,7 +13834,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"icon": "_icon_hsp2b_5"
+		"icon": "_icon_1tdh8_5"
 	};
 
 /***/ },
@@ -14608,7 +14619,7 @@
 
 
 	// module
-	exports.push([module.id, "._player-button_12752_4 {\n  width:      35px;\n  width:      35px;\n  width:      2.1875rem;\n  height:      35px;\n  height:      35px;\n  height:     2.1875rem;\n  cursor:     pointer;\n  border: 1px solid cyan;\n}\n._player-button_12752_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n", ""]);
+	exports.push([module.id, "._player-button_1yk93_4 {\n  width:      35px;\n  width:      35px;\n  width:      2.1875rem;\n  height:      35px;\n  height:      35px;\n  height:     2.1875rem;\n  cursor:     pointer;\n  fill:       #FFF;\n}\n._player-button_1yk93_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n", ""]);
 
 	// exports
 
@@ -14618,51 +14629,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"player-button": "_player-button_12752_4"
+		"player-button": "_player-button_1yk93_4"
 	};
 
 /***/ },
 /* 156 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(157);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 157 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ":root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  background-color: #f1f1f1;\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  /*background-color: #333;*/\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14687,8 +14658,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(159);
-	var CLASSES = __webpack_require__(161),
+	__webpack_require__(157);
+	var CLASSES = __webpack_require__(159),
 	    PLAYER_BTN_CLASSES = __webpack_require__(155);
 
 	var PlayButton = function (_IconFork) {
@@ -14707,8 +14678,8 @@
 
 	  PlayButton.prototype._declareDefaults = function _declareDefaults() {
 	    _IconFork.prototype._declareDefaults.call(this);
-	    this._defaults.icon1 = 'play';
-	    this._defaults.icon2 = 'pause';
+	    this._defaults.icon1 = 'pause';
+	    this._defaults.icon2 = 'play';
 	  };
 	  /*
 	    Method to render the module.
@@ -14728,13 +14699,13 @@
 	exports.default = PlayButton;
 
 /***/ },
-/* 159 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(160);
+	var content = __webpack_require__(158);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(115)(content, {});
@@ -14754,7 +14725,7 @@
 	}
 
 /***/ },
-/* 160 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(114)();
@@ -14768,12 +14739,52 @@
 
 
 /***/ },
-/* 161 */
+/* 159 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"play-button": "_play-button_16uj5_4"
 	};
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(161);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ":root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  /*background-color: #f1f1f1;*/\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  background-color: #333;\n}\n\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

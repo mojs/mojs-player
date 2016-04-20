@@ -14,10 +14,7 @@ class Icon extends Module {
     this._defaults = {
       className:       '',
       parent:          document.body,
-      shape:           '',
-      // onPointerDown:   null,
-      // onPointerUp:     null,
-      // onDoubleTap:     null
+      shape:           ''
     }
     this.NS = 'http://www.w3.org/2000/svg';
   }
@@ -38,13 +35,25 @@ class Icon extends Module {
     @private
   */
   _renderIcon () {
-    let svg = document.createElementNS( this.NS, 'svg' ),
-        use = document.createElementNS( this.NS, 'use' );
-
-    use.setAttribute( 'xlink:href', `#${ this._props.shape }-icon-shape` );
-    svg.appendChild( use );
+    let svg = document.createElementNS( this.NS, 'svg' );
+    svg.setAttribute( 'viewBox', '0 0 32 32' );
+    this._addSVGHtml( svg, `<use xlink:href="#${ this._props.shape }-icon-shape" />` );
     this.el.appendChild( svg );
-    // this.el.setAttribute( 'data-rand', (10*Math.random()).toFixed(0) )
+  }
+  /*
+    Add HTML to SVG element.
+    @private
+    @param {Object} SVG node.
+    @param {String} SVG content to add.
+  */
+  _addSVGHtml ( svg, content ) {
+    let receptacle  = this._createElement( 'div' ),
+        svgfragment = `<svg> ${ content } </svg>`;
+    receptacle.innerHTML = svgfragment;
+    let nodes = Array.prototype.slice.call(receptacle.childNodes[0].childNodes);
+    for (let i = 0; i < nodes.length; i++) {
+      svg.appendChild( nodes[i] );
+    }
   }
 }
 

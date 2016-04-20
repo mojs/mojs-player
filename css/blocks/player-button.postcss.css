@@ -5,7 +5,7 @@
   width:      calc( 35 * $PX );
   height:     calc( 35 * $PX );
   cursor:     pointer;
-  border: 1px solid cyan;
+  fill:       #FFF;
   > div {
     position:   absolute;
     top:        50%;

@@ -13,8 +13,8 @@ class PlayButton extends IconFork {
   */
   _declareDefaults () {
     super._declareDefaults();
-    this._defaults.icon1 = 'play';
-    this._defaults.icon2 = 'pause';
+    this._defaults.icon1 = 'pause';
+    this._defaults.icon2 = 'play';
   }
   /*
     Method to render the module.

@@ -13,7 +13,6 @@ import PlayButton   from './components/play-button';
 
 let playButton = new PlayButton();
 
-
 require('css/main.postcss.css');
 const Main = {
   /*
