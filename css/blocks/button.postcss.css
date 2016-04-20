@@ -2,6 +2,23 @@
 @import '../assets/globals.postcss.css';
 
 .button {
-  /* styles */
+  position:   relative;
+  width:      calc( 35 * $PX );
+  height:     calc( 35 * $PX );
+  cursor:     pointer;
+  fill:       #FFF;
+  display:    inline-block;
+  > div {
+    position:   absolute;
+    top:        50%;
+    left:       50%;
+    transform:  translate( -50%, -50% );
+  }
+  &:hover {
+    opacity:    .85;
+  }
+  &:active {
+    opacity:    1;
+  }
 }
 

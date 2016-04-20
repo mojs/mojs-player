@@ -11,7 +11,8 @@ class ButtonSwitch extends Button {
   */
   _declareDefaults () {
     super._declareDefaults();
-    this._defaults.isOn = false;
+    this._defaults.isOn          = false;
+    this._defaults.onStateChange = null;
   }
   /*
     Initial render method.
@@ -40,6 +41,7 @@ class ButtonSwitch extends Button {
   */
   _changeState () {
     this._props.isOn = !this._props.isOn;
+    this._callIfFunction( this._props.onStateChange );
     this._setState();
   }
   /*

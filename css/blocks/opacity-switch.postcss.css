@@ -1,0 +1,10 @@
+
+@import '../assets/globals.postcss.css';
+
+.opacity-switch {
+  opacity: .5;
+  &.is-on {
+    opacity: 1;
+  }
+}
+

@@ -14,7 +14,8 @@ class Icon extends Module {
     this._defaults = {
       className:       '',
       parent:          document.body,
-      shape:           ''
+      shape:           '',
+      size:            'x1'
     }
     this.NS = 'http://www.w3.org/2000/svg';
   }
@@ -25,9 +26,9 @@ class Icon extends Module {
     @returns this
   */
   _render () {
-    var p = this._props;
     this._addMainElement();
     this.el.classList.add( CLASSES.icon );
+    this.el.classList.add( CLASSES[ `is-${ this._props.size }` ] );
     this._renderIcon();
   }
   /*
