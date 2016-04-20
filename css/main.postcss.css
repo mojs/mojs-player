@@ -7,9 +7,9 @@
 }
 
 body {
-  background-color: #f1f1f1;
+  /*background-color: #f1f1f1;*/
   font-size: calc(12 * $PX);
   padding-top: 50px;
-  /*background-color: #333;*/
+  background-color: #333;
 }
 
