@@ -107,7 +107,7 @@
 
 	var _boundsButton2 = _interopRequireDefault(_boundsButton);
 
-	var _labelButton = __webpack_require__(175);
+	var _labelButton = __webpack_require__(173);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
@@ -119,9 +119,9 @@
 	var stopButton = new _stopButton2.default();
 	var repeatButton = new _repeatButton2.default();
 	var boundsButton = new _boundsButton2.default();
-	var labelButton = new _labelButton2.default({ progress: .7 });
+	var labelButton = new _labelButton2.default();
 
-	__webpack_require__(173);
+	__webpack_require__(177);
 	var Main = {
 	  /*
 	    Initialization method.
@@ -13983,6 +13983,9 @@
 	  Button.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.title = '';
+	    this._defaults.onPointerDown = null;
+	    this._defaults.onPointerup = null;
+	    this._defaults.onDoubleTap = null;
 	  };
 	  /*
 	    Initial render method.
@@ -15213,46 +15216,6 @@
 /* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(174);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, ":root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  /*background-color: #f1f1f1;*/\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  background-color: #333;\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 175 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	exports.__esModule = true;
@@ -15275,8 +15238,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(176);
-	var CLASSES = __webpack_require__(178);
+	__webpack_require__(174);
+	var CLASSES = __webpack_require__(176);
 
 	var LabelButton = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(LabelButton, _ButtonSwitch);
@@ -15353,13 +15316,13 @@
 	exports.default = LabelButton;
 
 /***/ },
-/* 176 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(177);
+	var content = __webpack_require__(175);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(115)(content, {});
@@ -15379,7 +15342,7 @@
 	}
 
 /***/ },
-/* 177 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(114)();
@@ -15393,12 +15356,52 @@
 
 
 /***/ },
-/* 178 */
+/* 176 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"label-button": "_label-button_1p6kr_4"
 	};
+
+/***/ },
+/* 177 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(178);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
+				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ":root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  /*background-color: #f1f1f1;*/\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  background-color: #333;\n}\n\n", ""]);
+
+	// exports
+
 
 /***/ }
 /******/ ]);

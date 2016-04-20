@@ -12,7 +12,10 @@ class Button extends Module {
   */
   _declareDefaults () {
     super._declareDefaults()
-    this._defaults.title = '';
+    this._defaults.title         = '';
+    this._defaults.onPointerDown = null;
+    this._defaults.onPointerup   = null;
+    this._defaults.onDoubleTap   = null;
   }
   /*
     Initial render method.
