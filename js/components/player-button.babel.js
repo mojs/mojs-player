@@ -7,15 +7,13 @@ class PlayerButton extends Button {
   /*
     Initial render method.
     @private
-    @overrides @ Module
+    @overrides @ Button
     @returns this
   */
-  // _render () {
-  //   var p = this._props;
-  //   this._addMainElement();
-  //   this.el.classList.add( CLASSES.button );
-  //   this._addListeners();
-  // }
+  _render () {
+    super._render();
+    this.el.classList.add( CLASSES[ 'player-button' ] );
+  }
 }
 
 export default PlayerButton;

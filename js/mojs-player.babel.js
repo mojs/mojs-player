@@ -7,10 +7,14 @@ import IconFork     from './components/icon-fork';
 import SpeedControl from './components/speed-control';
 import Button       from './components/button';
 import PlayerButton from './components/player-button';
+import PlayButton   from './components/play-button';
 
-let speedControl = new SpeedControl;
+// let speedControl = new SpeedControl;
 
-require('css/main.postcss.css')
+let playButton = new PlayButton();
+
+
+require('css/main.postcss.css');
 const Main = {
   /*
     Initialization method.
