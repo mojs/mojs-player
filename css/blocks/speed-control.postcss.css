@@ -20,6 +20,23 @@
   &__slider-inner{
     width:            100%;
     height:           100%;
+    
+    &:before,
+    &:after {
+      content:        '';
+      position:       absolute;
+      top:            50%;
+      width:          calc( 3*$PX );
+      height:         calc( $PX );
+      background:     #FFF;
+    }
+    $shift: calc( 5*$PX );
+    &:before {
+      left:           $shift;
+    }
+    &:after {
+      right:          $shift;
+    }
   }
   &__icon {
     border: 1px solid cyan;

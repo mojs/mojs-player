@@ -1,14 +1,13 @@
-import Icon from './icon';
-// import HammerJS from 'hammerjs'
+import Button from './button';
 
-require('css/blocks/icon-switch.postcss.css');
-let CLASSES = require('css/blocks/icon-switch.postcss.css.json');
+require('css/blocks/button-switch.postcss.css');
+let CLASSES = require('css/blocks/button-switch.postcss.css.json');
 
-class IconSwitch extends Icon {
+class ButtonSwitch extends Button {
   /*
     Method to declare _defaults.
     @private
-    @overrides @ Module
+    @overrides @ Button
   */
   _declareDefaults () {
     super._declareDefaults();
@@ -17,19 +16,18 @@ class IconSwitch extends Icon {
   /*
     Initial render method.
     @private
-    @overrides @ Icon
+    @overrides @ Button
     @returns this
   */
   _render () {
     super._render();
-    this.el.classList.add( CLASSES[ 'icon-switch' ] );
-    this._addListeners();
+    this.el.classList.add( CLASSES[ 'button-switch' ] );
     this._setState();
   }
   /*
     Method to invoke onPointerUp callback if excist.
     @private
-    @overrides @ Icon
+    @overrides @ Button
     @param {Object} Original event object.
   */
   _pointerUp ( e ) {
@@ -54,4 +52,4 @@ class IconSwitch extends Icon {
  
 }
 
-export default IconSwitch;
+export default ButtonSwitch;

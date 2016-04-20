@@ -25,9 +25,8 @@ class PlayerSlider extends Module {
     @returns this
   */
   _render () {
-    this.el = document.createElement( 'div' );
-    this.el.classList.add( `${ this._props.className }` );
-    this.el.classList.add( `${ SLIDER_CLASSES.slider }` );
+    this._addMainElement();
+    this.el.classList.add( SLIDER_CLASSES.slider );
 
     this.leftBound = new Slider({
       isBound:    true,
@@ -39,7 +38,6 @@ class PlayerSlider extends Module {
       className:  CLASSES.slider,
       onProgress: this._onTrackProgress.bind(this)
     });
-
     this.rightBound = new Slider({
       isBound:    true,
       parent:     this.el,

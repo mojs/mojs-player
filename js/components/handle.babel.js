@@ -21,6 +21,8 @@ class Handle extends Module {
       isInversed:   false,
       direction:    'x',
       onProgress:   null,
+      snapPoint:    0,
+      snapStrength: 0,
     }
   }
   /*
@@ -170,9 +172,17 @@ class Handle extends Module {
   _hammerTime () {
     let p  = this._props,
         hm = HammerJS(this.el);
+
     hm.on('pan', ( e ) => {
       this._delta = ( p.direction === 'x' ) ? e.deltaX : -e.deltaY;
-      this._setShift( this._shift + this._delta );
+      // get progress from the shift to undestand how far is the snapPoint
+      let shift = this._shift + this._delta,
+          proc  = this._shiftToProgress( shift );
+      // if progress is around snapPoint set it to the snap point
+      proc = ( Math.abs( proc - p.snapPoint ) < p.snapStrength )
+        ? p.snapPoint : proc;
+      // recalculate the progress to shift and set it
+      this._setShift( this._progressToShift( proc ) );
     });
 
     hm.on('panend', ( e ) => { this._saveDelta(); });

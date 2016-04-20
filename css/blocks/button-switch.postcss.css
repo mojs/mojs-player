@@ -1,7 +1,7 @@
 
 @import '../assets/globals.postcss.css';
 
-.icon-switch {
+.button-switch {
   position:     relative;
   display:      inline-block;
   
