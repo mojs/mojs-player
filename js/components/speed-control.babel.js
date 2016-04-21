@@ -43,6 +43,7 @@ class SpeedControl extends Module {
       parent:         this.el,
       className:      CLASSES[ `${ className }__icon` ],
       onStateChange:  this._onButtonStateChange.bind( this ),
+      onDoubleTap:    this._onDoubleTap.bind( this )
     });
     this.slider      = new Slider({
       parent:       slider,
@@ -106,6 +107,14 @@ class SpeedControl extends Module {
       speed = 1 + (9 * mojs.easing.cubic.in( speed/10 ));
     }
     return speed;
+  }
+  /*
+    Method that is invoked on double button tap.
+    @private
+  */
+  _onDoubleTap () {
+    this.slider.setProgress( .5 );
+    this.labelButton.off();
   }
 }
 

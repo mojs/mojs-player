@@ -14,16 +14,19 @@ $height: 30;
     position:         relative;
   }
   
-  $handleHeight: 13;
-  & .handle {
-    margin-left:    calc( - $handleHeight/2 * $PX );
-    margin-top:     calc( - $handleHeight/2 * $PX );
-  
-    position:       absolute;
-    left:           0;
-    top:            50%;
-    z-index:        3;
+  & .handle,
+  & .progress-handle {
+    z-index:          3;
+    position:         absolute;
+    top:              50%;
   }
+  $handleHeight: 13;
+  & .progress-handle {
+    left:             0;
+    margin-left:      calc( - $handleHeight/2 * $PX );
+    margin-top:       calc( - $handleHeight/2 * $PX );
+  }
+
   & .track {
     z-index:        2;
   }

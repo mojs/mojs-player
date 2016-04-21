@@ -20,8 +20,8 @@ class Slider extends Module {
       isProgress:   true,
       onProgress:   null,
       direction:    'x',
-      snapPoint:    .5,
-      snapStrength: .1
+      snapPoint:    0,
+      snapStrength: 0
     }
   }
   /*
@@ -70,6 +70,22 @@ class Slider extends Module {
     return this;
   }
   /*
+    Method to hide elements.
+    @public
+  */
+  show () {
+    this.track.el.style.display = 'block';
+    this.handle.el.style.display = 'block';
+  }
+  /*
+    Method to hide elements.
+    @public
+  */
+  hide () {
+    this.track.el.style.display = 'none';
+    this.handle.el.style.display = 'none';
+  }
+  /*
     Method to render the component.
     @private
     @overrides @ Module
@@ -106,8 +122,12 @@ class Slider extends Module {
     });
     rootEl.appendChild( this.track.el );
 
+
+    let handleClass = [ CLASSES.handle ];
+    if ( !p.isBound ) { handleClass.push( CLASSES[ 'progress-handle' ] ) }
+
     this.handle = new Handle({
-      className:      CLASSES.handle,
+      className:      handleClass,
       onProgress:     this._onHandleProgress.bind(this),
       isBound:        p.isBound,
       isInversed:     p.isInversed,

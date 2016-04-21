@@ -81,11 +81,12 @@ class Module {
   /*
     Method to add `this.el` on the module.
     @private
+    @param {String} Tag name of the element.
   */
-  _addMainElement () {
+  _addMainElement ( tagName = 'div' ) {
     let p = this._props;
 
-    this.el = this._createElement( 'div' );
+    this.el = this._createElement( tagName );
     this._addMainClasses();
     p.parent.appendChild( this.el );
   }
@@ -151,6 +152,19 @@ class Module {
     @returns {Object} HtmlElement.
   */
   _createElement ( tagName ) { return document.createElement( tagName ); }
+  /*
+    Method to create HTMLElement and append it to the `el` with a className.
+    @private
+    @param {String} The tagname for the HTMLElement.
+    @param {String} Optional class name to add to the new child.
+    @returns {Object} The newely created HTMLElement.
+  */
+  _createChild ( tagName, className ) {
+    let child = this._createElement( 'div' );
+    className && child.classList.add( className );
+    this.el.appendChild( child );
+    return child;
+  }
 }
 
 export default Module;

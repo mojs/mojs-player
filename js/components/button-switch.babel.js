@@ -15,6 +15,18 @@ class ButtonSwitch extends Button {
     this._defaults.onStateChange = null;
   }
   /*
+    Method to set the state to `false`.
+    @public
+  */
+  off () {
+    // set to true because the next step is toggle
+    this._props.isOn = false;
+    this._reactOnStateChange();
+  }
+
+  // ---
+
+  /*
     Initial render method.
     @private
     @overrides @ Button
@@ -24,6 +36,7 @@ class ButtonSwitch extends Button {
     super._render();
     this.el.classList.add( CLASSES[ 'button-switch' ] );
     this._setState();
+    this._reactOnStateChange();
   }
   /*
     Method to invoke onPointerUp callback if excist.
@@ -41,6 +54,13 @@ class ButtonSwitch extends Button {
   */
   _changeState () {
     this._props.isOn = !this._props.isOn;
+    this._reactOnStateChange();
+  }
+  /*
+    Method to react on state change.
+    @private
+  */
+  _reactOnStateChange () {
     this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
     this._setState();
   }
@@ -49,7 +69,7 @@ class ButtonSwitch extends Button {
     @private
   */
   _setState () {
-    console.log('change');
+    // console.log('change');
   }
  
 }

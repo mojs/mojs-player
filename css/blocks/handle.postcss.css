@@ -53,22 +53,44 @@ $handleHeight: 13;
     width:          calc( $width * $PX );
     height:         calc( $height * $PX );
     margin-left:    calc( - $width * $PX );
-    margin-top:     calc( - $height/2 * $PX );
+    margin-top:     calc( - $height/2 * $PX ) !important;
   }
   &.is-bound &__inner {
     background:     $c-orange;
+    border-top-right-radius:     0;
+    border-bottom-right-radius:  0;
+    $lineHeight: 40;
+    &:after {
+      content:      '';
+      position:     absolute;
+      right:        0;
+      top:          50%;
+      margin-top:   calc( - $lineHeight/2 * $PX );
+      width:        calc( $PX );
+      height:       calc( $lineHeight * $PX );
+      background:   $c-orange;
+    }
   }
   &.is-bound &__inner,
   &.is-bound &__shadow {
     border-radius:  $BRADIUS;
   }
 
-
   &.is-inversed {
     margin-left:    0;
   }
   &.is-inversed &__shadow {
     box-shadow:     calc( - $PX ) calc( $PX ) calc( 2*$PX ) black;
+  }
+  &.is-inversed &__inner {
+    border-top-left-radius:      0;
+    border-bottom-left-radius:   0;
+    border-top-right-radius:     $BRADIUS;
+    border-bottom-right-radius:  $BRADIUS;
+    &:after {
+      right:        auto;
+      left:         0;
+    }
   }
 }
 
