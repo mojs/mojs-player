@@ -1,4 +1,5 @@
 
+import Module         from './components/module';
 import PlayerSlider   from './components/player-slider';
 import Polyfill       from 'classlist-polyfill';
 import Icon           from './components/icon';
@@ -14,28 +15,79 @@ import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
 import LabelButton    from './components/label-button';
 
-// let speedControl = new SpeedControl;
+require('css/blocks/mojs-player.postcss.css');
+let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
-let playButton   = new PlayButton();
-let stopButton   = new StopButton();
-let repeatButton = new RepeatButton();
-let boundsButton = new BoundsButton();
-// let labelButton  = new LabelButton();
-let speedControl = new SpeedControl();
+class MojsPlayer extends Module {
+  _declareDefaults () {
+    super._declareDefaults();
 
-require('css/main.postcss.css');
-const Main = {
+    this._defaults.isBounds   = false;
+    this._defaults.leftBound  = 0;
+    this._defaults.rightBound = 1;
+    this._defaults.progress   = 0;
+    this._defaults.isPlaying  = false;
+  }
   /*
-    Initialization method.
-    @public
-    @param {Object} Initialization options.
+    Method to render the module.
+    @private
+    @overrides @ Module
   */
-  init (o) {
-    console.log( `Hello, ${o.name}!` );
+  _render () {
+    let p         = this._props,
+        className = 'mojs-player';
+    super._render();
+    this.el.classList.add( CLASSES[ className ] );
+
+    let left  = this._createChild( 'div', CLASSES[ `${ className }__left` ] ),
+        mid   = this._createChild( 'div', CLASSES[ `${ className }__mid` ] ),
+        right = this._createChild( 'div', CLASSES[ `${ className }__right` ] );
+
+    this.playButton   = new PlayButton({ parent: left, isOn: p.isPlaying });
+    this.stopButton   = new StopButton({ parent: left });
+    this.repeatButton = new RepeatButton({ parent: left });
+
+    this.playerSlider = new PlayerSlider({
+      parent:             mid,
+      leftProgress:       p.leftBound,
+      rightProgress:      p.rightBound,
+      progress:           p.progress
+    });
+    
+    this.boundsButton = new BoundsButton({
+      isOn:           p.isBounds,
+      parent:         left,
+      onStateChange:  this._boundsStateChange.bind( this )
+    });
+
+    this.speedControl = new SpeedControl({ parent: left });
+    
+    this.mojsButton   = new IconButton({
+          parent:   right,
+          icon:     'mojs',
+          link:     'https://github.com/legomushroom/mojs-player',
+          title:    'mo • js'
+        });
+
+    // this._boundsStateChange( p.isBounds );
+  }
+  /*
+    Method that is invoked on bounds switch state change.
+    @private
+    @param {Boolean} Bounds state.
+  */
+  _boundsStateChange ( isOn ) {
+    this.playerSlider[ `${ ( isOn ) ? 'enable' : 'disable' }Bounds` ]();
   }
 }
 
-Main.init( { name: 'World' } )
+new MojsPlayer({
+  isBounds:     true,
+  leftBound:    .5,
+  rightBound:   .75,
+  progress:     .6125,
+  isPlaying:    true
+});
 
 
-export default Main;
+export default MojsPlayer;

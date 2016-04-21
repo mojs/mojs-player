@@ -12,6 +12,7 @@ class Button extends Module {
   */
   _declareDefaults () {
     super._declareDefaults()
+    this._defaults.link          = null;
     this._defaults.title         = '';
     this._defaults.onPointerDown = null;
     this._defaults.onPointerup   = null;
@@ -24,10 +25,15 @@ class Button extends Module {
     @returns this
   */
   _render () {
-    this._addMainElement();
-    this.el.classList.add( CLASSES.button );
-    this.el.setAttribute( 'title', this._props.title );
+    let p         = this._props,
+        className = 'button',
+        tagName   = ( p.link != null ) ? 'a' : 'div';
+    this._addMainElement( tagName );
+    this.el.classList.add( CLASSES[ className ] );
+    this.el.setAttribute( 'title', p.title );
+    p.link && this.el.setAttribute( 'href', p.link );
     this._addListeners();
+    // this._createChild( 'div', CLASSES[ `${ className }__hover` ] )
   }
   /*
     Method to add event listeners to the icon.

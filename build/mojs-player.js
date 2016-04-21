@@ -55,7 +55,23 @@
 
 	exports.__esModule = true;
 
-	var _playerSlider = __webpack_require__(2);
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(76);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _playerSlider = __webpack_require__(77);
 
 	var _playerSlider2 = _interopRequireDefault(_playerSlider);
 
@@ -83,193 +99,127 @@
 
 	var _button2 = _interopRequireDefault(_button);
 
-	var _playerButton = __webpack_require__(152);
+	var _playerButton = __webpack_require__(156);
 
 	var _playerButton2 = _interopRequireDefault(_playerButton);
 
-	var _playButton = __webpack_require__(156);
+	var _playButton = __webpack_require__(160);
 
 	var _playButton2 = _interopRequireDefault(_playButton);
 
-	var _stopButton = __webpack_require__(160);
+	var _stopButton = __webpack_require__(164);
 
 	var _stopButton2 = _interopRequireDefault(_stopButton);
 
-	var _opacitySwitch = __webpack_require__(164);
+	var _opacitySwitch = __webpack_require__(168);
 
 	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
 
-	var _repeatButton = __webpack_require__(168);
+	var _repeatButton = __webpack_require__(172);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
-	var _boundsButton = __webpack_require__(172);
+	var _boundsButton = __webpack_require__(176);
 
 	var _boundsButton2 = _interopRequireDefault(_boundsButton);
 
-	var _labelButton = __webpack_require__(173);
+	var _labelButton = __webpack_require__(149);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// let speedControl = new SpeedControl;
-
-	var playButton = new _playButton2.default();
-	var stopButton = new _stopButton2.default();
-	var repeatButton = new _repeatButton2.default();
-	var boundsButton = new _boundsButton2.default();
-	// let labelButton  = new LabelButton();
-	var speedControl = new _speedControl2.default();
-
 	__webpack_require__(177);
-	var Main = {
-	  /*
-	    Initialization method.
-	    @public
-	    @param {Object} Initialization options.
-	  */
+	var CLASSES = __webpack_require__(179);
 
-	  init: function init(o) {
-	    console.log('Hello, ' + o.name + '!');
-	  }
-	};
+	var MojsPlayer = function (_Module) {
+	  (0, _inherits3.default)(MojsPlayer, _Module);
 
-	Main.init({ name: 'World' });
-
-	exports.default = Main;
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _slider = __webpack_require__(77);
-
-	var _slider2 = _interopRequireDefault(_slider);
-
-	var _module = __webpack_require__(78);
-
-	var _module2 = _interopRequireDefault(_module);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(124);
-	var CLASSES = __webpack_require__(126);
-	var SLIDER_CLASSES = __webpack_require__(123);
-
-	var PlayerSlider = function (_Module) {
-	  (0, _inherits3.default)(PlayerSlider, _Module);
-
-	  function PlayerSlider() {
-	    (0, _classCallCheck3.default)(this, PlayerSlider);
+	  function MojsPlayer() {
+	    (0, _classCallCheck3.default)(this, MojsPlayer);
 	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
 
+	  MojsPlayer.prototype._declareDefaults = function _declareDefaults() {
+	    _Module.prototype._declareDefaults.call(this);
+
+	    this._defaults.isBounds = false;
+	    this._defaults.leftBound = 0;
+	    this._defaults.rightBound = 1;
+	    this._defaults.progress = 0;
+	    this._defaults.isPlaying = false;
+	  };
 	  /*
-	    Method to declare _defaults.
+	    Method to render the module.
 	    @private
 	    @overrides @ Module
 	  */
 
-	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: CLASSES['player-slider'],
-	      parent: document.body
-	    };
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Module
-	    @returns this
-	  */
 
+	  MojsPlayer.prototype._render = function _render() {
+	    var p = this._props,
+	        className = 'mojs-player';
+	    _Module.prototype._render.call(this);
+	    this.el.classList.add(CLASSES[className]);
 
-	  // isEl:      true
+	    var left = this._createChild('div', CLASSES[className + '__left']),
+	        mid = this._createChild('div', CLASSES[className + '__mid']),
+	        right = this._createChild('div', CLASSES[className + '__right']);
 
-	  PlayerSlider.prototype._render = function _render() {
-	    this._addMainElement();
-	    this.el.classList.add(SLIDER_CLASSES.slider);
+	    this.playButton = new _playButton2.default({ parent: left, isOn: p.isPlaying });
+	    this.stopButton = new _stopButton2.default({ parent: left });
+	    this.repeatButton = new _repeatButton2.default({ parent: left });
 
-	    this.leftBound = new _slider2.default({
-	      isBound: true,
-	      parent: this.el,
-	      onProgress: this._onLeftBoundProgress.bind(this)
-	    });
-	    this.track = new _slider2.default({
-	      parent: this.el,
-	      className: CLASSES.slider,
-	      onProgress: this._onTrackProgress.bind(this)
-	    });
-	    this.rightBound = new _slider2.default({
-	      isBound: true,
-	      parent: this.el,
-	      isInversed: true,
-	      onProgress: this._onRightBoundProgress.bind(this)
+	    this.playerSlider = new _playerSlider2.default({
+	      parent: mid,
+	      leftProgress: p.leftBound,
+	      rightProgress: p.rightBound,
+	      progress: p.progress
 	    });
 
-	    this.rightBound.setProgress(.75);
-	    this.track.setProgress(.5);
-	    this.leftBound.setProgress(.25);
+	    this.boundsButton = new _boundsButton2.default({
+	      isOn: p.isBounds,
+	      parent: left,
+	      onStateChange: this._boundsStateChange.bind(this)
+	    });
 
-	    this._props.parent.appendChild(this.el);
+	    this.speedControl = new _speedControl2.default({ parent: left });
+
+	    this.mojsButton = new _iconButton2.default({
+	      parent: right,
+	      icon: 'mojs',
+	      link: 'https://github.com/legomushroom/mojs-player',
+	      title: 'mo • js'
+	    });
+
+	    // this._boundsStateChange( p.isBounds );
 	  };
 	  /*
-	    Method that should be called on track update.
+	    Method that is invoked on bounds switch state change.
 	    @private
-	    @param {Number} Track progress value [0...1].
+	    @param {Boolean} Bounds state.
 	  */
 
 
-	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {}
-	  // console.log( `track progress: ${p}` );
-
-	  /*
-	    Method that should be called on left bound update.
-	    @private
-	    @param {Number} Track progress value [0...1].
-	  */
-	  ;
-
-	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
-	    this.track.setMinBound(p);
-	    this.rightBound.setMinBound(p);
-	  };
-	  /*
-	    Method that should be called on right bound update.
-	    @private
-	    @param {Number} Track progress value [0...1].
-	  */
-
-
-	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
-	    this.track.setMaxBound(p);
-	    this.leftBound.setMaxBound(p);
+	  MojsPlayer.prototype._boundsStateChange = function _boundsStateChange(isOn) {
+	    this.playerSlider[(isOn ? 'enable' : 'disable') + 'Bounds']();
 	  };
 
-	  return PlayerSlider;
+	  return MojsPlayer;
 	}(_module2.default);
 
-	exports.default = PlayerSlider;
+	new MojsPlayer({
+	  isBounds: true,
+	  leftBound: .5,
+	  rightBound: .75,
+	  progress: .6125,
+	  isPlaying: true
+	});
+
+	exports.default = MojsPlayer;
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -283,14 +233,14 @@
 	};
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _typeof2 = __webpack_require__(5);
+	var _typeof2 = __webpack_require__(4);
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -305,18 +255,18 @@
 	};
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _iterator = __webpack_require__(6);
+	var _iterator = __webpack_require__(5);
 
 	var _iterator2 = _interopRequireDefault(_iterator);
 
-	var _symbol = __webpack_require__(56);
+	var _symbol = __webpack_require__(55);
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -331,28 +281,28 @@
 	};
 
 /***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(6), __esModule: true };
+
+/***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(7), __esModule: true };
+	__webpack_require__(7);
+	__webpack_require__(51);
+	module.exports = __webpack_require__(48)('iterator');
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(8);
-	__webpack_require__(52);
-	module.exports = __webpack_require__(49)('iterator');
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
-	var $at  = __webpack_require__(9)(true);
+	var $at  = __webpack_require__(8)(true);
 
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(12)(String, 'String', function(iterated){
+	__webpack_require__(11)(String, 'String', function(iterated){
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -367,11 +317,11 @@
 	});
 
 /***/ },
-/* 9 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(10)
-	  , defined   = __webpack_require__(11);
+	var toInteger = __webpack_require__(9)
+	  , defined   = __webpack_require__(10);
 	// true  -> String#at
 	// false -> String#codePointAt
 	module.exports = function(TO_STRING){
@@ -389,7 +339,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 9 */
 /***/ function(module, exports) {
 
 	// 7.1.4 ToInteger
@@ -400,7 +350,7 @@
 	};
 
 /***/ },
-/* 11 */
+/* 10 */
 /***/ function(module, exports) {
 
 	// 7.2.1 RequireObjectCoercible(argument)
@@ -410,20 +360,20 @@
 	};
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(13)
-	  , $export        = __webpack_require__(14)
-	  , redefine       = __webpack_require__(29)
-	  , hide           = __webpack_require__(19)
-	  , has            = __webpack_require__(30)
-	  , Iterators      = __webpack_require__(31)
-	  , $iterCreate    = __webpack_require__(32)
-	  , setToStringTag = __webpack_require__(48)
-	  , getPrototypeOf = __webpack_require__(50)
-	  , ITERATOR       = __webpack_require__(49)('iterator')
+	var LIBRARY        = __webpack_require__(12)
+	  , $export        = __webpack_require__(13)
+	  , redefine       = __webpack_require__(28)
+	  , hide           = __webpack_require__(18)
+	  , has            = __webpack_require__(29)
+	  , Iterators      = __webpack_require__(30)
+	  , $iterCreate    = __webpack_require__(31)
+	  , setToStringTag = __webpack_require__(47)
+	  , getPrototypeOf = __webpack_require__(49)
+	  , ITERATOR       = __webpack_require__(48)('iterator')
 	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
 	  , FF_ITERATOR    = '@@iterator'
 	  , KEYS           = 'keys'
@@ -485,19 +435,19 @@
 	};
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = true;
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global    = __webpack_require__(15)
-	  , core      = __webpack_require__(16)
-	  , ctx       = __webpack_require__(17)
-	  , hide      = __webpack_require__(19)
+	var global    = __webpack_require__(14)
+	  , core      = __webpack_require__(15)
+	  , ctx       = __webpack_require__(16)
+	  , hide      = __webpack_require__(18)
 	  , PROTOTYPE = 'prototype';
 
 	var $export = function(type, name, source){
@@ -557,7 +507,7 @@
 	module.exports = $export;
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports) {
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -566,18 +516,18 @@
 	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports) {
 
 	var core = module.exports = {version: '2.2.2'};
 	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(18);
+	var aFunction = __webpack_require__(17);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -598,7 +548,7 @@
 	};
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -607,12 +557,12 @@
 	};
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP         = __webpack_require__(20)
-	  , createDesc = __webpack_require__(28);
-	module.exports = __webpack_require__(24) ? function(object, key, value){
+	var dP         = __webpack_require__(19)
+	  , createDesc = __webpack_require__(27);
+	module.exports = __webpack_require__(23) ? function(object, key, value){
 	  return dP.f(object, key, createDesc(1, value));
 	} : function(object, key, value){
 	  object[key] = value;
@@ -620,15 +570,15 @@
 	};
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var anObject       = __webpack_require__(21)
-	  , IE8_DOM_DEFINE = __webpack_require__(23)
-	  , toPrimitive    = __webpack_require__(27)
+	var anObject       = __webpack_require__(20)
+	  , IE8_DOM_DEFINE = __webpack_require__(22)
+	  , toPrimitive    = __webpack_require__(26)
 	  , dP             = Object.defineProperty;
 
-	exports.f = __webpack_require__(24) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	exports.f = __webpack_require__(23) ? Object.defineProperty : function defineProperty(O, P, Attributes){
 	  anObject(O);
 	  P = toPrimitive(P, true);
 	  anObject(Attributes);
@@ -641,17 +591,17 @@
 	};
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(22);
+	var isObject = __webpack_require__(21);
 	module.exports = function(it){
 	  if(!isObject(it))throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -659,24 +609,24 @@
 	};
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = !__webpack_require__(24) && !__webpack_require__(25)(function(){
-	  return Object.defineProperty(__webpack_require__(26)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	module.exports = !__webpack_require__(23) && !__webpack_require__(24)(function(){
+	  return Object.defineProperty(__webpack_require__(25)('div'), 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(25)(function(){
+	module.exports = !__webpack_require__(24)(function(){
 	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
 	});
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = function(exec){
@@ -688,11 +638,11 @@
 	};
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isObject = __webpack_require__(22)
-	  , document = __webpack_require__(15).document
+	var isObject = __webpack_require__(21)
+	  , document = __webpack_require__(14).document
 	  // in old IE typeof document.createElement is 'object'
 	  , is = isObject(document) && isObject(document.createElement);
 	module.exports = function(it){
@@ -700,11 +650,11 @@
 	};
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
-	var isObject = __webpack_require__(22);
+	var isObject = __webpack_require__(21);
 	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
 	// and the second argument - flag - preferred type is a string
 	module.exports = function(it, S){
@@ -717,7 +667,7 @@
 	};
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports) {
 
 	module.exports = function(bitmap, value){
@@ -730,13 +680,13 @@
 	};
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(19);
+	module.exports = __webpack_require__(18);
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
@@ -745,23 +695,23 @@
 	};
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports) {
 
 	module.exports = {};
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var create         = __webpack_require__(33)
-	  , descriptor     = __webpack_require__(28)
-	  , setToStringTag = __webpack_require__(48)
+	var create         = __webpack_require__(32)
+	  , descriptor     = __webpack_require__(27)
+	  , setToStringTag = __webpack_require__(47)
 	  , IteratorPrototype = {};
 
 	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(19)(IteratorPrototype, __webpack_require__(49)('iterator'), function(){ return this; });
+	__webpack_require__(18)(IteratorPrototype, __webpack_require__(48)('iterator'), function(){ return this; });
 
 	module.exports = function(Constructor, NAME, next){
 	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
@@ -769,26 +719,26 @@
 	};
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	var anObject    = __webpack_require__(21)
-	  , dPs         = __webpack_require__(34)
-	  , enumBugKeys = __webpack_require__(46)
-	  , IE_PROTO    = __webpack_require__(43)('IE_PROTO')
+	var anObject    = __webpack_require__(20)
+	  , dPs         = __webpack_require__(33)
+	  , enumBugKeys = __webpack_require__(45)
+	  , IE_PROTO    = __webpack_require__(42)('IE_PROTO')
 	  , Empty       = function(){ /* empty */ }
 	  , PROTOTYPE   = 'prototype';
 
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function(){
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = __webpack_require__(26)('iframe')
+	  var iframe = __webpack_require__(25)('iframe')
 	    , i      = enumBugKeys.length
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
-	  __webpack_require__(47).appendChild(iframe);
+	  __webpack_require__(46).appendChild(iframe);
 	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
 	  // createDict = iframe.contentWindow.Object;
 	  // html.removeChild(iframe);
@@ -814,14 +764,14 @@
 	};
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dP       = __webpack_require__(20)
-	  , anObject = __webpack_require__(21)
-	  , getKeys  = __webpack_require__(35);
+	var dP       = __webpack_require__(19)
+	  , anObject = __webpack_require__(20)
+	  , getKeys  = __webpack_require__(34);
 
-	module.exports = __webpack_require__(24) ? Object.defineProperties : function defineProperties(O, Properties){
+	module.exports = __webpack_require__(23) ? Object.defineProperties : function defineProperties(O, Properties){
 	  anObject(O);
 	  var keys   = getKeys(Properties)
 	    , length = keys.length
@@ -832,25 +782,25 @@
 	};
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-	var $keys       = __webpack_require__(36)
-	  , enumBugKeys = __webpack_require__(46);
+	var $keys       = __webpack_require__(35)
+	  , enumBugKeys = __webpack_require__(45);
 
 	module.exports = Object.keys || function keys(O){
 	  return $keys(O, enumBugKeys);
 	};
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var has          = __webpack_require__(30)
-	  , toIObject    = __webpack_require__(37)
-	  , arrayIndexOf = __webpack_require__(40)(false)
-	  , IE_PROTO     = __webpack_require__(43)('IE_PROTO');
+	var has          = __webpack_require__(29)
+	  , toIObject    = __webpack_require__(36)
+	  , arrayIndexOf = __webpack_require__(39)(false)
+	  , IE_PROTO     = __webpack_require__(42)('IE_PROTO');
 
 	module.exports = function(object, names){
 	  var O      = toIObject(object)
@@ -866,28 +816,28 @@
 	};
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// to indexed object, toObject with fallback for non-array-like ES3 strings
-	var IObject = __webpack_require__(38)
-	  , defined = __webpack_require__(11);
+	var IObject = __webpack_require__(37)
+	  , defined = __webpack_require__(10);
 	module.exports = function(it){
 	  return IObject(defined(it));
 	};
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for non-array-like ES3 and non-enumerable old V8 strings
-	var cof = __webpack_require__(39);
+	var cof = __webpack_require__(38);
 	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 	  return cof(it) == 'String' ? it.split('') : Object(it);
 	};
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -897,14 +847,14 @@
 	};
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// false -> Array#indexOf
 	// true  -> Array#includes
-	var toIObject = __webpack_require__(37)
-	  , toLength  = __webpack_require__(41)
-	  , toIndex   = __webpack_require__(42);
+	var toIObject = __webpack_require__(36)
+	  , toLength  = __webpack_require__(40)
+	  , toIndex   = __webpack_require__(41);
 	module.exports = function(IS_INCLUDES){
 	  return function($this, el, fromIndex){
 	    var O      = toIObject($this)
@@ -923,21 +873,21 @@
 	};
 
 /***/ },
-/* 41 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(10)
+	var toInteger = __webpack_require__(9)
 	  , min       = Math.min;
 	module.exports = function(it){
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 	};
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(10)
+	var toInteger = __webpack_require__(9)
 	  , max       = Math.max
 	  , min       = Math.min;
 	module.exports = function(index, length){
@@ -946,20 +896,20 @@
 	};
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var shared = __webpack_require__(44)('keys')
-	  , uid    = __webpack_require__(45);
+	var shared = __webpack_require__(43)('keys')
+	  , uid    = __webpack_require__(44);
 	module.exports = function(key){
 	  return shared[key] || (shared[key] = uid(key));
 	};
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var global = __webpack_require__(15)
+	var global = __webpack_require__(14)
 	  , SHARED = '__core-js_shared__'
 	  , store  = global[SHARED] || (global[SHARED] = {});
 	module.exports = function(key){
@@ -967,7 +917,7 @@
 	};
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports) {
 
 	var id = 0
@@ -977,7 +927,7 @@
 	};
 
 /***/ },
-/* 46 */
+/* 45 */
 /***/ function(module, exports) {
 
 	// IE 8- don't enum bug keys
@@ -986,30 +936,30 @@
 	).split(',');
 
 /***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(14).document && document.documentElement;
+
+/***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(15).document && document.documentElement;
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var def = __webpack_require__(20).f
-	  , has = __webpack_require__(30)
-	  , TAG = __webpack_require__(49)('toStringTag');
+	var def = __webpack_require__(19).f
+	  , has = __webpack_require__(29)
+	  , TAG = __webpack_require__(48)('toStringTag');
 
 	module.exports = function(it, tag, stat){
 	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
 	};
 
 /***/ },
-/* 49 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var store      = __webpack_require__(44)('wks')
-	  , uid        = __webpack_require__(45)
-	  , Symbol     = __webpack_require__(15).Symbol
+	var store      = __webpack_require__(43)('wks')
+	  , uid        = __webpack_require__(44)
+	  , Symbol     = __webpack_require__(14).Symbol
 	  , USE_SYMBOL = typeof Symbol == 'function';
 	module.exports = function(name){
 	  return store[name] || (store[name] =
@@ -1017,13 +967,13 @@
 	};
 
 /***/ },
-/* 50 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has         = __webpack_require__(30)
-	  , toObject    = __webpack_require__(51)
-	  , IE_PROTO    = __webpack_require__(43)('IE_PROTO')
+	var has         = __webpack_require__(29)
+	  , toObject    = __webpack_require__(50)
+	  , IE_PROTO    = __webpack_require__(42)('IE_PROTO')
 	  , ObjectProto = Object.prototype;
 
 	module.exports = Object.getPrototypeOf || function(O){
@@ -1035,24 +985,24 @@
 	};
 
 /***/ },
-/* 51 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(11);
+	var defined = __webpack_require__(10);
 	module.exports = function(it){
 	  return Object(defined(it));
 	};
 
 /***/ },
-/* 52 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(53);
-	var global        = __webpack_require__(15)
-	  , hide          = __webpack_require__(19)
-	  , Iterators     = __webpack_require__(31)
-	  , TO_STRING_TAG = __webpack_require__(49)('toStringTag');
+	__webpack_require__(52);
+	var global        = __webpack_require__(14)
+	  , hide          = __webpack_require__(18)
+	  , Iterators     = __webpack_require__(30)
+	  , TO_STRING_TAG = __webpack_require__(48)('toStringTag');
 
 	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
 	  var NAME       = collections[i]
@@ -1063,20 +1013,20 @@
 	}
 
 /***/ },
-/* 53 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(54)
-	  , step             = __webpack_require__(55)
-	  , Iterators        = __webpack_require__(31)
-	  , toIObject        = __webpack_require__(37);
+	var addToUnscopables = __webpack_require__(53)
+	  , step             = __webpack_require__(54)
+	  , Iterators        = __webpack_require__(30)
+	  , toIObject        = __webpack_require__(36);
 
 	// 22.1.3.4 Array.prototype.entries()
 	// 22.1.3.13 Array.prototype.keys()
 	// 22.1.3.29 Array.prototype.values()
 	// 22.1.3.30 Array.prototype[@@iterator]()
-	module.exports = __webpack_require__(12)(Array, 'Array', function(iterated, kind){
+	module.exports = __webpack_require__(11)(Array, 'Array', function(iterated, kind){
 	  this._t = toIObject(iterated); // target
 	  this._i = 0;                   // next index
 	  this._k = kind;                // kind
@@ -1102,13 +1052,13 @@
 	addToUnscopables('entries');
 
 /***/ },
-/* 54 */
+/* 53 */
 /***/ function(module, exports) {
 
 	module.exports = function(){ /* empty */ };
 
 /***/ },
-/* 55 */
+/* 54 */
 /***/ function(module, exports) {
 
 	module.exports = function(done, value){
@@ -1116,48 +1066,48 @@
 	};
 
 /***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(56), __esModule: true };
+
+/***/ },
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(57), __esModule: true };
+	__webpack_require__(57);
+	__webpack_require__(67);
+	module.exports = __webpack_require__(15).Symbol;
 
 /***/ },
 /* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(58);
-	__webpack_require__(68);
-	module.exports = __webpack_require__(16).Symbol;
-
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 	// ECMAScript 6 symbols shim
-	var global         = __webpack_require__(15)
-	  , core           = __webpack_require__(16)
-	  , has            = __webpack_require__(30)
-	  , DESCRIPTORS    = __webpack_require__(24)
-	  , $export        = __webpack_require__(14)
-	  , redefine       = __webpack_require__(29)
-	  , META           = __webpack_require__(59).KEY
-	  , $fails         = __webpack_require__(25)
-	  , shared         = __webpack_require__(44)
-	  , setToStringTag = __webpack_require__(48)
-	  , uid            = __webpack_require__(45)
-	  , wks            = __webpack_require__(49)
-	  , keyOf          = __webpack_require__(60)
-	  , enumKeys       = __webpack_require__(61)
-	  , isArray        = __webpack_require__(64)
-	  , anObject       = __webpack_require__(21)
-	  , toIObject      = __webpack_require__(37)
-	  , toPrimitive    = __webpack_require__(27)
-	  , createDesc     = __webpack_require__(28)
-	  , _create        = __webpack_require__(33)
-	  , gOPNExt        = __webpack_require__(65)
-	  , $GOPD          = __webpack_require__(67)
-	  , $DP            = __webpack_require__(20)
+	var global         = __webpack_require__(14)
+	  , core           = __webpack_require__(15)
+	  , has            = __webpack_require__(29)
+	  , DESCRIPTORS    = __webpack_require__(23)
+	  , $export        = __webpack_require__(13)
+	  , redefine       = __webpack_require__(28)
+	  , META           = __webpack_require__(58).KEY
+	  , $fails         = __webpack_require__(24)
+	  , shared         = __webpack_require__(43)
+	  , setToStringTag = __webpack_require__(47)
+	  , uid            = __webpack_require__(44)
+	  , wks            = __webpack_require__(48)
+	  , keyOf          = __webpack_require__(59)
+	  , enumKeys       = __webpack_require__(60)
+	  , isArray        = __webpack_require__(63)
+	  , anObject       = __webpack_require__(20)
+	  , toIObject      = __webpack_require__(36)
+	  , toPrimitive    = __webpack_require__(26)
+	  , createDesc     = __webpack_require__(27)
+	  , _create        = __webpack_require__(32)
+	  , gOPNExt        = __webpack_require__(64)
+	  , $GOPD          = __webpack_require__(66)
+	  , $DP            = __webpack_require__(19)
 	  , gOPD           = $GOPD.f
 	  , dP             = $DP.f
 	  , gOPN           = gOPNExt.f
@@ -1292,11 +1242,11 @@
 
 	  $GOPD.f = $getOwnPropertyDescriptor;
 	  $DP.f   = $defineProperty;
-	  __webpack_require__(66).f = gOPNExt.f = $getOwnPropertyNames;
-	  __webpack_require__(63).f  = $propertyIsEnumerable
-	  __webpack_require__(62).f = $getOwnPropertySymbols;
+	  __webpack_require__(65).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(62).f  = $propertyIsEnumerable
+	  __webpack_require__(61).f = $getOwnPropertySymbols;
 
-	  if(DESCRIPTORS && !__webpack_require__(13)){
+	  if(DESCRIPTORS && !__webpack_require__(12)){
 	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 	}
@@ -1361,7 +1311,7 @@
 	$JSON && $export($export.S + $export.F * (!USE_NATIVE || BUGGY_JSON), 'JSON', {stringify: $stringify});
 
 	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(19)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(18)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
 	// 19.4.3.5 Symbol.prototype[@@toStringTag]
 	setToStringTag($Symbol, 'Symbol');
 	// 20.2.1.9 Math[@@toStringTag]
@@ -1370,18 +1320,18 @@
 	setToStringTag(global.JSON, 'JSON', true);
 
 /***/ },
-/* 59 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var META     = __webpack_require__(45)('meta')
-	  , isObject = __webpack_require__(22)
-	  , has      = __webpack_require__(30)
-	  , setDesc  = __webpack_require__(20).f
+	var META     = __webpack_require__(44)('meta')
+	  , isObject = __webpack_require__(21)
+	  , has      = __webpack_require__(29)
+	  , setDesc  = __webpack_require__(19).f
 	  , id       = 0;
 	var isExtensible = Object.isExtensible || function(){
 	  return true;
 	};
-	var FREEZE = !__webpack_require__(25)(function(){
+	var FREEZE = !__webpack_require__(24)(function(){
 	  return isExtensible(Object.preventExtensions({}));
 	});
 	var setMeta = function(it){
@@ -1428,11 +1378,11 @@
 	};
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getKeys   = __webpack_require__(35)
-	  , toIObject = __webpack_require__(37);
+	var getKeys   = __webpack_require__(34)
+	  , toIObject = __webpack_require__(36);
 	module.exports = function(object, el){
 	  var O      = toIObject(object)
 	    , keys   = getKeys(O)
@@ -1443,13 +1393,13 @@
 	};
 
 /***/ },
-/* 61 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// all enumerable object keys, includes symbols
-	var getKeys = __webpack_require__(35)
-	  , gOPS    = __webpack_require__(62)
-	  , pIE     = __webpack_require__(63);
+	var getKeys = __webpack_require__(34)
+	  , gOPS    = __webpack_require__(61)
+	  , pIE     = __webpack_require__(62);
 	module.exports = function(it){
 	  var result     = getKeys(it)
 	    , getSymbols = gOPS.f;
@@ -1463,34 +1413,34 @@
 	};
 
 /***/ },
-/* 62 */
+/* 61 */
 /***/ function(module, exports) {
 
 	exports.f = Object.getOwnPropertySymbols;
 
 /***/ },
-/* 63 */
+/* 62 */
 /***/ function(module, exports) {
 
 	exports.f = {}.propertyIsEnumerable;
 
 /***/ },
-/* 64 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.2.2 IsArray(argument)
-	var cof = __webpack_require__(39);
+	var cof = __webpack_require__(38);
 	module.exports = Array.isArray || function isArray(arg){
 	  return cof(arg) == 'Array';
 	};
 
 /***/ },
-/* 65 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-	var toIObject = __webpack_require__(37)
-	  , gOPN      = __webpack_require__(66).f
+	var toIObject = __webpack_require__(36)
+	  , gOPN      = __webpack_require__(65).f
 	  , toString  = {}.toString;
 
 	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
@@ -1510,30 +1460,30 @@
 
 
 /***/ },
-/* 66 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-	var $keys      = __webpack_require__(36)
-	  , hiddenKeys = __webpack_require__(46).concat('length', 'prototype');
+	var $keys      = __webpack_require__(35)
+	  , hiddenKeys = __webpack_require__(45).concat('length', 'prototype');
 
 	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 	  return $keys(O, hiddenKeys);
 	};
 
 /***/ },
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pIE            = __webpack_require__(63)
-	  , createDesc     = __webpack_require__(28)
-	  , toIObject      = __webpack_require__(37)
-	  , toPrimitive    = __webpack_require__(27)
-	  , has            = __webpack_require__(30)
-	  , IE8_DOM_DEFINE = __webpack_require__(23)
+	var pIE            = __webpack_require__(62)
+	  , createDesc     = __webpack_require__(27)
+	  , toIObject      = __webpack_require__(36)
+	  , toPrimitive    = __webpack_require__(26)
+	  , has            = __webpack_require__(29)
+	  , IE8_DOM_DEFINE = __webpack_require__(22)
 	  , gOPD           = Object.getOwnPropertyDescriptor;
 
-	exports.f = __webpack_require__(24) ? gOPD : function getOwnPropertyDescriptor(O, P){
+	exports.f = __webpack_require__(23) ? gOPD : function getOwnPropertyDescriptor(O, P){
 	  O = toIObject(O);
 	  P = toPrimitive(P, true);
 	  if(IE8_DOM_DEFINE)try {
@@ -1543,28 +1493,28 @@
 	};
 
 /***/ },
-/* 68 */
+/* 67 */
 /***/ function(module, exports) {
 
 	
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _setPrototypeOf = __webpack_require__(70);
+	var _setPrototypeOf = __webpack_require__(69);
 
 	var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
-	var _create = __webpack_require__(74);
+	var _create = __webpack_require__(73);
 
 	var _create2 = _interopRequireDefault(_create);
 
-	var _typeof2 = __webpack_require__(5);
+	var _typeof2 = __webpack_require__(4);
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
@@ -1587,34 +1537,34 @@
 	};
 
 /***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(70), __esModule: true };
+
+/***/ },
 /* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(71), __esModule: true };
+	__webpack_require__(71);
+	module.exports = __webpack_require__(15).Object.setPrototypeOf;
 
 /***/ },
 /* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(72);
-	module.exports = __webpack_require__(16).Object.setPrototypeOf;
+	// 19.1.3.19 Object.setPrototypeOf(O, proto)
+	var $export = __webpack_require__(13);
+	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(72).set});
 
 /***/ },
 /* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// 19.1.3.19 Object.setPrototypeOf(O, proto)
-	var $export = __webpack_require__(14);
-	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(73).set});
-
-/***/ },
-/* 73 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
 	/* eslint-disable no-proto */
-	var isObject = __webpack_require__(22)
-	  , anObject = __webpack_require__(21);
+	var isObject = __webpack_require__(21)
+	  , anObject = __webpack_require__(20);
 	var check = function(O, proto){
 	  anObject(O);
 	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
@@ -1623,7 +1573,7 @@
 	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
 	    function(test, buggy, set){
 	      try {
-	        set = __webpack_require__(17)(Function.call, __webpack_require__(67).f(Object.prototype, '__proto__').set, 2);
+	        set = __webpack_require__(16)(Function.call, __webpack_require__(66).f(Object.prototype, '__proto__').set, 2);
 	        set(test, []);
 	        buggy = !(test instanceof Array);
 	      } catch(e){ buggy = true; }
@@ -1638,252 +1588,42 @@
 	};
 
 /***/ },
+/* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(74), __esModule: true };
+
+/***/ },
 /* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(75), __esModule: true };
-
-/***/ },
-/* 75 */
-/***/ function(module, exports, __webpack_require__) {
-
-	__webpack_require__(76);
-	var $Object = __webpack_require__(16).Object;
+	__webpack_require__(75);
+	var $Object = __webpack_require__(15).Object;
 	module.exports = function create(P, D){
 	  return $Object.create(P, D);
 	};
 
 /***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(13)
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	$export($export.S, 'Object', {create: __webpack_require__(32)});
+
+/***/ },
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $export = __webpack_require__(14)
-	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	$export($export.S, 'Object', {create: __webpack_require__(33)});
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _module = __webpack_require__(78);
-
-	var _module2 = _interopRequireDefault(_module);
-
-	var _handle = __webpack_require__(79);
-
-	var _handle2 = _interopRequireDefault(_handle);
-
-	var _track = __webpack_require__(117);
-
-	var _track2 = _interopRequireDefault(_track);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(121);
-	var CLASSES = __webpack_require__(123);
-
-	var Slider = function (_Module) {
-	  (0, _inherits3.default)(Slider, _Module);
-
-	  function Slider() {
-	    (0, _classCallCheck3.default)(this, Slider);
-	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare _defaults.
-	    @private
-	    @overrides @ Module
-	  */
-
-	  Slider.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      isBound: false,
-	      isInversed: false,
-	      isProgress: true,
-	      onProgress: null,
-	      direction: 'x',
-	      snapPoint: .5,
-	      snapStrength: .1
-	    };
-	  };
-	  /*
-	    Method to set slider progress.
-	    @public
-	    @param {Number} Progress to set.
-	    @returns this.
-	  */
-
-
-	  Slider.prototype.setProgress = function setProgress(progress) {
-	    this.handle.setProgress(progress);
-	    this.track.setProgress(progress);
-	    return this;
-	  };
-	  /*
-	    Method to set bounds of progress.
-	    @public
-	    @param {Number} Min bound to set [0...1].
-	    @param {Number} Max bound to set [0...1].
-	    @returns this.
-	  */
-
-
-	  Slider.prototype.setBounds = function setBounds(min, max) {
-	    this.handle.setBounds(min, max);
-	    this.track.setBounds(min, max);
-	    return this;
-	  };
-	  /*
-	    Method to set min bound of progress.
-	    @public
-	    @param {Number} Min bound to set [0...1].
-	    @returns this.
-	  */
-
-
-	  Slider.prototype.setMinBound = function setMinBound(min) {
-	    this.handle.setMinBound(min);
-	    this.track.setMinBound(min);
-	    return this;
-	  };
-	  /*
-	    Method to set max bound of progress.
-	    @public
-	    @param {Number} Max bound to set [0...1].
-	    @returns this.
-	  */
-
-
-	  Slider.prototype.setMaxBound = function setMaxBound(max) {
-	    this.handle.setMaxBound(max);
-	    this.track.setMaxBound(max);
-	    return this;
-	  };
-	  /*
-	    Method to render the component.
-	    @private
-	    @overrides @ Module
-	  */
-
-
-	  Slider.prototype._render = function _render() {
-	    var p = this._props;
-
-	    if (!p.isBound) {
-	      var el = this._createElement('div'),
-	          classList = el.classList;
-	      this.el = el;
-
-	      this.inner = this._createElement('div');
-	      this.inner.classList.add(CLASSES['slider__inner']);
-	      this.el.appendChild(this.inner);
-
-	      classList.add(CLASSES.slider);
-	      p.direction === 'y' && classList.add(CLASSES['is-y']);
-	      p.className && classList.add(p.className);
-	      p.parent.appendChild(el);
-	    }
-
-	    var rootEl = !p.isBound ? this.inner : p.parent;
-
-	    this.track = new _track2.default({
-	      className: CLASSES.track,
-	      onProgress: this._onTrackProgress.bind(this),
-	      isBound: p.isBound,
-	      isInversed: p.isInversed,
-	      isProgress: p.isProgress,
-	      parent: rootEl,
-	      direction: p.direction
-	    });
-	    rootEl.appendChild(this.track.el);
-
-	    this.handle = new _handle2.default({
-	      className: CLASSES.handle,
-	      onProgress: this._onHandleProgress.bind(this),
-	      isBound: p.isBound,
-	      isInversed: p.isInversed,
-	      parent: rootEl,
-	      direction: p.direction,
-	      snapPoint: p.snapPoint,
-	      snapStrength: p.snapStrength
-	    });
-	    rootEl.appendChild(this.handle.el);
-	  };
-	  /*
-	    Method that is invoked on handle progress change.
-	    @private
-	    @param {Number} Progress [0...1].
-	  */
-
-
-	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
-	    this.track.setProgress(p, false);
-	    this._onProgress(p);
-	  };
-	  /*
-	    Method that is invoked on track progress change.
-	    @private
-	    @param {Number} Progress [0...1].
-	  */
-
-
-	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
-	    this.handle.setProgress(p, false);
-	    this._onProgress(p);
-	  };
-	  /*
-	    Method to call onProgress callback.
-	    @private
-	    @param {Number} Progress value [0...1].
-	  */
-
-
-	  Slider.prototype._onProgress = function _onProgress(progress) {
-	    var p = this._props;
-
-	    if (typeof p.onProgress === 'function' && this._progress !== progress) {
-	      this._progress = progress;
-	      p.onProgress.call(this, progress);
-	    }
-	  };
-
-	  return Slider;
-	}(_module2.default);
-
-	exports.default = Slider;
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _typeof2 = __webpack_require__(5);
+	var _typeof2 = __webpack_require__(4);
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
@@ -1995,13 +1735,16 @@
 	  /*
 	    Method to add `this.el` on the module.
 	    @private
+	    @param {String} Tag name of the element.
 	  */
 
 
 	  Module.prototype._addMainElement = function _addMainElement() {
+	    var tagName = arguments.length <= 0 || arguments[0] === undefined ? 'div' : arguments[0];
+
 	    var p = this._props;
 
-	    this.el = this._createElement('div');
+	    this.el = this._createElement(tagName);
 	    this._addMainClasses();
 	    p.parent.appendChild(this.el);
 	  };
@@ -2089,11 +1832,433 @@
 	  Module.prototype._createElement = function _createElement(tagName) {
 	    return document.createElement(tagName);
 	  };
+	  /*
+	    Method to create HTMLElement and append it to the `el` with a className.
+	    @private
+	    @param {String} The tagname for the HTMLElement.
+	    @param {String} Optional class name to add to the new child.
+	    @returns {Object} The newely created HTMLElement.
+	  */
+
+
+	  Module.prototype._createChild = function _createChild(tagName, className) {
+	    var child = this._createElement('div');
+	    className && child.classList.add(className);
+	    this.el.appendChild(child);
+	    return child;
+	  };
 
 	  return Module;
 	}();
 
 	exports.default = Module;
+
+/***/ },
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _slider = __webpack_require__(78);
+
+	var _slider2 = _interopRequireDefault(_slider);
+
+	var _module = __webpack_require__(76);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(124);
+	var CLASSES = __webpack_require__(126);
+	var SLIDER_CLASSES = __webpack_require__(123);
+
+	var PlayerSlider = function (_Module) {
+	  (0, _inherits3.default)(PlayerSlider, _Module);
+
+	  function PlayerSlider() {
+	    (0, _classCallCheck3.default)(this, PlayerSlider);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: CLASSES['player-slider'],
+	      parent: document.body,
+	      progress: 0,
+	      leftProgress: 0,
+	      rightProgress: 1,
+	      isBounds: false
+	    };
+	  };
+	  /*
+	    Method to disable bounds.
+	    @public
+	  */
+
+
+	  PlayerSlider.prototype.disableBounds = function disableBounds() {
+	    var p = this._props;
+	    // p.isBounds = false;
+	    this._rightProgress = this.rightBound._progress;
+	    this._leftProgress = this.leftBound._progress;
+
+	    console.log('disable', this._leftProgress, this._rightProgress);
+
+	    this.rightBound.setProgress(1);
+	    this.leftBound.setProgress(0);
+
+	    this.rightBound.hide();
+	    this.leftBound.hide();
+	  };
+	  /*
+	    Method to enable bounds.
+	    @public
+	  */
+
+
+	  PlayerSlider.prototype.enableBounds = function enableBounds() {
+	    var p = this._props;
+	    // p.isBounds = false;
+	    // this._rightProgress = p.rightProgress;
+	    // this._leftProgress  = p.leftProgress;
+	    console.log(this._leftProgress, this._rightProgress);
+	    this.rightBound.setProgress(this._rightProgress);
+	    this.leftBound.setProgress(this._leftProgress);
+
+	    this.rightBound.show();
+	    this.leftBound.show();
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Module
+	    @returns this
+	  */
+
+
+	  PlayerSlider.prototype._render = function _render() {
+	    this._addMainElement();
+	    this.el.classList.add(SLIDER_CLASSES.slider);
+
+	    this.leftBound = new _slider2.default({
+	      isBound: true,
+	      parent: this.el,
+	      onProgress: this._onLeftBoundProgress.bind(this)
+	    });
+	    this.track = new _slider2.default({
+	      parent: this.el,
+	      className: CLASSES.slider,
+	      onProgress: this._onTrackProgress.bind(this)
+	    });
+	    this.rightBound = new _slider2.default({
+	      isBound: true,
+	      parent: this.el,
+	      isInversed: true,
+	      onProgress: this._onRightBoundProgress.bind(this)
+	    });
+
+	    var p = this._props;
+	    this.rightBound.setProgress(p.rightProgress);
+	    this.track.setProgress(p.progress);
+	    this.leftBound.setProgress(p.leftProgress);
+
+	    p.parent.appendChild(this.el);
+
+	    p.isBounds ? this.enableBounds() : this.disableBounds();
+	  };
+	  /*
+	    Method that should be called on track update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+
+
+	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {}
+	  // console.log( `track progress: ${p}` );
+
+	  /*
+	    Method that should be called on left bound update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+	  ;
+
+	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
+	    this.track.setMinBound(p);
+	    this.rightBound.setMinBound(p);
+	  };
+	  /*
+	    Method that should be called on right bound update.
+	    @private
+	    @param {Number} Track progress value [0...1].
+	  */
+
+
+	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
+	    this.track.setMaxBound(p);
+	    this.leftBound.setMaxBound(p);
+	  };
+
+	  return PlayerSlider;
+	}(_module2.default);
+
+	exports.default = PlayerSlider;
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(76);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _handle = __webpack_require__(79);
+
+	var _handle2 = _interopRequireDefault(_handle);
+
+	var _track = __webpack_require__(117);
+
+	var _track2 = _interopRequireDefault(_track);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(121);
+	var CLASSES = __webpack_require__(123);
+
+	var Slider = function (_Module) {
+	  (0, _inherits3.default)(Slider, _Module);
+
+	  function Slider() {
+	    (0, _classCallCheck3.default)(this, Slider);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Slider.prototype._declareDefaults = function _declareDefaults() {
+	    this._defaults = {
+	      className: '',
+	      parent: document.body,
+	      isBound: false,
+	      isInversed: false,
+	      isProgress: true,
+	      onProgress: null,
+	      direction: 'x',
+	      snapPoint: 0,
+	      snapStrength: 0
+	    };
+	  };
+	  /*
+	    Method to set slider progress.
+	    @public
+	    @param {Number} Progress to set.
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setProgress = function setProgress(progress) {
+	    this.handle.setProgress(progress);
+	    this.track.setProgress(progress);
+	    return this;
+	  };
+	  /*
+	    Method to set bounds of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setBounds = function setBounds(min, max) {
+	    this.handle.setBounds(min, max);
+	    this.track.setBounds(min, max);
+	    return this;
+	  };
+	  /*
+	    Method to set min bound of progress.
+	    @public
+	    @param {Number} Min bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setMinBound = function setMinBound(min) {
+	    this.handle.setMinBound(min);
+	    this.track.setMinBound(min);
+	    return this;
+	  };
+	  /*
+	    Method to set max bound of progress.
+	    @public
+	    @param {Number} Max bound to set [0...1].
+	    @returns this.
+	  */
+
+
+	  Slider.prototype.setMaxBound = function setMaxBound(max) {
+	    this.handle.setMaxBound(max);
+	    this.track.setMaxBound(max);
+	    return this;
+	  };
+	  /*
+	    Method to hide elements.
+	    @public
+	  */
+
+
+	  Slider.prototype.show = function show() {
+	    this.track.el.style.display = 'block';
+	    this.handle.el.style.display = 'block';
+	  };
+	  /*
+	    Method to hide elements.
+	    @public
+	  */
+
+
+	  Slider.prototype.hide = function hide() {
+	    this.track.el.style.display = 'none';
+	    this.handle.el.style.display = 'none';
+	  };
+	  /*
+	    Method to render the component.
+	    @private
+	    @overrides @ Module
+	  */
+
+
+	  Slider.prototype._render = function _render() {
+	    var p = this._props;
+
+	    if (!p.isBound) {
+	      var el = this._createElement('div'),
+	          classList = el.classList;
+	      this.el = el;
+
+	      this.inner = this._createElement('div');
+	      this.inner.classList.add(CLASSES['slider__inner']);
+	      this.el.appendChild(this.inner);
+
+	      classList.add(CLASSES.slider);
+	      p.direction === 'y' && classList.add(CLASSES['is-y']);
+	      p.className && classList.add(p.className);
+	      p.parent.appendChild(el);
+	    }
+
+	    var rootEl = !p.isBound ? this.inner : p.parent;
+
+	    this.track = new _track2.default({
+	      className: CLASSES.track,
+	      onProgress: this._onTrackProgress.bind(this),
+	      isBound: p.isBound,
+	      isInversed: p.isInversed,
+	      isProgress: p.isProgress,
+	      parent: rootEl,
+	      direction: p.direction
+	    });
+	    rootEl.appendChild(this.track.el);
+
+	    var handleClass = [CLASSES.handle];
+	    if (!p.isBound) {
+	      handleClass.push(CLASSES['progress-handle']);
+	    }
+
+	    this.handle = new _handle2.default({
+	      className: handleClass,
+	      onProgress: this._onHandleProgress.bind(this),
+	      isBound: p.isBound,
+	      isInversed: p.isInversed,
+	      parent: rootEl,
+	      direction: p.direction,
+	      snapPoint: p.snapPoint,
+	      snapStrength: p.snapStrength
+	    });
+	    rootEl.appendChild(this.handle.el);
+	  };
+	  /*
+	    Method that is invoked on handle progress change.
+	    @private
+	    @param {Number} Progress [0...1].
+	  */
+
+
+	  Slider.prototype._onHandleProgress = function _onHandleProgress(p) {
+	    this.track.setProgress(p, false);
+	    this._onProgress(p);
+	  };
+	  /*
+	    Method that is invoked on track progress change.
+	    @private
+	    @param {Number} Progress [0...1].
+	  */
+
+
+	  Slider.prototype._onTrackProgress = function _onTrackProgress(p) {
+	    this.handle.setProgress(p, false);
+	    this._onProgress(p);
+	  };
+	  /*
+	    Method to call onProgress callback.
+	    @private
+	    @param {Number} Progress value [0...1].
+	  */
+
+
+	  Slider.prototype._onProgress = function _onProgress(progress) {
+	    var p = this._props;
+
+	    if (typeof p.onProgress === 'function' && this._progress !== progress) {
+	      this._progress = progress;
+	      p.onProgress.call(this, progress);
+	    }
+	  };
+
+	  return Slider;
+	}(_module2.default);
+
+	exports.default = Slider;
 
 /***/ },
 /* 79 */
@@ -2103,19 +2268,19 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(76);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -12824,7 +12989,7 @@
 
 
 	// module
-	exports.push([module.id, "._handle_190lv_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n._handle__inner_190lv_1, ._handle__shadow_190lv_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  -webkit-transform:          translateZ(0);\n          transform:          translateZ(0)\n}\n._handle__inner_190lv_1 {\n  background:          #FFF\n}\n._handle__shadow_190lv_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_190lv_5:hover ._handle__inner_190lv_1, ._handle_190lv_5:hover ._handle__shadow_190lv_1 {\n  -webkit-transform:          scale(1.1) translateZ(0);\n          transform:          scale(1.1) translateZ(0)\n}\n._handle_190lv_5:active ._handle__inner_190lv_1 {\n  -webkit-transform:          scale(1.2) translateZ(0);\n          transform:          scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_190lv_5:active ._handle__shadow_190lv_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1) translateZ(0);\n          transform:          scale(1) translateZ(0)\n}\n._handle_190lv_5._is-bound_190lv_52 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px;\n  margin-top:          -10px;\n  margin-top:          -0.625rem\n}\n._handle_190lv_5._is-bound_190lv_52 ._handle__inner_190lv_1 {\n  background:          #FF512F\n}\n._handle_190lv_5._is-bound_190lv_52 ._handle__inner_190lv_1, ._handle_190lv_5._is-bound_190lv_52 ._handle__shadow_190lv_1 {\n  border-radius:          0.1875rem\n}\n._handle_190lv_5._is-inversed_190lv_67 {\n  margin-left:          0\n}\n._handle_190lv_5._is-inversed_190lv_67 ._handle__shadow_190lv_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n\n", ""]);
+	exports.push([module.id, "._handle_19utm_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n._handle__inner_19utm_1, ._handle__shadow_19utm_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  -webkit-transform:          translateZ(0);\n          transform:          translateZ(0)\n}\n._handle__inner_19utm_1 {\n  background:          #FFF\n}\n._handle__shadow_19utm_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_19utm_5:hover ._handle__inner_19utm_1, ._handle_19utm_5:hover ._handle__shadow_19utm_1 {\n  -webkit-transform:          scale(1.1) translateZ(0);\n          transform:          scale(1.1) translateZ(0)\n}\n._handle_19utm_5:active ._handle__inner_19utm_1 {\n  -webkit-transform:          scale(1.2) translateZ(0);\n          transform:          scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_19utm_5:active ._handle__shadow_19utm_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1) translateZ(0);\n          transform:          scale(1) translateZ(0)\n}\n._handle_19utm_5._is-bound_19utm_52 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px !important;\n  margin-top:          -10px !important;\n  margin-top:          -0.625rem !important\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1 {\n  background:          #FF512F;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1, ._handle_19utm_5._is-bound_19utm_52 ._handle__shadow_19utm_1 {\n  border-radius:          0.1875rem\n}\n._handle_19utm_5._is-inversed_19utm_79 {\n  margin-left:          0\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__shadow_19utm_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__inner_19utm_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__inner_19utm_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
 
 	// exports
 
@@ -13142,11 +13307,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_190lv_5",
-		"handle__inner": "_handle__inner_190lv_1",
-		"handle__shadow": "_handle__shadow_190lv_1",
-		"is-bound": "_is-bound_190lv_52",
-		"is-inversed": "_is-inversed_190lv_67"
+		"handle": "_handle_19utm_5",
+		"handle__inner": "_handle__inner_19utm_1",
+		"handle__shadow": "_handle__shadow_19utm_1",
+		"is-bound": "_is-bound_19utm_52",
+		"is-inversed": "_is-inversed_19utm_79"
 	};
 
 /***/ },
@@ -13157,15 +13322,15 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -13403,7 +13568,7 @@
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_2xel6_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider__inner_2xel6_1 {\n  width:           100%;\n  height:           100%;\n  position:           relative\n}\n._slider_2xel6_6 ._handle_2xel6_18 {\n  margin-left:           -6.5px;\n  margin-left:           -6.5px;\n  margin-left:           -0.40625rem;\n  margin-top:           -6.5px;\n  margin-top:           -6.5px;\n  margin-top:           -0.40625rem;\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  z-index:           3\n}\n._slider_2xel6_6 ._track_2xel6_27 {\n  z-index:           2\n}\n._slider_2xel6_6._is-y_2xel6_31 {\n  width:           30px;\n  width:           30px;\n  width:           1.875rem;\n  height:           100%;\n}\n._slider_2xel6_6._is-y_2xel6_31 ._handle_2xel6_18 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -0.40625rem\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_14t9x_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider__inner_14t9x_1 {\n  width:           100%;\n  height:           100%;\n  position:           relative\n}\n._slider_14t9x_6 ._handle_14t9x_17, ._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  z-index:           3;\n  position:           absolute;\n  top:           50%\n}\n._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  left:           0;\n  margin-left:           -6.5px;\n  margin-left:           -6.5px;\n  margin-left:           -0.40625rem;\n  margin-top:           -6.5px;\n  margin-top:           -6.5px;\n  margin-top:           -0.40625rem\n}\n._slider_14t9x_6 ._track_14t9x_30 {\n  z-index:           2\n}\n._slider_14t9x_6._is-y_14t9x_34 {\n  width:           30px;\n  width:           30px;\n  width:           1.875rem;\n  height:           100%;\n}\n._slider_14t9x_6._is-y_14t9x_34 ._handle_14t9x_17 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -0.40625rem\n}\n\n", ""]);
 
 	// exports
 
@@ -13413,11 +13578,12 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"slider": "_slider_2xel6_6",
-		"slider__inner": "_slider__inner_2xel6_1",
-		"handle": "_handle_2xel6_18",
-		"track": "_track_2xel6_27",
-		"is-y": "_is-y_2xel6_31"
+		"slider": "_slider_14t9x_6",
+		"slider__inner": "_slider__inner_14t9x_1",
+		"handle": "_handle_14t9x_17",
+		"progress-handle": "_progress-handle_14t9x_18",
+		"track": "_track_14t9x_30",
+		"is-y": "_is-y_14t9x_34"
 	};
 
 /***/ },
@@ -13455,7 +13621,7 @@
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_fh7me_6 {\n\n}\n._player-slider_fh7me_6 > div {\n    position: absolute;\n    left: 0;\n    top: 0;\n    z-index: 2\n}\n._player-slider_fh7me_6 ._slider_fh7me_15 {\n    z-index: 1\n}\n\n", ""]);
+	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_1t00q_6 {\n  /*overflow:     hidden;*/\n  height:       40px;\n  height:       40px;\n  height:       2.5rem\n\n}\n._player-slider_1t00q_6 > div {\n  position:       absolute;\n  left:       0;\n  top:       0;\n  z-index:       2\n\n}\n._player-slider_1t00q_6 ._slider_1t00q_15 {\n  z-index:       1;\n  height:       100%\n\n}\n\n", ""]);
 
 	// exports
 
@@ -13465,8 +13631,8 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"player-slider": "_player-slider_fh7me_6",
-		"slider": "_slider_fh7me_15"
+		"player-slider": "_player-slider_1t00q_6",
+		"slider": "_slider_1t00q_15"
 	};
 
 /***/ },
@@ -13722,19 +13888,19 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(76);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -13876,15 +14042,15 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -13947,19 +14113,19 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(76);
 
 	var _module2 = _interopRequireDefault(_module);
 
@@ -13988,6 +14154,7 @@
 
 	  Button.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.link = null;
 	    this._defaults.title = '';
 	    this._defaults.onPointerDown = null;
 	    this._defaults.onPointerup = null;
@@ -14002,10 +14169,15 @@
 
 
 	  Button.prototype._render = function _render() {
-	    this._addMainElement();
-	    this.el.classList.add(CLASSES.button);
-	    this.el.setAttribute('title', this._props.title);
+	    var p = this._props,
+	        className = 'button',
+	        tagName = p.link != null ? 'a' : 'div';
+	    this._addMainElement(tagName);
+	    this.el.classList.add(CLASSES[className]);
+	    this.el.setAttribute('title', p.title);
+	    p.link && this.el.setAttribute('href', p.link);
 	    this._addListeners();
+	    // this._createChild( 'div', CLASSES[ `${ className }__hover` ] )
 	  };
 	  /*
 	    Method to add event listeners to the icon.
@@ -14089,7 +14261,7 @@
 
 
 	// module
-	exports.push([module.id, "._button_1q92c_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n}\n._button_1q92c_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1q92c_4:hover {\n  opacity:   .85;\n}\n._button_1q92c_4:active {\n  opacity:   1;\n}\n\n", ""]);
+	exports.push([module.id, "._button_1jhf8_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n  -webkit-transform:  translateZ(0);\n          transform:  translateZ(0);\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n._button_1jhf8_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1jhf8_4:hover {\n  opacity:   .85;\n}\n._button_1jhf8_4:active {\n  opacity:   1;\n}\n\n", ""]);
 
 	// exports
 
@@ -14099,7 +14271,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"button": "_button_1q92c_4"
+		"button": "_button_1jhf8_4"
 	};
 
 /***/ },
@@ -14158,15 +14330,15 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -14238,15 +14410,15 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -14279,6 +14451,20 @@
 	    this._defaults.onStateChange = null;
 	  };
 	  /*
+	    Method to set the state to `false`.
+	    @public
+	  */
+
+
+	  ButtonSwitch.prototype.off = function off() {
+	    // set to true because the next step is toggle
+	    this._props.isOn = false;
+	    this._reactOnStateChange();
+	  };
+
+	  // ---
+
+	  /*
 	    Initial render method.
 	    @private
 	    @overrides @ Button
@@ -14290,6 +14476,7 @@
 	    _Button.prototype._render.call(this);
 	    this.el.classList.add(CLASSES['button-switch']);
 	    this._setState();
+	    this._reactOnStateChange();
 	  };
 	  /*
 	    Method to invoke onPointerUp callback if excist.
@@ -14311,6 +14498,15 @@
 
 	  ButtonSwitch.prototype._changeState = function _changeState() {
 	    this._props.isOn = !this._props.isOn;
+	    this._reactOnStateChange();
+	  };
+	  /*
+	    Method to react on state change.
+	    @private
+	  */
+
+
+	  ButtonSwitch.prototype._reactOnStateChange = function _reactOnStateChange() {
 	    this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
 	    this._setState();
 	  };
@@ -14321,7 +14517,7 @@
 
 
 	  ButtonSwitch.prototype._setState = function _setState() {
-	    console.log('change');
+	    // console.log('change');
 	  };
 
 	  return ButtonSwitch;
@@ -14436,27 +14632,27 @@
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(76);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _labelButton = __webpack_require__(173);
+	var _labelButton = __webpack_require__(149);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
-	var _slider = __webpack_require__(77);
+	var _slider = __webpack_require__(78);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
@@ -14466,8 +14662,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(149);
-	var CLASSES = __webpack_require__(151);
+	__webpack_require__(153);
+	var CLASSES = __webpack_require__(155);
 
 	var SpeedControl = function (_Module) {
 	  (0, _inherits3.default)(SpeedControl, _Module);
@@ -14514,7 +14710,8 @@
 	    this.labelButton = new _labelButton2.default({
 	      parent: this.el,
 	      className: CLASSES[className + '__icon'],
-	      onStateChange: this._onButtonStateChange.bind(this)
+	      onStateChange: this._onButtonStateChange.bind(this),
+	      onDoubleTap: this._onDoubleTap.bind(this)
 	    });
 	    this.slider = new _slider2.default({
 	      parent: slider,
@@ -14591,6 +14788,16 @@
 	    }
 	    return speed;
 	  };
+	  /*
+	    Method that is invoked on double button tap.
+	    @private
+	  */
+
+
+	  SpeedControl.prototype._onDoubleTap = function _onDoubleTap() {
+	    this.slider.setProgress(.5);
+	    this.labelButton.off();
+	  };
 
 	  return SpeedControl;
 	}(_module2.default);
@@ -14601,710 +14808,19 @@
 /* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(150);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 150 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._speed-control_qz5vo_4 {\n  position:       relative;\n  display:        inline-block\n}\n._speed-control__slider_qz5vo_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem)\n}\n._speed-control__slider_qz5vo_1:before, ._speed-control__slider_qz5vo_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_qz5vo_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_qz5vo_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_qz5vo_1 {\n  border:       1px solid cyan\n}\n._speed-control_qz5vo_4._is-on_qz5vo_47 ._speed-control__slider_qz5vo_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 151 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"speed-control": "_speed-control_qz5vo_4",
-		"speed-control__slider": "_speed-control__slider_qz5vo_1",
-		"speed-control__button": "_speed-control__button_qz5vo_1",
-		"is-on": "_is-on_qz5vo_47"
-	};
-
-/***/ },
-/* 152 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(3);
+	var _classCallCheck2 = __webpack_require__(2);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(4);
+	var _possibleConstructorReturn2 = __webpack_require__(3);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _button = __webpack_require__(133);
-
-	var _button2 = _interopRequireDefault(_button);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(153);
-	var CLASSES = __webpack_require__(155);
-
-	var PlayerButton = function (_Button) {
-	  (0, _inherits3.default)(PlayerButton, _Button);
-
-	  function PlayerButton() {
-	    (0, _classCallCheck3.default)(this, PlayerButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
-	  }
-
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-	  PlayerButton.prototype._render = function _render() {
-	    _Button.prototype._render.call(this);
-	    this.el.classList.add(CLASSES['player-button']);
-	  };
-
-	  return PlayerButton;
-	}(_button2.default);
-
-	exports.default = PlayerButton;
-
-/***/ },
-/* 153 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(154);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 154 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._player-button_1yk93_4 {\n  width:      35px;\n  width:      35px;\n  width:      2.1875rem;\n  height:      35px;\n  height:      35px;\n  height:     2.1875rem;\n  cursor:     pointer;\n  fill:       #FFF;\n}\n._player-button_1yk93_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 155 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"player-button": "_player-button_1yk93_4"
-	};
-
-/***/ },
-/* 156 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _iconFork = __webpack_require__(140);
-
-	var _iconFork2 = _interopRequireDefault(_iconFork);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(157);
-	var CLASSES = __webpack_require__(159),
-	    PLAYER_BTN_CLASSES = __webpack_require__(155);
-
-	var PlayButton = function (_IconFork) {
-	  (0, _inherits3.default)(PlayButton, _IconFork);
-
-	  function PlayButton() {
-	    (0, _classCallCheck3.default)(this, PlayButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _IconFork.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare defaults on the module.
-	    @private
-	    @overrides @ ButtonSwitch
-	  */
-
-	  PlayButton.prototype._declareDefaults = function _declareDefaults() {
-	    _IconFork.prototype._declareDefaults.call(this);
-	    this._defaults.icon1 = 'pause';
-	    this._defaults.icon2 = 'play';
-	    this._defaults.title = 'play/pause';
-	  };
-	  /*
-	    Method to render the module.
-	    @private
-	  */
-
-
-	  PlayButton.prototype._render = function _render() {
-	    _IconFork.prototype._render.call(this);
-	    this._addClass(this.el, CLASSES['play-button']);
-	    this._addClass(this.el, PLAYER_BTN_CLASSES['player-button']);
-	  };
-
-	  return PlayButton;
-	}(_iconFork2.default);
-
-	exports.default = PlayButton;
-
-/***/ },
-/* 157 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(158);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 158 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 159 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"play-button": "_play-button_16uj5_4"
-	};
-
-/***/ },
-/* 160 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _iconButton = __webpack_require__(132);
-
-	var _iconButton2 = _interopRequireDefault(_iconButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(161);
-	var CLASSES = __webpack_require__(163);
-
-	var StopButton = function (_IconButton) {
-	  (0, _inherits3.default)(StopButton, _IconButton);
-
-	  function StopButton() {
-	    (0, _classCallCheck3.default)(this, StopButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _IconButton.apply(this, arguments));
-	  }
-
-	  StopButton.prototype._declareDefaults = function _declareDefaults() {
-	    _IconButton.prototype._declareDefaults.call(this);
-	    this._defaults.icon = 'stop';
-	    this._defaults.title = 'stop';
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-
-	  StopButton.prototype._render = function _render() {
-	    _IconButton.prototype._render.call(this);
-	    this._addClass(this.el, CLASSES['stop-button']);
-	  };
-
-	  return StopButton;
-	}(_iconButton2.default);
-
-	exports.default = StopButton;
-
-/***/ },
-/* 161 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(162);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./stop-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./stop-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 162 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._stop-button_lpa7l_4 {\n  /* styles */\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 163 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"stop-button": "_stop-button_lpa7l_4"
-	};
-
-/***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _icon = __webpack_require__(128);
-
-	var _icon2 = _interopRequireDefault(_icon);
-
-	var _buttonSwitch = __webpack_require__(141);
-
-	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(165);
-	var CLASSES = __webpack_require__(167);
-
-	var OpacitySwitch = function (_ButtonSwitch) {
-	  (0, _inherits3.default)(OpacitySwitch, _ButtonSwitch);
-
-	  function OpacitySwitch() {
-	    (0, _classCallCheck3.default)(this, OpacitySwitch);
-	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to decalre defaults.
-	    @private
-	    @overrides @ ButtonSwitch
-	  */
-
-	  OpacitySwitch.prototype._declareDefaults = function _declareDefaults() {
-	    _ButtonSwitch.prototype._declareDefaults.call(this);
-	    this._defaults.icon = '';
-	    this._defaults.iconSize = '';
-	  };
-	  /*
-	    Method to render the module.
-	    @private
-	    @overrides @ ButtonSwitch
-	  */
-
-
-	  OpacitySwitch.prototype._render = function _render() {
-	    _ButtonSwitch.prototype._render.call(this);
-	    this.el.classList.add(CLASSES['opacity-switch']);
-	    var icon = new _icon2.default({
-	      parent: this.el,
-	      shape: this._props.icon,
-	      size: this._props.iconSize
-	    });
-	    this.el.appendChild(icon.el);
-	  };
-	  /*
-	    Method to react to switch state change.
-	    @private
-	    @overrides @ ButtonSwitch
-	  */
-
-
-	  OpacitySwitch.prototype._setState = function _setState() {
-	    var method = this._props.isOn ? 'add' : 'remove';
-	    this.el.classList[method](CLASSES['is-on']);
-	  };
-
-	  return OpacitySwitch;
-	}(_buttonSwitch2.default);
-
-	exports.default = OpacitySwitch;
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(166);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./opacity-switch.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./opacity-switch.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._opacity-switch_4i3zk_4 {\n  opacity: .5\n}\n._opacity-switch_4i3zk_4._is-on_4i3zk_6 {\n  opacity: 1\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 167 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"opacity-switch": "_opacity-switch_4i3zk_4",
-		"is-on": "_is-on_4i3zk_6"
-	};
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _opacitySwitch = __webpack_require__(164);
-
-	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(169);
-	var CLASSES = __webpack_require__(171);
-
-	var RepeatButton = function (_OpacitySwitch) {
-	  (0, _inherits3.default)(RepeatButton, _OpacitySwitch);
-
-	  function RepeatButton() {
-	    (0, _classCallCheck3.default)(this, RepeatButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _OpacitySwitch.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare defaults.
-	    @private
-	    @overrides @ OpacitySwitch
-	  */
-
-	  RepeatButton.prototype._declareDefaults = function _declareDefaults() {
-	    _OpacitySwitch.prototype._declareDefaults.call(this);
-	    this._defaults.icon = 'repeat';
-	    this._defaults.iconSize = 'x2';
-	    this._defaults.title = 'repeat';
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-
-	  RepeatButton.prototype._render = function _render() {
-	    _OpacitySwitch.prototype._render.call(this);
-	    this._addClass(this.el, CLASSES['repeat-button']);
-	  };
-
-	  return RepeatButton;
-	}(_opacitySwitch2.default);
-
-	exports.default = RepeatButton;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(170);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(115)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./repeat-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./repeat-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 170 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(114)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._repeat-button_1ce74_4 {\n  /* styles */\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 171 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"repeat-button": "_repeat-button_1ce74_4"
-	};
-
-/***/ },
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _repeatButton = __webpack_require__(168);
-
-	var _repeatButton2 = _interopRequireDefault(_repeatButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// require('css/blocks/repeat-button.postcss.css');
-	// let CLASSES = require('css/blocks/repeat-button.postcss.css.json');
-
-	var BoundsButton = function (_RepeatButton) {
-	  (0, _inherits3.default)(BoundsButton, _RepeatButton);
-
-	  function BoundsButton() {
-	    (0, _classCallCheck3.default)(this, BoundsButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _RepeatButton.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare defaults.
-	    @private
-	    @overrides @ RepeatButton
-	  */
-
-	  BoundsButton.prototype._declareDefaults = function _declareDefaults() {
-	    _RepeatButton.prototype._declareDefaults.call(this);
-	    this._defaults.icon = 'bounds';
-	    this._defaults.title = 'progress bounds';
-	  };
-	  // /*
-	  //   Initial render method.
-	  //   @private
-	  //   @overrides @ Button
-	  //   @returns this
-	  // */
-	  // _render () {
-	  //   super._render();
-	  //   this._addClass( this.el, CLASSES[ 'repeat-button' ] );
-	  // }
-
-
-	  return BoundsButton;
-	}(_repeatButton2.default);
-
-	exports.default = BoundsButton;
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(3);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(4);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(69);
+	var _inherits2 = __webpack_require__(68);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -15314,8 +14830,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(174);
-	var CLASSES = __webpack_require__(176);
+	__webpack_require__(150);
+	var CLASSES = __webpack_require__(152);
 
 	var LabelButton = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(LabelButton, _ButtonSwitch);
@@ -15396,13 +14912,13 @@
 	exports.default = LabelButton;
 
 /***/ },
-/* 174 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(175);
+	var content = __webpack_require__(151);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(115)(content, {});
@@ -15422,7 +14938,7 @@
 	}
 
 /***/ },
-/* 175 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(114)();
@@ -15436,12 +14952,692 @@
 
 
 /***/ },
-/* 176 */
+/* 152 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"label-button": "_label-button_1p6kr_4"
 	};
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(154);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._speed-control_1svrw_4 {\n  position:       relative;\n  display:        inline-block;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem\n}\n._speed-control__slider_1svrw_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n._speed-control__slider_1svrw_1:before, ._speed-control__slider_1svrw_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_1svrw_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_1svrw_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_1svrw_1 {\n  border:       1px solid cyan\n}\n._speed-control_1svrw_4._is-on_1svrw_48 ._speed-control__slider_1svrw_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 155 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"speed-control": "_speed-control_1svrw_4",
+		"speed-control__slider": "_speed-control__slider_1svrw_1",
+		"speed-control__button": "_speed-control__button_1svrw_1",
+		"is-on": "_is-on_1svrw_48"
+	};
+
+/***/ },
+/* 156 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _button = __webpack_require__(133);
+
+	var _button2 = _interopRequireDefault(_button);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(157);
+	var CLASSES = __webpack_require__(159);
+
+	var PlayerButton = function (_Button) {
+	  (0, _inherits3.default)(PlayerButton, _Button);
+
+	  function PlayerButton() {
+	    (0, _classCallCheck3.default)(this, PlayerButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
+	  }
+
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+	  PlayerButton.prototype._render = function _render() {
+	    _Button.prototype._render.call(this);
+	    this.el.classList.add(CLASSES['player-button']);
+	  };
+
+	  return PlayerButton;
+	}(_button2.default);
+
+	exports.default = PlayerButton;
+
+/***/ },
+/* 157 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(158);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./player-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._player-button_14zxa_4 {\n/*  width:      calc( 35 * $PX );\n  height:     calc( 35 * $PX );\n  cursor:     pointer;\n  fill:       #FFF;\n  > div {\n    position:   absolute;\n    top:        50%;\n    left:       50%;\n    transform:  translate( -50%, -50% );\n  }*/\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 159 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"player-button": "_player-button_14zxa_4"
+	};
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _iconFork = __webpack_require__(140);
+
+	var _iconFork2 = _interopRequireDefault(_iconFork);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(161);
+	var CLASSES = __webpack_require__(163),
+	    PLAYER_BTN_CLASSES = __webpack_require__(159);
+
+	var PlayButton = function (_IconFork) {
+	  (0, _inherits3.default)(PlayButton, _IconFork);
+
+	  function PlayButton() {
+	    (0, _classCallCheck3.default)(this, PlayButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _IconFork.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults on the module.
+	    @private
+	    @overrides @ ButtonSwitch
+	  */
+
+	  PlayButton.prototype._declareDefaults = function _declareDefaults() {
+	    _IconFork.prototype._declareDefaults.call(this);
+	    this._defaults.icon1 = 'pause';
+	    this._defaults.icon2 = 'play';
+	    this._defaults.title = 'play/pause';
+	  };
+	  /*
+	    Method to render the module.
+	    @private
+	  */
+
+
+	  PlayButton.prototype._render = function _render() {
+	    _IconFork.prototype._render.call(this);
+	    this._addClass(this.el, CLASSES['play-button']);
+	    this._addClass(this.el, PLAYER_BTN_CLASSES['player-button']);
+	  };
+
+	  return PlayButton;
+	}(_iconFork2.default);
+
+	exports.default = PlayButton;
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(162);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"play-button": "_play-button_16uj5_4"
+	};
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _iconButton = __webpack_require__(132);
+
+	var _iconButton2 = _interopRequireDefault(_iconButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(165);
+	var CLASSES = __webpack_require__(167);
+
+	var StopButton = function (_IconButton) {
+	  (0, _inherits3.default)(StopButton, _IconButton);
+
+	  function StopButton() {
+	    (0, _classCallCheck3.default)(this, StopButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _IconButton.apply(this, arguments));
+	  }
+
+	  StopButton.prototype._declareDefaults = function _declareDefaults() {
+	    _IconButton.prototype._declareDefaults.call(this);
+	    this._defaults.icon = 'stop';
+	    this._defaults.title = 'stop';
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  StopButton.prototype._render = function _render() {
+	    _IconButton.prototype._render.call(this);
+	    this._addClass(this.el, CLASSES['stop-button']);
+	  };
+
+	  return StopButton;
+	}(_iconButton2.default);
+
+	exports.default = StopButton;
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(166);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./stop-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./stop-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._stop-button_lpa7l_4 {\n  /* styles */\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 167 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"stop-button": "_stop-button_lpa7l_4"
+	};
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _icon = __webpack_require__(128);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	var _buttonSwitch = __webpack_require__(141);
+
+	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(169);
+	var CLASSES = __webpack_require__(171);
+
+	var OpacitySwitch = function (_ButtonSwitch) {
+	  (0, _inherits3.default)(OpacitySwitch, _ButtonSwitch);
+
+	  function OpacitySwitch() {
+	    (0, _classCallCheck3.default)(this, OpacitySwitch);
+	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to decalre defaults.
+	    @private
+	    @overrides @ ButtonSwitch
+	  */
+
+	  OpacitySwitch.prototype._declareDefaults = function _declareDefaults() {
+	    _ButtonSwitch.prototype._declareDefaults.call(this);
+	    this._defaults.icon = '';
+	    this._defaults.iconSize = '';
+	  };
+	  /*
+	    Method to render the module.
+	    @private
+	    @overrides @ ButtonSwitch
+	  */
+
+
+	  OpacitySwitch.prototype._render = function _render() {
+	    _ButtonSwitch.prototype._render.call(this);
+	    this.el.classList.add(CLASSES['opacity-switch']);
+	    var icon = new _icon2.default({
+	      parent: this.el,
+	      shape: this._props.icon,
+	      size: this._props.iconSize
+	    });
+	    this.el.appendChild(icon.el);
+	  };
+	  /*
+	    Method to react to switch state change.
+	    @private
+	    @overrides @ ButtonSwitch
+	  */
+
+
+	  OpacitySwitch.prototype._setState = function _setState() {
+	    var method = this._props.isOn ? 'add' : 'remove';
+	    this.el.classList[method](CLASSES['is-on']);
+	  };
+
+	  return OpacitySwitch;
+	}(_buttonSwitch2.default);
+
+	exports.default = OpacitySwitch;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(170);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./opacity-switch.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./opacity-switch.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._opacity-switch_x3c4d_4 {\n  opacity: .5\n}\n._opacity-switch_x3c4d_4._is-on_x3c4d_6 {\n  opacity: 1\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"opacity-switch": "_opacity-switch_x3c4d_4",
+		"is-on": "_is-on_x3c4d_6"
+	};
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _opacitySwitch = __webpack_require__(168);
+
+	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(173);
+	var CLASSES = __webpack_require__(175);
+
+	var RepeatButton = function (_OpacitySwitch) {
+	  (0, _inherits3.default)(RepeatButton, _OpacitySwitch);
+
+	  function RepeatButton() {
+	    (0, _classCallCheck3.default)(this, RepeatButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _OpacitySwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ OpacitySwitch
+	  */
+
+	  RepeatButton.prototype._declareDefaults = function _declareDefaults() {
+	    _OpacitySwitch.prototype._declareDefaults.call(this);
+	    this._defaults.icon = 'repeat';
+	    this._defaults.iconSize = 'x2';
+	    this._defaults.title = 'repeat';
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  RepeatButton.prototype._render = function _render() {
+	    _OpacitySwitch.prototype._render.call(this);
+	    this._addClass(this.el, CLASSES['repeat-button']);
+	  };
+
+	  return RepeatButton;
+	}(_opacitySwitch2.default);
+
+	exports.default = RepeatButton;
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(174);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(115)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./repeat-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./repeat-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(114)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._repeat-button_1ce74_4 {\n  /* styles */\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 175 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"repeat-button": "_repeat-button_1ce74_4"
+	};
+
+/***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(2);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(3);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(68);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _repeatButton = __webpack_require__(172);
+
+	var _repeatButton2 = _interopRequireDefault(_repeatButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// require('css/blocks/repeat-button.postcss.css');
+	// let CLASSES = require('css/blocks/repeat-button.postcss.css.json');
+
+	var BoundsButton = function (_RepeatButton) {
+	  (0, _inherits3.default)(BoundsButton, _RepeatButton);
+
+	  function BoundsButton() {
+	    (0, _classCallCheck3.default)(this, BoundsButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _RepeatButton.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ RepeatButton
+	  */
+
+	  BoundsButton.prototype._declareDefaults = function _declareDefaults() {
+	    _RepeatButton.prototype._declareDefaults.call(this);
+	    this._defaults.icon = 'bounds';
+	    this._defaults.title = 'progress bounds';
+	  };
+
+	  return BoundsButton;
+	}(_repeatButton2.default);
+
+	exports.default = BoundsButton;
 
 /***/ },
 /* 177 */
@@ -15459,8 +15655,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./main.postcss.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -15478,10 +15674,21 @@
 
 
 	// module
-	exports.push([module.id, ":root {\n  font-size: 16px;\n  line-height: 1.7;\n}\n\nbody {\n  /*background-color: #f1f1f1;*/\n  font-size: 12px;\n  font-size: 12px;\n  font-size: 0.75rem;\n  padding-top: 50px;\n  background-color: #333;\n}\n\n", ""]);
+	exports.push([module.id, "._mojs-player_11jsv_4 {\n  position:     fixed;\n  left:         0;\n  bottom:       0;\n  width:        100%;\n  height:     40px;\n  height:     40px;\n  height:       2.5rem;\n  \n  background:   rgba( 58, 8, 57, .85 )\n\n\n}\n._mojs-player__left_11jsv_1 {\n  position:     absolute;\n  left:     0;\n  /*outline:  1px solid cyan;*/\n  width:     175px;\n  width:     175px;\n  width:     10.9375rem\n\n\n}\n._mojs-player__mid_11jsv_1 {\n  position:     absolute;\n  left:     175px;\n  left:     175px;\n  left:     10.9375rem;\n  right:     35px;\n  right:     35px;\n  right:     2.1875rem;\n  /*outline:      1px solid yellow;*/\n  overflow:     hidden;\n  /*margin-left:  calc( $btnCount * $btnWidth * $PX );*/\n  padding:     0 20px;\n  padding:     0 20px;\n  padding:     0 1.25rem\n\n\n}\n._mojs-player__right_11jsv_1 {\n  position:     absolute;\n  right:     0\n\n\n}\n\n", ""]);
 
 	// exports
 
+
+/***/ },
+/* 179 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"mojs-player": "_mojs-player_11jsv_4",
+		"mojs-player__left": "_mojs-player__left_11jsv_1",
+		"mojs-player__mid": "_mojs-player__mid_11jsv_1",
+		"mojs-player__right": "_mojs-player__right_11jsv_1"
+	};
 
 /***/ }
 /******/ ]);

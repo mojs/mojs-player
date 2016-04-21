@@ -13,10 +13,47 @@ class PlayerSlider extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className: CLASSES['player-slider'],
-      parent:    document.body,
-      // isEl:      true
+      className:        CLASSES['player-slider'],
+      parent:           document.body,
+      progress:         0,
+      leftProgress:     0,
+      rightProgress:    1,
+      isBounds:         false,
     }
+  }
+  /*
+    Method to disable bounds.
+    @public
+  */
+  disableBounds () {
+    let p = this._props;
+    // p.isBounds = false;
+    this._rightProgress = this.rightBound._progress;
+    this._leftProgress  = this.leftBound._progress;
+
+    console.log( 'disable', this._leftProgress, this._rightProgress );
+
+    this.rightBound.setProgress( 1 );
+    this.leftBound.setProgress( 0 );
+
+    this.rightBound.hide();
+    this.leftBound.hide();
+  }
+  /*
+    Method to enable bounds.
+    @public
+  */
+  enableBounds () {
+    let p = this._props;
+    // p.isBounds = false;
+    // this._rightProgress = p.rightProgress;
+    // this._leftProgress  = p.leftProgress;
+    console.log( this._leftProgress, this._rightProgress );
+    this.rightBound.setProgress( this._rightProgress );
+    this.leftBound.setProgress( this._leftProgress );
+    
+    this.rightBound.show();
+    this.leftBound.show();
   }
   /*
     Initial render method.
@@ -45,11 +82,15 @@ class PlayerSlider extends Module {
       onProgress: this._onRightBoundProgress.bind(this)
     });
 
-    this.rightBound.setProgress( .75 );
-    this.track.setProgress( .5 );
-    this.leftBound.setProgress( .25 );
+    let p = this._props;
+    this.rightBound.setProgress( p.rightProgress );
+    this.track.setProgress( p.progress );
+    this.leftBound.setProgress( p.leftProgress );
     
-    this._props.parent.appendChild( this.el );
+    p.parent.appendChild( this.el );
+
+    ( p.isBounds ) ? this.enableBounds() : this.disableBounds();
+
   }
   /*
     Method that should be called on track update.

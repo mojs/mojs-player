@@ -2,7 +2,7 @@
 @import '../assets/globals.postcss.css';
 
 .player-button {
-  width:      calc( 35 * $PX );
+/*  width:      calc( 35 * $PX );
   height:     calc( 35 * $PX );
   cursor:     pointer;
   fill:       #FFF;
@@ -11,5 +11,5 @@
     top:        50%;
     left:       50%;
     transform:  translate( -50%, -50% );
-  }
+  }*/
 }

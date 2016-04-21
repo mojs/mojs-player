@@ -4,6 +4,7 @@
 .speed-control {
   position:       relative;
   display:        inline-block;
+  height:         calc( 40 * $PX );
   
   $pad: 2;
   &__slider {
@@ -22,7 +23,7 @@
     
     $translateSize : calc( -99999999 * $PX );
     transform:        translate($translateSize, $translateSize);
-
+    backface-visibility: hidden;
     &:before,
     &:after {
       content:        '';
@@ -46,6 +47,7 @@
 
   &.is-on &__slider {
     transform: translate(0, 0);
+
   }
 }
 

@@ -14,16 +14,6 @@ class BoundsButton extends RepeatButton {
     this._defaults.icon  = 'bounds';
     this._defaults.title = 'progress bounds';
   }
-  // /*
-  //   Initial render method.
-  //   @private
-  //   @overrides @ Button
-  //   @returns this
-  // */
-  // _render () {
-  //   super._render();
-  //   this._addClass( this.el, CLASSES[ 'repeat-button' ] );
-  // }
 }
 
 export default BoundsButton;
