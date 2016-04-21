@@ -15,8 +15,10 @@ class SpeedControl extends Module {
   */
   _declareDefaults () {
     super._declareDefaults();
-    this._defaults.progress = .5;
+    this._defaults.isOn          = false;
+    this._defaults.progress      = .5;
     this._defaults.onSpeedChange = null;
+    this._defaults.onIsSpeed     = null
   }
   /*
     Initial render method.
@@ -41,6 +43,7 @@ class SpeedControl extends Module {
     // child components
     this.labelButton = new LabelButton({
       parent:         this.el,
+      isOn:           p.isOn,
       className:      CLASSES[ `${ className }__icon` ],
       onStateChange:  this._onButtonStateChange.bind( this ),
       onDoubleTap:    this._onDoubleTap.bind( this )
@@ -55,6 +58,7 @@ class SpeedControl extends Module {
     });
 
     this.slider.setProgress( this._props.progress );
+    // this._onButtonStateChange( p.isOn );
   }
   /*
     Method that is invoked on slider progress.
@@ -76,6 +80,7 @@ class SpeedControl extends Module {
   _onButtonStateChange ( isOn ) {
     let method = ( isOn ) ? 'add' : 'remove' ;
     this.el.classList[ method ]( CLASSES[ 'is-on' ] );
+    this._callIfFunction( this._props.onIsSpeed, [ isOn ] );
   }
   /*
     Method to recalc progress to label string.
