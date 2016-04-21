@@ -39,7 +39,6 @@ class OpacitySwitch extends ButtonSwitch {
     let method = ( this._props.isOn ) ? 'add' : 'remove';
     this.el.classList[ method ]( CLASSES[ 'is-on' ] );
   }
-
 }
 
 export default OpacitySwitch;

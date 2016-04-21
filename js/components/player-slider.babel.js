@@ -19,6 +19,9 @@ class PlayerSlider extends Module {
       leftProgress:     0,
       rightProgress:    1,
       isBounds:         false,
+      onLeftProgress:   null,
+      onProgress:       null,
+      onRightProgress:  null
     }
   }
   /*
@@ -26,15 +29,13 @@ class PlayerSlider extends Module {
     @public
   */
   disableBounds () {
-    let p = this._props;
+    // let p = this._props;
     // p.isBounds = false;
-    this._rightProgress = this.rightBound._progress;
-    this._leftProgress  = this.leftBound._progress;
-
-    console.log( 'disable', this._leftProgress, this._rightProgress );
-
-    this.rightBound.setProgress( 1 );
-    this.leftBound.setProgress( 0 );
+    // this._rightProgress = this.rightBound._progress;
+    // this._leftProgress  = this.leftBound._progress;
+    // console.log( 'disable', this._leftProgress, this._rightProgress );
+    // this.rightBound.setProgress( 1 );
+    // this.leftBound.setProgress( 0 );
 
     this.rightBound.hide();
     this.leftBound.hide();
@@ -44,13 +45,15 @@ class PlayerSlider extends Module {
     @public
   */
   enableBounds () {
-    let p = this._props;
-    // p.isBounds = false;
-    // this._rightProgress = p.rightProgress;
-    // this._leftProgress  = p.leftProgress;
-    console.log( this._leftProgress, this._rightProgress );
-    this.rightBound.setProgress( this._rightProgress );
-    this.leftBound.setProgress( this._leftProgress );
+    // let p     = this._props,
+    //     // if no chached value - use the value from props
+    //     left  = ( this._leftProgress == null )
+    //       ? p.leftProgress : this._leftProgress,
+    //     right = ( this._rightProgress == null )
+    //       ? p.rightProgress : this._rightProgress;
+
+    // this.rightBound.setProgress( right );
+    // this.leftBound.setProgress( left );
     
     this.rightBound.show();
     this.leftBound.show();
@@ -89,7 +92,7 @@ class PlayerSlider extends Module {
     
     p.parent.appendChild( this.el );
 
-    ( p.isBounds ) ? this.enableBounds() : this.disableBounds();
+    // ( p.isBounds ) ? this.enableBounds() : this.disableBounds();
 
   }
   /*
@@ -98,7 +101,8 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onTrackProgress ( p ) {
-    // console.log( `track progress: ${p}` );
+    console.log( `track: ${ p }` );
+    this._callIfFunction( this._props.onProgress, [ p ] );
   }
   /*
     Method that should be called on left bound update.
@@ -106,8 +110,10 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onLeftBoundProgress ( p ) {
+    console.log( `left: ${ p }` );
     this.track.setMinBound( p );
     this.rightBound.setMinBound( p );
+    this._callIfFunction( this._props.onLeftProgress, [ p ] );
   }
   /*
     Method that should be called on right bound update.
@@ -115,8 +121,10 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onRightBoundProgress ( p ) {
+    console.log( `right: ${ p }` );
     this.track.setMaxBound( p );
     this.leftBound.setMaxBound( p );
+    this._callIfFunction( this._props.onRightProgress, [ p ] );
   }
 }
 
