@@ -2111,6 +2111,7 @@
 	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
 	    this.track = new _slider2.default({
+	      isIt: 1,
 	      parent: this.el,
 	      className: CLASSES.slider,
 	      onProgress: this._onTrackProgress.bind(this)
@@ -2139,7 +2140,6 @@
 
 
 	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {
-	    console.log('track: ' + p);
 	    this._callIfFunction(this._props.onProgress, [p]);
 	  };
 	  /*
@@ -2150,7 +2150,6 @@
 
 
 	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
-	    console.log('left: ' + p);
 	    this.track.setMinBound(p);
 	    this.rightBound.setMinBound(p);
 	    this._callIfFunction(this._props.onLeftProgress, [p]);
@@ -2163,7 +2162,6 @@
 
 
 	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
-	    console.log('right: ' + p);
 	    this.track.setMaxBound(p);
 	    this.leftBound.setMaxBound(p);
 	    this._callIfFunction(this._props.onRightProgress, [p]);
@@ -2570,7 +2568,11 @@
 
 	    shift = _moJs2.default.h.clamp(shift, minBound, maxBound);
 	    this._applyShift(shift);
-	    isCallback && this._onProgress(shift);
+	    if (isCallback) {
+	      this._onProgress(shift);
+	    } else {
+	      this._progress = this._shiftToProgress(shift);
+	    }
 	    return shift;
 	  };
 	  /*

@@ -101,7 +101,8 @@ class Handle extends Module {
 
     shift = mojs.h.clamp( shift, minBound, maxBound );
     this._applyShift( shift );
-    isCallback && this._onProgress( shift );
+    if ( isCallback ) { this._onProgress( shift ); }
+    else { this._progress = this._shiftToProgress( shift ); }
     return shift;
   }
   /*
