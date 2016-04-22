@@ -7,7 +7,8 @@ $handleHeight: 13;
   height:         calc( $handleHeight * $PX );
   
   cursor:         pointer;
-  transform:      translateX(0) translateZ(0);
+  transform:      translateX(0);
+  /*backface-visibility: hidden;*/
   
   &__inner,
   &__shadow {
@@ -20,7 +21,8 @@ $handleHeight: 13;
     height:         100%;
     border-radius:  50%;
     cursor:         pointer;
-    transform:      translateZ(0);
+    /*transform:      translateZ(0);*/
+    backface-visibility: hidden;
   }
   
   &__inner {
@@ -35,16 +37,16 @@ $handleHeight: 13;
 
   &:hover &__inner,
   &:hover &__shadow {
-    transform:      scale(1.1) translateZ(0);
+    transform:      scale(1.1);
   }
 
   &:active &__inner {
-    transform:      scale(1.2) translateZ(0);
+    transform:      scale(1.2);
     /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/
   }
   &:active &__shadow {
     opacity:        .85;
-    transform:      scale(1) translateZ(0);
+    transform:      scale(1);
   }
   
   $width:  9;
@@ -53,7 +55,7 @@ $handleHeight: 13;
     width:          calc( $width * $PX );
     height:         calc( $height * $PX );
     margin-left:    calc( - $width * $PX );
-    margin-top:     calc( - $height/2 * $PX ) !important;
+    margin-top:     calc( - $height/2 * $PX );
   }
   &.is-bound &__inner {
     background:     $c-orange;

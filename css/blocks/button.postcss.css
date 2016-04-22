@@ -8,7 +8,7 @@
   cursor:     pointer;
   fill:       #FFF;
   display:    inline-block;
-  transform:  translateZ(0);
+  /*transform:  translateZ(0);*/
   > div {
     position:   absolute;
     top:        50%;
