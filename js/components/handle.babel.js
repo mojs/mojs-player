@@ -173,9 +173,10 @@ class Handle extends Module {
   */
   _hammerTime () {
     let p  = this._props,
+        direction = ( p.direction === 'x' ) ? 'HORIZONTAL' : 'VERTICAL',
         hm = new HammerJS.Manager(this.el, {
           recognizers: [
-            [Hammer.Pan, { direction: HammerJS.DIRECTION_VERTICAL }]
+            [HammerJS.Pan, { direction: HammerJS[ `DIRECTION_${direction}` ] }]
           ]
         });
 
