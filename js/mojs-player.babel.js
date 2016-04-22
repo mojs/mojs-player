@@ -62,6 +62,7 @@ class MojsPlayer extends Module {
 
     this.playerSlider = new PlayerSlider({
       parent:             mid,
+      isBounds:           p.isBounds,
       leftProgress:       p.leftBound,
       rightProgress:      p.rightBound,
       progress:           p.progress,
@@ -91,7 +92,7 @@ class MojsPlayer extends Module {
     });
     this.stopButton   = new StopButton({
       parent:            left,
-      onTap:             this._onStop.bind( this )
+      onPointerUp:       this._onStop.bind( this )
     });
     
     this.mojsButton   = new IconButton({
@@ -116,6 +117,11 @@ class MojsPlayer extends Module {
       onProgress: (p) => {
         this.playerSlider.setTrackProgress( p );
         let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1;
+        let leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
+        if ( p < leftBound && p !== 0 ) {
+          this._onSysTweenComplete( true );
+          console.log(p, leftBound)
+        }
         if ( p >= rightBound ) {
           this._onSysTweenComplete( true );
         }
@@ -133,6 +139,8 @@ class MojsPlayer extends Module {
       if ( this._props.isRepeat ) {
         this._sysTween.stop();
         this._play();
+      } else {
+        this.playButton.off();
       }
     }
   }
@@ -152,6 +160,7 @@ class MojsPlayer extends Module {
   _play () {
     let p         = this._props,
         leftBound = ( p.isBounds ) ? p.leftBound : p.progress;
+
     this._sysTween
       .setProgress( p.progress )
       .play();
@@ -160,7 +169,10 @@ class MojsPlayer extends Module {
     Method that is invoked on stop button tap.
     @private
   */
-  _onStop ( ) { console.log( 'stop' ); }
+  _onStop ( ) {
+    this.playButton.off();
+    this._sysTween.stop();
+  }
   /*
     Method that is invoked on repeat switch state change.
     @private
@@ -173,6 +185,7 @@ class MojsPlayer extends Module {
     @param {Boolean} Bounds state.
   */
   _boundsStateChange ( isOn ) {
+    this.playerSlider._props.isBounds = isOn;
     this.playerSlider[ `${ ( isOn ) ? 'enable' : 'disable' }Bounds` ]();
     this._props.isBounds = isOn;
   }
@@ -204,7 +217,6 @@ class MojsPlayer extends Module {
     @param {Number} Progress value [0...1].
   */
   _onProgress ( progress ) {
-    // console.log(progress)
     this._props.progress = progress;
     if ( !this.timeline._prevTime ) {
       this.timeline.setProgress( 0 );
@@ -233,6 +245,17 @@ class MojsPlayer extends Module {
     @returns {Any} If set - the first property, if not - the second.
   */
   _fallbackTo ( prop, fallback ) { return ( prop != null ) ? prop : fallback; }
+  /*
+    Method to get bound regarding isBound option.
+    @private
+    @param {String} Bound name.
+  */
+  _getBound ( boundName ) {
+    let p        = this._props,
+        fallback = ( boundName === 'left' ) ? 0 : 1;
+
+    return ( p.isBounds ) ? p[ `${ boundName }Bound` ] : fallback;
+  }
 }
 
 let el = document.querySelector( '#js-el' );

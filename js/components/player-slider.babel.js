@@ -108,6 +108,7 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onLeftBoundProgress ( p ) {
+    if ( !this._props.isBounds ) { return; }
     this.track.setMinBound( p );
     this.rightBound.setMinBound( p );
     this._callIfFunction( this._props.onLeftProgress, [ p ] );
@@ -118,6 +119,7 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onRightBoundProgress ( p ) {
+    if ( !this._props.isBounds ) { return; }
     this.track.setMaxBound( p );
     this.leftBound.setMaxBound( p );
     this._callIfFunction( this._props.onRightProgress, [ p ] );

@@ -60,7 +60,7 @@ class ButtonSwitch extends Button {
     Method to react on state change.
     @private
   */
-  _reactOnStateChange () {
+  _reactOnStateChange ( ) {
     this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
     this._setState();
   }
