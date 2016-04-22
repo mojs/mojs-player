@@ -44,6 +44,7 @@ class MojsPlayer extends Module {
         className = 'mojs-player';
     super._render();
     this.el.classList.add( CLASSES[ className ] );
+    this.el.setAttribute( 'id', 'js-mojs-player' );
 
     let left  = this._createChild( 'div', CLASSES[ `${ className }__left` ] ),
         mid   = this._createChild( 'div', CLASSES[ `${ className }__mid` ] ),
@@ -63,7 +64,9 @@ class MojsPlayer extends Module {
       progress:           p.progress,
       onLeftProgress:     this._onLeftProgress.bind( this ),
       onProgress:         this._onProgress.bind( this ),
-      onRightProgress:    this._onRightProgress.bind( this )
+      onRightProgress:    this._onRightProgress.bind( this ),
+      onSeekStart:        this._onSeekStart.bind( this ),
+      onSeekEnd:          this._onSeekEnd.bind( this )
     });
     
     this.boundsButton = new BoundsButton({
@@ -85,6 +88,7 @@ class MojsPlayer extends Module {
       isPrepend:      true,
       onPointerUp:    this._onStop.bind( this )
     });
+
     this.playButton   = new PlayButton({
       parent:         left,
       isOn:           p.isPlaying,
@@ -99,7 +103,43 @@ class MojsPlayer extends Module {
       title:    'mo • js'
     });
 
+    this.transit = new mojs.Transit({
+      parent:       this.el,
+      strokeWidth:  { 40 : 0 },
+      fill:         'none',
+      // stroke:       '#FF512F',
+      stroke:       'white',
+      opacity:      { .15: 0 },
+      isShowEnd:    false
+    });
+
+    this.transit.el.style[ 'z-index' ] = 0;
+
+    this._addPointerDownEvent( this.el, (e) => {
+      this.transit
+        .tune({ x: e.pageX, y: e.layerY + 10 })
+        .replay()
+    });
     window.addEventListener('beforeunload', this._onUnload.bind(this));
+  }
+  /*
+    Method that is invoked when user touches the track.
+    @private
+    @param {Object} Original event object.
+  */
+  _onSeekStart ( e ) { this._sysTween.pause(); }
+  /*
+    Method that is invoked when user touches the track.
+    @private
+    @param {Object} Original event object.
+  */
+  _onSeekEnd ( e ) {
+    clearTimeout( this._endTimer );
+    this._endTimer = setTimeout( () => {
+      if ( this._props.isPlaying ) {
+        this._play();
+      }
+    }, 20 );
   }
   /*
     Method to init timeline.

@@ -21,7 +21,9 @@ class PlayerSlider extends Module {
       isBounds:         false,
       onLeftProgress:   null,
       onProgress:       null,
-      onRightProgress:  null
+      onRightProgress:  null,
+      onSeekStart:      null,
+      onSeekEnd:        null
     }
   }
   /*
@@ -64,34 +66,36 @@ class PlayerSlider extends Module {
     @returns this
   */
   _render () {
+    let p = this._props;
+
     this._addMainElement();
     this.el.classList.add( SLIDER_CLASSES.slider );
 
     this.leftBound = new Slider({
-      isBound:    true,
-      parent:     this.el,
-      onProgress: this._onLeftBoundProgress.bind(this)
-    });
-    this.track = new Slider({
-      parent:     this.el,
-      className:  CLASSES.slider,
-      onProgress: this._onTrackProgress.bind(this)
-    });
-    this.rightBound = new Slider({
-      isBound:    true,
-      parent:     this.el,
-      isInversed: true,
-      onProgress: this._onRightBoundProgress.bind(this)
+      isBound:        true,
+      parent:         this.el,
+      onProgress:     this._onLeftBoundProgress.bind(this)
     });
 
-    let p = this._props;
+    this.track = new Slider({
+      parent:         this.el,
+      className:      CLASSES.slider,
+      onProgress:     this._onTrackProgress.bind(this),
+      onSeekStart:    p.onSeekStart,
+      onSeekEnd:      p.onSeekEnd
+    });
+    this.rightBound = new Slider({
+      isBound:        true,
+      parent:         this.el,
+      isInversed:     true,
+      onProgress:     this._onRightBoundProgress.bind(this)
+    });
+
     this.rightBound.setProgress( p.rightProgress );
     this.track.setProgress( p.progress );
     this.leftBound.setProgress( p.leftProgress );
     
     p.parent.appendChild( this.el );
-
-    // ( p.isBounds ) ? this.enableBounds() : this.disableBounds();
 
   }
   /*

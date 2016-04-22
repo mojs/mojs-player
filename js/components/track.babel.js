@@ -17,6 +17,8 @@ class Track extends Handle {
       className:    '',
       parent:       document.body,
       onProgress:   null,
+      onSeekStart:  null,
+      onSeekEnd:    null,
       isProgress:   true, // if should render bold progress line
       isBound:      false,
       isInversed:   false,
@@ -88,15 +90,17 @@ class Track extends Handle {
   }
 
   _hammerTime () {
+    let p = this._props;
     super._hammerTime();
     this._addPointerDownEvent( this.el, (e) => {
-      let p = this._props,
-          x = (this._props.direction === 'x' ) ? e.layerX : e.layerY;
+      this._isPointerDown = true;
+      let x = (this._props.direction === 'x' ) ? e.layerX : e.layerY;
 
       if ( p.direction === 'y' ) { x = this._maxWidth - e.layerY; }
       x = ( this._props.isInversed && x < 0 ) ? this._maxWidth + x : x;
-
       this.setProgress( this._shiftToProgress( x ) );
+
+      this._callIfFunction( p.onSeekStart, [ e ] );
     });
   }
 }

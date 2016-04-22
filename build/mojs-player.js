@@ -166,11 +166,14 @@
 
 
 	  MojsPlayer.prototype._render = function _render() {
+	    var _this2 = this;
+
 	    this._initTimeline();
 	    var p = this._props,
 	        className = 'mojs-player';
 	    _Module.prototype._render.call(this);
 	    this.el.classList.add(CLASSES[className]);
+	    this.el.setAttribute('id', 'js-mojs-player');
 
 	    var left = this._createChild('div', CLASSES[className + '__left']),
 	        mid = this._createChild('div', CLASSES[className + '__mid']),
@@ -190,7 +193,9 @@
 	      progress: p.progress,
 	      onLeftProgress: this._onLeftProgress.bind(this),
 	      onProgress: this._onProgress.bind(this),
-	      onRightProgress: this._onRightProgress.bind(this)
+	      onRightProgress: this._onRightProgress.bind(this),
+	      onSeekStart: this._onSeekStart.bind(this),
+	      onSeekEnd: this._onSeekEnd.bind(this)
 	    });
 
 	    this.boundsButton = new _boundsButton2.default({
@@ -212,6 +217,7 @@
 	      isPrepend: true,
 	      onPointerUp: this._onStop.bind(this)
 	    });
+
 	    this.playButton = new _playButton2.default({
 	      parent: left,
 	      isOn: p.isPlaying,
@@ -226,7 +232,49 @@
 	      title: 'mo • js'
 	    });
 
+	    this.transit = new mojs.Transit({
+	      parent: this.el,
+	      strokeWidth: { 40: 0 },
+	      fill: 'none',
+	      // stroke:       '#FF512F',
+	      stroke: 'white',
+	      opacity: { .15: 0 },
+	      isShowEnd: false
+	    });
+
+	    this.transit.el.style['z-index'] = 0;
+
+	    this._addPointerDownEvent(this.el, function (e) {
+	      _this2.transit.tune({ x: e.pageX, y: e.layerY + 10 }).replay();
+	    });
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
+	  };
+	  /*
+	    Method that is invoked when user touches the track.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  MojsPlayer.prototype._onSeekStart = function _onSeekStart(e) {
+	    this._sysTween.pause();
+	  };
+	  /*
+	    Method that is invoked when user touches the track.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  MojsPlayer.prototype._onSeekEnd = function _onSeekEnd(e) {
+	    var _this3 = this;
+
+	    clearTimeout(this._endTimer);
+	    this._endTimer = setTimeout(function () {
+	      if (_this3._props.isPlaying) {
+	        _this3._play();
+	      }
+	    }, 20);
 	  };
 	  /*
 	    Method to init timeline.
@@ -235,7 +283,7 @@
 
 
 	  MojsPlayer.prototype._initTimeline = function _initTimeline() {
-	    var _this2 = this;
+	    var _this4 = this;
 
 	    this.timeline = new mojs.Timeline({});
 	    this.timeline.add(this._o.add);
@@ -245,13 +293,13 @@
 	      onProgress: this._onSysProgress.bind(this),
 	      onComplete: this._onSysTweenComplete.bind(this),
 	      onPlaybackStop: function onPlaybackStop() {
-	        _this2._setPlayState('off');
+	        _this4._setPlayState('off');
 	      },
 	      onPlaybackPause: function onPlaybackPause() {
-	        _this2._setPlayState('off');
+	        _this4._setPlayState('off');
 	      },
 	      onPlaybackStart: function onPlaybackStart() {
-	        _this2._setPlayState('on');
+	        _this4._setPlayState('on');
 	      }
 	    });
 	  };
@@ -286,11 +334,11 @@
 
 
 	  MojsPlayer.prototype._setPlayState = function _setPlayState(method) {
-	    var _this3 = this;
+	    var _this5 = this;
 
 	    clearTimeout(this._playTimeout);
 	    this._playTimeout = setTimeout(function () {
-	      _this3.playButton && _this3.playButton[method](false);
+	      _this5.playButton && _this5.playButton[method](false);
 	    }, 2);
 	  };
 	  /*
@@ -2223,7 +2271,9 @@
 	      isBounds: false,
 	      onLeftProgress: null,
 	      onProgress: null,
-	      onRightProgress: null
+	      onRightProgress: null,
+	      onSeekStart: null,
+	      onSeekEnd: null
 	    };
 	  };
 	  /*
@@ -2274,6 +2324,8 @@
 
 
 	  PlayerSlider.prototype._render = function _render() {
+	    var p = this._props;
+
 	    this._addMainElement();
 	    this.el.classList.add(SLIDER_CLASSES.slider);
 
@@ -2282,10 +2334,13 @@
 	      parent: this.el,
 	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
+
 	    this.track = new _slider2.default({
 	      parent: this.el,
 	      className: CLASSES.slider,
-	      onProgress: this._onTrackProgress.bind(this)
+	      onProgress: this._onTrackProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd
 	    });
 	    this.rightBound = new _slider2.default({
 	      isBound: true,
@@ -2294,14 +2349,11 @@
 	      onProgress: this._onRightBoundProgress.bind(this)
 	    });
 
-	    var p = this._props;
 	    this.rightBound.setProgress(p.rightProgress);
 	    this.track.setProgress(p.progress);
 	    this.leftBound.setProgress(p.leftProgress);
 
 	    p.parent.appendChild(this.el);
-
-	    // ( p.isBounds ) ? this.enableBounds() : this.disableBounds();
 	  };
 	  /*
 	    Method that should be called on track update.
@@ -2408,6 +2460,8 @@
 	      isInversed: false,
 	      isProgress: true,
 	      onProgress: null,
+	      onSeekStart: null,
+	      onSeekEnd: null,
 	      direction: 'x',
 	      snapPoint: 0,
 	      snapStrength: 0
@@ -2516,6 +2570,8 @@
 	    this.track = new _track2.default({
 	      className: CLASSES.track,
 	      onProgress: this._onTrackProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd,
 	      isBound: p.isBound,
 	      isInversed: p.isInversed,
 	      isProgress: p.isProgress,
@@ -2532,6 +2588,8 @@
 	    this.handle = new _handle2.default({
 	      className: handleClass,
 	      onProgress: this._onHandleProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd,
 	      isBound: p.isBound,
 	      isInversed: p.isInversed,
 	      parent: rootEl,
@@ -2644,6 +2702,8 @@
 	      isBound: false,
 	      isInversed: false,
 	      direction: 'x',
+	      onSeekStart: null,
+	      onSeekEnd: null,
 	      onProgress: null,
 	      snapPoint: 0,
 	      snapStrength: 0
@@ -2853,6 +2913,35 @@
 
 	    hm.on('panend', function (e) {
 	      _this2._saveDelta();
+	      _this2._callIfFunction(p.onSeekEnd, [e]);
+	    });
+
+	    this._addPointerDownEvent(this.el, function (e) {
+	      _this2._isPointerDown = true;
+	      _this2._callIfFunction(p.onSeekStart, [e]);
+	    });
+
+	    this._addPointerUpEvents();
+	  };
+	  /*
+	    Method to add pointer up events to handle the pointer up event.
+	  */
+
+
+	  Handle.prototype._addPointerUpEvents = function _addPointerUpEvents() {
+	    var _this3 = this;
+
+	    var p = this._props;
+	    this._addPointerUpEvent(this.el, function (e) {
+	      _this3._callIfFunction(p.onSeekEnd, [e]);
+	    });
+	    // add listener on document to cover edge cases
+	    // like when you press -> leave the element -> release
+	    this._addPointerUpEvent(document, function (e) {
+	      if (_this3._isPointerDown) {
+	        _this3._callIfFunction(p.onSeekEnd, [e]);
+	        _this3._isPointerDown = false;
+	      }
 	    });
 	  };
 	  /*
@@ -13702,6 +13791,8 @@
 	      className: '',
 	      parent: document.body,
 	      onProgress: null,
+	      onSeekStart: null,
+	      onSeekEnd: null,
 	      isProgress: true, // if should render bold progress line
 	      isBound: false,
 	      isInversed: false,
@@ -13794,17 +13885,19 @@
 	  Track.prototype._hammerTime = function _hammerTime() {
 	    var _this2 = this;
 
+	    var p = this._props;
 	    _Handle.prototype._hammerTime.call(this);
 	    this._addPointerDownEvent(this.el, function (e) {
-	      var p = _this2._props,
-	          x = _this2._props.direction === 'x' ? e.layerX : e.layerY;
+	      _this2._isPointerDown = true;
+	      var x = _this2._props.direction === 'x' ? e.layerX : e.layerY;
 
 	      if (p.direction === 'y') {
 	        x = _this2._maxWidth - e.layerY;
 	      }
 	      x = _this2._props.isInversed && x < 0 ? _this2._maxWidth + x : x;
-
 	      _this2.setProgress(_this2._shiftToProgress(x));
+
+	      _this2._callIfFunction(p.onSeekStart, [e]);
 	    });
 	  };
 
