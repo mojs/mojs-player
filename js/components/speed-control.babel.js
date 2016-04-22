@@ -66,6 +66,10 @@ class SpeedControl extends Module {
     @param {Number} Progress of the slider.
   */
   _onSliderProgress ( p ) {
+
+    // progress should be at least 0.01
+    p = Math.max( p, 0.01 );
+
     let props = this._props,
         args  = [ this._progressToSpeed(p), p ];
 

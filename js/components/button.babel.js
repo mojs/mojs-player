@@ -15,7 +15,7 @@ class Button extends Module {
     this._defaults.link          = null;
     this._defaults.title         = '';
     this._defaults.onPointerDown = null;
-    this._defaults.onPointerup   = null;
+    this._defaults.onPointerUp   = null;
     this._defaults.onDoubleTap   = null;
   }
   /*

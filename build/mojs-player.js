@@ -189,6 +189,7 @@
 
 	    this.playerSlider = new _playerSlider2.default({
 	      parent: mid,
+	      isBounds: p.isBounds,
 	      leftProgress: p.leftBound,
 	      rightProgress: p.rightBound,
 	      progress: p.progress,
@@ -218,7 +219,7 @@
 	    });
 	    this.stopButton = new _stopButton2.default({
 	      parent: left,
-	      onTap: this._onStop.bind(this)
+	      onPointerUp: this._onStop.bind(this)
 	    });
 
 	    this.mojsButton = new _iconButton2.default({
@@ -247,6 +248,11 @@
 	      onProgress: function onProgress(p) {
 	        _this2.playerSlider.setTrackProgress(p);
 	        var rightBound = _this2._props.isBounds ? _this2._props.rightBound : 1;
+	        var leftBound = _this2._props.isBounds ? _this2._props.leftBound : -1;
+	        if (p < leftBound && p !== 0) {
+	          _this2._onSysTweenComplete(true);
+	          console.log(p, leftBound);
+	        }
 	        if (p >= rightBound) {
 	          _this2._onSysTweenComplete(true);
 	        }
@@ -266,6 +272,8 @@
 	      if (this._props.isRepeat) {
 	        this._sysTween.stop();
 	        this._play();
+	      } else {
+	        this.playButton.off();
 	      }
 	    }
 	  };
@@ -293,6 +301,7 @@
 	  MojsPlayer.prototype._play = function _play() {
 	    var p = this._props,
 	        leftBound = p.isBounds ? p.leftBound : p.progress;
+
 	    this._sysTween.setProgress(p.progress).play();
 	  };
 	  /*
@@ -302,7 +311,8 @@
 
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
-	    console.log('stop');
+	    this.playButton.off();
+	    this._sysTween.stop();
 	  };
 	  /*
 	    Method that is invoked on repeat switch state change.
@@ -322,6 +332,7 @@
 
 
 	  MojsPlayer.prototype._boundsStateChange = function _boundsStateChange(isOn) {
+	    this.playerSlider._props.isBounds = isOn;
 	    this.playerSlider[(isOn ? 'enable' : 'disable') + 'Bounds']();
 	    this._props.isBounds = isOn;
 	  };
@@ -365,7 +376,6 @@
 
 
 	  MojsPlayer.prototype._onProgress = function _onProgress(progress) {
-	    // console.log(progress)
 	    this._props.progress = progress;
 	    if (!this.timeline._prevTime) {
 	      this.timeline.setProgress(0);
@@ -403,6 +413,19 @@
 
 	  MojsPlayer.prototype._fallbackTo = function _fallbackTo(prop, fallback) {
 	    return prop != null ? prop : fallback;
+	  };
+	  /*
+	    Method to get bound regarding isBound option.
+	    @private
+	    @param {String} Bound name.
+	  */
+
+
+	  MojsPlayer.prototype._getBound = function _getBound(boundName) {
+	    var p = this._props,
+	        fallback = boundName === 'left' ? 0 : 1;
+
+	    return p.isBounds ? p[boundName + 'Bound'] : fallback;
 	  };
 
 	  return MojsPlayer;
@@ -2230,6 +2253,9 @@
 
 
 	  PlayerSlider.prototype._onLeftBoundProgress = function _onLeftBoundProgress(p) {
+	    if (!this._props.isBounds) {
+	      return;
+	    }
 	    this.track.setMinBound(p);
 	    this.rightBound.setMinBound(p);
 	    this._callIfFunction(this._props.onLeftProgress, [p]);
@@ -2242,6 +2268,9 @@
 
 
 	  PlayerSlider.prototype._onRightBoundProgress = function _onRightBoundProgress(p) {
+	    if (!this._props.isBounds) {
+	      return;
+	    }
 	    this.track.setMaxBound(p);
 	    this.leftBound.setMaxBound(p);
 	    this._callIfFunction(this._props.onRightProgress, [p]);
@@ -2738,7 +2767,9 @@
 	    var _this2 = this;
 
 	    var p = this._props,
-	        hm = (0, _hammerjs2.default)(this.el);
+	        hm = new _hammerjs2.default.Manager(this.el, {
+	      recognizers: [[Hammer.Pan, { direction: _hammerjs2.default.DIRECTION_VERTICAL }]]
+	    });
 
 	    hm.on('pan', function (e) {
 	      _this2._delta = p.direction === 'x' ? e.deltaX : -e.deltaY;
@@ -14390,7 +14421,7 @@
 	    this._defaults.link = null;
 	    this._defaults.title = '';
 	    this._defaults.onPointerDown = null;
-	    this._defaults.onPointerup = null;
+	    this._defaults.onPointerUp = null;
 	    this._defaults.onDoubleTap = null;
 	  };
 	  /*
@@ -14969,6 +15000,10 @@
 
 
 	  SpeedControl.prototype._onSliderProgress = function _onSliderProgress(p) {
+
+	    // progress should be at least 0.01
+	    p = Math.max(p, 0.01);
+
 	    var props = this._props,
 	        args = [this._progressToSpeed(p), p];
 
