@@ -15,13 +15,24 @@ class ButtonSwitch extends Button {
     this._defaults.onStateChange = null;
   }
   /*
+    Method to set the state to `true`.
+    @public
+    @param {Boolean} If should invoke callback.
+  */
+  on ( isCallback = true ) {
+    // set to true because the next step is toggle
+    this._props.isOn = true;
+    this._reactOnStateChange( isCallback );
+  }
+  /*
     Method to set the state to `false`.
     @public
+    @param {Boolean} If should invoke callback.
   */
-  off () {
+  off ( isCallback = true ) {
     // set to true because the next step is toggle
     this._props.isOn = false;
-    this._reactOnStateChange();
+    this._reactOnStateChange( isCallback );
   }
 
   // ---
@@ -59,9 +70,12 @@ class ButtonSwitch extends Button {
   /*
     Method to react on state change.
     @private
+    @param {Boolean} If should invoke callback.
   */
-  _reactOnStateChange ( ) {
-    this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
+  _reactOnStateChange ( isCallback = true ) {
+    if ( isCallback ) {
+      this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
+    }
     this._setState();
   }
   /*

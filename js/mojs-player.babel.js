@@ -30,6 +30,7 @@ class MojsPlayer extends Module {
     this._defaults.isPlaying  = this._fallbackTo( m.isPlaying,  false );
     this._defaults.isRepeat   = this._fallbackTo( m.isRepeat,   false );
     this._defaults.speed      = this._fallbackTo( m.speed,      .5 );
+    this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
   }
   /*
@@ -119,15 +120,32 @@ class MojsPlayer extends Module {
         let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1;
         let leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
         if ( p < leftBound && p !== 0 ) {
-          this._onSysTweenComplete( true );
-          console.log(p, leftBound)
+          this._sysTween.pause()
+          setTimeout( () => { this._play(); }, 1 );
         }
         if ( p >= rightBound ) {
-          this._onSysTweenComplete( true );
+          this._sysTween.pause()
+          setTimeout( () => {
+            if ( this._props.isRepeat ) { this._play(); }
+          }, 1 );
         }
       },
-      onComplete: this._onSysTweenComplete.bind( this )
+      onComplete: this._onSysTweenComplete.bind( this ),
+      onPlaybackStop:  () => { this._setPlayState( 'off' ); },
+      onPlaybackPause: () => { this._setPlayState( 'off' ); },
+      onPlaybackStart: () => { this._setPlayState( 'on' ) }
     });
+  }
+  /*
+    Method to set play button state.
+    @private
+    @param {String} Method name to call it on playButton.
+  */
+  _setPlayState ( method ) {
+    clearTimeout( this._playTimeout );
+    this._playTimeout = setTimeout( () => {
+      this.playButton && this.playButton[ method ]( false );
+    }, 2);
   }
   /*
     Method that is invoked on system tween completion.
@@ -139,8 +157,6 @@ class MojsPlayer extends Module {
       if ( this._props.isRepeat ) {
         this._sysTween.stop();
         this._play();
-      } else {
-        this.playButton.off();
       }
     }
   }
@@ -159,10 +175,13 @@ class MojsPlayer extends Module {
   */
   _play () {
     let p         = this._props,
-        leftBound = ( p.isBounds ) ? p.leftBound : p.progress;
+        leftBound = ( p.isBounds ) ? p.leftBound : p.progress,
+        progress  = ( p.progress >= this._getBound( 'right' ) )
+          ? leftBound : p.progress;
 
     this._sysTween
-      .setProgress( p.progress )
+      .setProgress( progress )
+      .setSpeed( p.speedValue )
       .play();
   }
   /*
@@ -170,7 +189,7 @@ class MojsPlayer extends Module {
     @private
   */
   _onStop ( ) {
-    this.playButton.off();
+    // this.playButton.off();
     this._sysTween.stop();
   }
   /*
@@ -197,6 +216,7 @@ class MojsPlayer extends Module {
   */
   _onSpeedChange ( speed, progress ) {
     this._props.speed = progress;
+    this._props.speedValue = speed;
     this._sysTween.setSpeed( speed );
   }
   /*
@@ -253,7 +273,7 @@ class MojsPlayer extends Module {
   _getBound ( boundName ) {
     let p        = this._props,
         fallback = ( boundName === 'left' ) ? 0 : 1;
-
+   
     return ( p.isBounds ) ? p[ `${ boundName }Bound` ] : fallback;
   }
 }

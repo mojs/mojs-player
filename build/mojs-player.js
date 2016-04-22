@@ -155,6 +155,7 @@
 	    this._defaults.isPlaying = this._fallbackTo(m.isPlaying, false);
 	    this._defaults.isRepeat = this._fallbackTo(m.isRepeat, false);
 	    this._defaults.speed = this._fallbackTo(m.speed, .5);
+	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	  };
 	  /*
@@ -250,15 +251,46 @@
 	        var rightBound = _this2._props.isBounds ? _this2._props.rightBound : 1;
 	        var leftBound = _this2._props.isBounds ? _this2._props.leftBound : -1;
 	        if (p < leftBound && p !== 0) {
-	          _this2._onSysTweenComplete(true);
-	          console.log(p, leftBound);
+	          _this2._sysTween.pause();
+	          setTimeout(function () {
+	            _this2._play();
+	          }, 1);
 	        }
 	        if (p >= rightBound) {
-	          _this2._onSysTweenComplete(true);
+	          _this2._sysTween.pause();
+	          setTimeout(function () {
+	            if (_this2._props.isRepeat) {
+	              _this2._play();
+	            }
+	          }, 1);
 	        }
 	      },
-	      onComplete: this._onSysTweenComplete.bind(this)
+	      onComplete: this._onSysTweenComplete.bind(this),
+	      onPlaybackStop: function onPlaybackStop() {
+	        _this2._setPlayState('off');
+	      },
+	      onPlaybackPause: function onPlaybackPause() {
+	        _this2._setPlayState('off');
+	      },
+	      onPlaybackStart: function onPlaybackStart() {
+	        _this2._setPlayState('on');
+	      }
 	    });
+	  };
+	  /*
+	    Method to set play button state.
+	    @private
+	    @param {String} Method name to call it on playButton.
+	  */
+
+
+	  MojsPlayer.prototype._setPlayState = function _setPlayState(method) {
+	    var _this3 = this;
+
+	    clearTimeout(this._playTimeout);
+	    this._playTimeout = setTimeout(function () {
+	      _this3.playButton && _this3.playButton[method](false);
+	    }, 2);
 	  };
 	  /*
 	    Method that is invoked on system tween completion.
@@ -272,8 +304,6 @@
 	      if (this._props.isRepeat) {
 	        this._sysTween.stop();
 	        this._play();
-	      } else {
-	        this.playButton.off();
 	      }
 	    }
 	  };
@@ -300,9 +330,10 @@
 
 	  MojsPlayer.prototype._play = function _play() {
 	    var p = this._props,
-	        leftBound = p.isBounds ? p.leftBound : p.progress;
+	        leftBound = p.isBounds ? p.leftBound : p.progress,
+	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
 
-	    this._sysTween.setProgress(p.progress).play();
+	    this._sysTween.setProgress(progress).setSpeed(p.speedValue).play();
 	  };
 	  /*
 	    Method that is invoked on stop button tap.
@@ -311,7 +342,7 @@
 
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
-	    this.playButton.off();
+	    // this.playButton.off();
 	    this._sysTween.stop();
 	  };
 	  /*
@@ -346,6 +377,7 @@
 
 	  MojsPlayer.prototype._onSpeedChange = function _onSpeedChange(speed, progress) {
 	    this._props.speed = progress;
+	    this._props.speedValue = speed;
 	    this._sysTween.setSpeed(speed);
 	  };
 	  /*
@@ -2767,8 +2799,9 @@
 	    var _this2 = this;
 
 	    var p = this._props,
+	        direction = p.direction === 'x' ? 'HORIZONTAL' : 'VERTICAL',
 	        hm = new _hammerjs2.default.Manager(this.el, {
-	      recognizers: [[Hammer.Pan, { direction: _hammerjs2.default.DIRECTION_VERTICAL }]]
+	      recognizers: [[_hammerjs2.default.Pan, { direction: _hammerjs2.default['DIRECTION_' + direction] }]]
 	    });
 
 	    hm.on('pan', function (e) {
@@ -14715,15 +14748,32 @@
 	    this._defaults.onStateChange = null;
 	  };
 	  /*
+	    Method to set the state to `true`.
+	    @public
+	    @param {Boolean} If should invoke callback.
+	  */
+
+
+	  ButtonSwitch.prototype.on = function on() {
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+	    // set to true because the next step is toggle
+	    this._props.isOn = true;
+	    this._reactOnStateChange(isCallback);
+	  };
+	  /*
 	    Method to set the state to `false`.
 	    @public
+	    @param {Boolean} If should invoke callback.
 	  */
 
 
 	  ButtonSwitch.prototype.off = function off() {
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
 	    // set to true because the next step is toggle
 	    this._props.isOn = false;
-	    this._reactOnStateChange();
+	    this._reactOnStateChange(isCallback);
 	  };
 
 	  // ---
@@ -14767,11 +14817,16 @@
 	  /*
 	    Method to react on state change.
 	    @private
+	    @param {Boolean} If should invoke callback.
 	  */
 
 
 	  ButtonSwitch.prototype._reactOnStateChange = function _reactOnStateChange() {
-	    this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+	    if (isCallback) {
+	      this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
+	    }
 	    this._setState();
 	  };
 	  /*
