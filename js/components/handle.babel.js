@@ -13,16 +13,18 @@ class Handle extends Module {
   */
   _declareDefaults () {
     this._defaults = {
-      className:    '',
-      parent:       document.body,
-      minBound:     0,
-      maxBound:     1,
-      isBound:      false,
-      isInversed:   false,
-      direction:    'x',
-      onProgress:   null,
-      snapPoint:    0,
-      snapStrength: 0,
+      className:      '',
+      parent:         document.body,
+      minBound:       0,
+      maxBound:       1,
+      isBound:        false,
+      isInversed:     false,
+      direction:      'x',
+      onSeekStart:    null,
+      onSeekEnd:      null,
+      onProgress:     null,
+      snapPoint:      0,
+      snapStrength:   0
     }
   }
   /*
@@ -172,9 +174,9 @@ class Handle extends Module {
     @private
   */
   _hammerTime () {
-    let p  = this._props,
+    let p         = this._props,
         direction = ( p.direction === 'x' ) ? 'HORIZONTAL' : 'VERTICAL',
-        hm = new HammerJS.Manager(this.el, {
+        hm        = new HammerJS.Manager(this.el, {
           recognizers: [
             [HammerJS.Pan, { direction: HammerJS[ `DIRECTION_${direction}` ] }]
           ]
@@ -192,7 +194,34 @@ class Handle extends Module {
       this._setShift( this._progressToShift( proc ) );
     });
 
-    hm.on('panend', ( e ) => { this._saveDelta(); });
+    hm.on('panend', ( e ) => {
+      this._saveDelta();
+      this._callIfFunction( p.onSeekEnd, [ e ] );
+    });
+
+    this._addPointerDownEvent( this.el, (e) => {
+      this._isPointerDown = true;
+      this._callIfFunction( p.onSeekStart, [ e ] );
+    });
+    
+    this._addPointerUpEvents();
+  }
+  /*
+    Method to add pointer up events to handle the pointer up event.
+  */
+  _addPointerUpEvents () {
+    let p = this._props;
+    this._addPointerUpEvent( this.el, (e) => {
+      this._callIfFunction( p.onSeekEnd, [ e ] );
+    });
+    // add listener on document to cover edge cases
+    // like when you press -> leave the element -> release
+    this._addPointerUpEvent( document, (e) => {
+      if ( this._isPointerDown ) {
+        this._callIfFunction( p.onSeekEnd, [ e ] );
+        this._isPointerDown = false;
+      }
+    });
   }
   /*
     Method to add _delta to _shift.
