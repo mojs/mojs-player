@@ -74,6 +74,7 @@ class PlayerSlider extends Module {
       onProgress: this._onLeftBoundProgress.bind(this)
     });
     this.track = new Slider({
+      isIt:       1,
       parent:     this.el,
       className:  CLASSES.slider,
       onProgress: this._onTrackProgress.bind(this)
@@ -101,7 +102,6 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onTrackProgress ( p ) {
-    console.log( `track: ${ p }` );
     this._callIfFunction( this._props.onProgress, [ p ] );
   }
   /*
@@ -110,7 +110,6 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onLeftBoundProgress ( p ) {
-    console.log( `left: ${ p }` );
     this.track.setMinBound( p );
     this.rightBound.setMinBound( p );
     this._callIfFunction( this._props.onLeftProgress, [ p ] );
@@ -121,7 +120,6 @@ class PlayerSlider extends Module {
     @param {Number} Track progress value [0...1].
   */
   _onRightBoundProgress ( p ) {
-    console.log( `right: ${ p }` );
     this.track.setMaxBound( p );
     this.leftBound.setMaxBound( p );
     this._callIfFunction( this._props.onRightProgress, [ p ] );
