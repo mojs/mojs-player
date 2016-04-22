@@ -45,7 +45,8 @@ class Track extends Handle {
   _applyShift ( shift ) {
     if ( !this._props.isProgress ) { return; }
     if ( this._props.isInversed ) { shift = this._maxWidth - shift; }
-    let transform = `scaleX( ${shift} ) translateZ(0)`;
+    // translateZ(0)
+    let transform = `scaleX( ${shift} )`;
     this.trackProgressEl.style.transform = transform;
   }
   /*

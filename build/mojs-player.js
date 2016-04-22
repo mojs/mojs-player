@@ -158,6 +158,12 @@
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	  };
 	  /*
+	    Method to add tween/timeline to the self timeline.
+	    @public
+	    @param {Object} Tween/timeline to add.
+	  */
+	  // add ( timeline ) { this.timeline.add( timeline ); }
+	  /*
 	    Method to render the module.
 	    @private
 	    @overrides @ Module
@@ -165,6 +171,7 @@
 
 
 	  MojsPlayer.prototype._render = function _render() {
+	    this._initTimeline();
 	    var p = this._props,
 	        className = 'mojs-player';
 	    _Module.prototype._render.call(this);
@@ -173,16 +180,6 @@
 	    var left = this._createChild('div', CLASSES[className + '__left']),
 	        mid = this._createChild('div', CLASSES[className + '__mid']),
 	        right = this._createChild('div', CLASSES[className + '__right']);
-
-	    this.playButton = new _playButton2.default({
-	      parent: left,
-	      isOn: p.isPlaying,
-	      onStateChange: this._onPlayStateChange.bind(this)
-	    });
-	    this.stopButton = new _stopButton2.default({
-	      parent: left,
-	      onTap: this._onStop.bind(this)
-	    });
 
 	    this.repeatButton = new _repeatButton2.default({
 	      parent: left,
@@ -214,13 +211,63 @@
 	      onIsSpeed: this._onIsSpeed.bind(this)
 	    });
 
+	    this.playButton = new _playButton2.default({
+	      parent: left,
+	      isOn: p.isPlaying,
+	      onStateChange: this._onPlayStateChange.bind(this)
+	    });
+	    this.stopButton = new _stopButton2.default({
+	      parent: left,
+	      onTap: this._onStop.bind(this)
+	    });
+
 	    this.mojsButton = new _iconButton2.default({
 	      parent: right,
 	      icon: 'mojs',
 	      link: 'https://github.com/legomushroom/mojs-player',
 	      title: 'mo • js'
 	    });
+
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
+	  };
+	  /*
+	    Method to init timeline.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._initTimeline = function _initTimeline() {
+	    var _this2 = this;
+
+	    this.timeline = new mojs.Timeline({});
+	    this.timeline.add(this._o.add);
+
+	    this._sysTween = new mojs.Tween({
+	      duration: this.timeline._props.repeatTime,
+	      onProgress: function onProgress(p) {
+	        _this2.playerSlider.setTrackProgress(p);
+	        var rightBound = _this2._props.isBounds ? _this2._props.rightBound : 1;
+	        if (p >= rightBound) {
+	          _this2._onSysTweenComplete(true);
+	        }
+	      },
+	      onComplete: this._onSysTweenComplete.bind(this)
+	    });
+	  };
+	  /*
+	    Method that is invoked on system tween completion.
+	    @private
+	    @param {Boolean} If forward direction.
+	  */
+
+
+	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {
+	    if (this._props.isPlaying && isForward) {
+	      if (this._props.isRepeat) {
+	        this._sysTween.stop();
+	        this._play();
+	      }
+	    }
 	  };
 	  /*
 	    Method that is invoked play button state change.
@@ -231,6 +278,22 @@
 
 	  MojsPlayer.prototype._onPlayStateChange = function _onPlayStateChange(isPlay) {
 	    this._props.isPlaying = isPlay;
+	    if (isPlay) {
+	      this._play();
+	    } else {
+	      this._sysTween.pause();
+	    }
+	  };
+	  /*
+	    Method to play system tween from progress.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._play = function _play() {
+	    var p = this._props,
+	        leftBound = p.isBounds ? p.leftBound : p.progress;
+	    this._sysTween.setProgress(p.progress).play();
 	  };
 	  /*
 	    Method that is invoked on stop button tap.
@@ -272,6 +335,7 @@
 
 	  MojsPlayer.prototype._onSpeedChange = function _onSpeedChange(speed, progress) {
 	    this._props.speed = progress;
+	    this._sysTween.setSpeed(speed);
 	  };
 	  /*
 	    Method that is invoked on speed state change.
@@ -301,7 +365,12 @@
 
 
 	  MojsPlayer.prototype._onProgress = function _onProgress(progress) {
+	    // console.log(progress)
 	    this._props.progress = progress;
+	    if (!this.timeline._prevTime) {
+	      this.timeline.setProgress(0);
+	    }
+	    this.timeline.setProgress(progress);
 	  };
 	  /*
 	    Method that is invoked on timeline's right bound progress.
@@ -339,7 +408,18 @@
 	  return MojsPlayer;
 	}(_module2.default);
 
-	var mojsPlayer = new MojsPlayer({});
+	var el = document.querySelector('#js-el');
+	var tw = new mojs.Tween({
+	  duration: 4000,
+	  onUpdate: function onUpdate(p) {
+	    el.style.transform = 'translateX(' + 1000 * p + 'px)';
+	  }
+	});
+
+	var mojsPlayer = new MojsPlayer({
+	  add: tw
+	});
+	// mojsPlayer.add( tw );
 
 	exports.default = MojsPlayer;
 
@@ -2058,40 +2138,41 @@
 	  /*
 	    Method to disable bounds.
 	    @public
+	    @returns this.
 	  */
 
 
 	  PlayerSlider.prototype.disableBounds = function disableBounds() {
-	    // let p = this._props;
-	    // p.isBounds = false;
-	    // this._rightProgress = this.rightBound._progress;
-	    // this._leftProgress  = this.leftBound._progress;
-	    // console.log( 'disable', this._leftProgress, this._rightProgress );
-	    // this.rightBound.setProgress( 1 );
-	    // this.leftBound.setProgress( 0 );
-
+	    this.track.setBounds(0, 1);
 	    this.rightBound.hide();
 	    this.leftBound.hide();
+	    return this;
 	  };
 	  /*
 	    Method to enable bounds.
 	    @public
+	    @returns this.
 	  */
 
 
 	  PlayerSlider.prototype.enableBounds = function enableBounds() {
-	    // let p     = this._props,
-	    //     // if no chached value - use the value from props
-	    //     left  = ( this._leftProgress == null )
-	    //       ? p.leftProgress : this._leftProgress,
-	    //     right = ( this._rightProgress == null )
-	    //       ? p.rightProgress : this._rightProgress;
-
-	    // this.rightBound.setProgress( right );
-	    // this.leftBound.setProgress( left );
-
+	    var p = this._props;
+	    this.track.setBounds(p.leftProgress, p.rightProgress);
 	    this.rightBound.show();
 	    this.leftBound.show();
+	    return this;
+	  };
+	  /*
+	    Method to set progress of the track.
+	    @public
+	    @param {Number} Progress to set [0...1].
+	    @returns this.
+	  */
+
+
+	  PlayerSlider.prototype.setTrackProgress = function setTrackProgress(p) {
+	    this.track.setProgress(p);
+	    return this;
 	  };
 	  /*
 	    Initial render method.
@@ -2111,7 +2192,6 @@
 	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
 	    this.track = new _slider2.default({
-	      isIt: 1,
 	      parent: this.el,
 	      className: CLASSES.slider,
 	      onProgress: this._onTrackProgress.bind(this)
@@ -2584,7 +2664,8 @@
 
 	  Handle.prototype._applyShift = function _applyShift(shift) {
 	    var p = this._props;
-	    this.el.style.transform = p.direction === 'x' ? 'translateX( ' + shift + 'px ) translateZ(0)' : 'translateY( ' + -shift + 'px ) translateZ(0)';
+	    // translateZ(0)
+	    this.el.style.transform = p.direction === 'x' ? 'translateX( ' + shift + 'px )' : 'translateY( ' + -shift + 'px )';
 	  };
 	  /*
 	    Method to get max width of the parent.
@@ -13140,7 +13221,7 @@
 
 
 	// module
-	exports.push([module.id, "._handle_19utm_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0) translateZ(0);\n          transform:      translateX(0) translateZ(0)\n}\n._handle__inner_19utm_1, ._handle__shadow_19utm_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  -webkit-transform:          translateZ(0);\n          transform:          translateZ(0)\n}\n._handle__inner_19utm_1 {\n  background:          #FFF\n}\n._handle__shadow_19utm_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_19utm_5:hover ._handle__inner_19utm_1, ._handle_19utm_5:hover ._handle__shadow_19utm_1 {\n  -webkit-transform:          scale(1.1) translateZ(0);\n          transform:          scale(1.1) translateZ(0)\n}\n._handle_19utm_5:active ._handle__inner_19utm_1 {\n  -webkit-transform:          scale(1.2) translateZ(0);\n          transform:          scale(1.2) translateZ(0)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_19utm_5:active ._handle__shadow_19utm_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1) translateZ(0);\n          transform:          scale(1) translateZ(0)\n}\n._handle_19utm_5._is-bound_19utm_52 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px !important;\n  margin-top:          -10px !important;\n  margin-top:          -0.625rem !important\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1 {\n  background:          #FF512F;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_19utm_5._is-bound_19utm_52 ._handle__inner_19utm_1, ._handle_19utm_5._is-bound_19utm_52 ._handle__shadow_19utm_1 {\n  border-radius:          0.1875rem\n}\n._handle_19utm_5._is-inversed_19utm_79 {\n  margin-left:          0\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__shadow_19utm_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__inner_19utm_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_19utm_5._is-inversed_19utm_79 ._handle__inner_19utm_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
+	exports.push([module.id, "._handle_1wxcg_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0);\n          transform:      translateX(0)\n  /*backface-visibility: hidden;*/\n}\n._handle__inner_1wxcg_1, ._handle__shadow_1wxcg_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  /*transform:      translateZ(0);*/\n  -webkit-backface-visibility:          hidden;\n          backface-visibility:          hidden\n}\n._handle__inner_1wxcg_1 {\n  background:          #FFF\n}\n._handle__shadow_1wxcg_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_1wxcg_5:hover ._handle__inner_1wxcg_1, ._handle_1wxcg_5:hover ._handle__shadow_1wxcg_1 {\n  -webkit-transform:          scale(1.1);\n          transform:          scale(1.1)\n}\n._handle_1wxcg_5:active ._handle__inner_1wxcg_1 {\n  -webkit-transform:          scale(1.2);\n          transform:          scale(1.2)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_1wxcg_5:active ._handle__shadow_1wxcg_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1);\n          transform:          scale(1)\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px;\n  margin-top:          -10px;\n  margin-top:          -0.625rem\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1 {\n  background:          #FF512F;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1, ._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__shadow_1wxcg_1 {\n  border-radius:          0.1875rem\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 {\n  margin-left:          0\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__shadow_1wxcg_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__inner_1wxcg_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__inner_1wxcg_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
 
 	// exports
 
@@ -13458,11 +13539,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_19utm_5",
-		"handle__inner": "_handle__inner_19utm_1",
-		"handle__shadow": "_handle__shadow_19utm_1",
-		"is-bound": "_is-bound_19utm_52",
-		"is-inversed": "_is-inversed_19utm_79"
+		"handle": "_handle_1wxcg_5",
+		"handle__inner": "_handle__inner_1wxcg_1",
+		"handle__shadow": "_handle__shadow_1wxcg_1",
+		"is-bound": "_is-bound_1wxcg_54",
+		"is-inversed": "_is-inversed_1wxcg_81"
 	};
 
 /***/ },
@@ -13559,7 +13640,8 @@
 	    if (this._props.isInversed) {
 	      shift = this._maxWidth - shift;
 	    }
-	    var transform = 'scaleX( ' + shift + ' ) translateZ(0)';
+	    // translateZ(0)
+	    var transform = 'scaleX( ' + shift + ' )';
 	    this.trackProgressEl.style.transform = transform;
 	  };
 	  /*
@@ -14412,7 +14494,7 @@
 
 
 	// module
-	exports.push([module.id, "._button_1jhf8_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n  -webkit-transform:  translateZ(0);\n          transform:  translateZ(0);\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n._button_1jhf8_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1jhf8_4:hover {\n  opacity:   .85;\n}\n._button_1jhf8_4:active {\n  opacity:   1;\n}\n\n", ""]);
+	exports.push([module.id, "._button_1mh5t_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n/*transform:  translateZ(0);*/\n._button_1mh5t_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1mh5t_4:hover {\n  opacity:   .85;\n}\n._button_1mh5t_4:active {\n  opacity:   1;\n}\n\n", ""]);
 
 	// exports
 
@@ -14422,7 +14504,7 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"button": "_button_1jhf8_4"
+		"button": "_button_1mh5t_4"
 	};
 
 /***/ },

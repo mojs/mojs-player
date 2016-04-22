@@ -27,36 +27,35 @@ class PlayerSlider extends Module {
   /*
     Method to disable bounds.
     @public
+    @returns this.
   */
   disableBounds () {
-    // let p = this._props;
-    // p.isBounds = false;
-    // this._rightProgress = this.rightBound._progress;
-    // this._leftProgress  = this.leftBound._progress;
-    // console.log( 'disable', this._leftProgress, this._rightProgress );
-    // this.rightBound.setProgress( 1 );
-    // this.leftBound.setProgress( 0 );
-
+    this.track.setBounds( 0, 1 );
     this.rightBound.hide();
     this.leftBound.hide();
+    return this;
   }
   /*
     Method to enable bounds.
     @public
+    @returns this.
   */
   enableBounds () {
-    // let p     = this._props,
-    //     // if no chached value - use the value from props
-    //     left  = ( this._leftProgress == null )
-    //       ? p.leftProgress : this._leftProgress,
-    //     right = ( this._rightProgress == null )
-    //       ? p.rightProgress : this._rightProgress;
-
-    // this.rightBound.setProgress( right );
-    // this.leftBound.setProgress( left );
-    
+    let p = this._props;
+    this.track.setBounds( p.leftProgress, p.rightProgress );
     this.rightBound.show();
     this.leftBound.show();
+    return this;
+  }
+  /*
+    Method to set progress of the track.
+    @public
+    @param {Number} Progress to set [0...1].
+    @returns this.
+  */
+  setTrackProgress ( p ) {
+    this.track.setProgress( p );
+    return this;
   }
   /*
     Initial render method.
@@ -74,7 +73,6 @@ class PlayerSlider extends Module {
       onProgress: this._onLeftBoundProgress.bind(this)
     });
     this.track = new Slider({
-      isIt:       1,
       parent:     this.el,
       className:  CLASSES.slider,
       onProgress: this._onTrackProgress.bind(this)

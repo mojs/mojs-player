@@ -112,9 +112,10 @@ class Handle extends Module {
   */
   _applyShift ( shift ) {
     let p = this._props;
+    // translateZ(0)
     this.el.style.transform = ( p.direction === 'x' )
-      ? `translateX( ${  shift }px ) translateZ(0)`
-      : `translateY( ${ -shift }px ) translateZ(0)`;
+      ? `translateX( ${  shift }px )`
+      : `translateY( ${ -shift }px )`;
   }
   /*
     Method to get max width of the parent.

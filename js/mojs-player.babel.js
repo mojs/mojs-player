@@ -33,11 +33,18 @@ class MojsPlayer extends Module {
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
   }
   /*
+    Method to add tween/timeline to the self timeline.
+    @public
+    @param {Object} Tween/timeline to add.
+  */
+  // add ( timeline ) { this.timeline.add( timeline ); }
+  /*
     Method to render the module.
     @private
     @overrides @ Module
   */
   _render () {
+    this._initTimeline();
     let p         = this._props,
         className = 'mojs-player';
     super._render();
@@ -46,16 +53,6 @@ class MojsPlayer extends Module {
     let left  = this._createChild( 'div', CLASSES[ `${ className }__left` ] ),
         mid   = this._createChild( 'div', CLASSES[ `${ className }__mid` ] ),
         right = this._createChild( 'div', CLASSES[ `${ className }__right` ] );
-
-    this.playButton   = new PlayButton({
-      parent:            left,
-      isOn:              p.isPlaying,
-      onStateChange:     this._onPlayStateChange.bind( this )
-    });
-    this.stopButton   = new StopButton({
-      parent:            left,
-      onTap:             this._onStop.bind( this )
-    });
 
     this.repeatButton = new RepeatButton({
       parent:             left,
@@ -86,6 +83,16 @@ class MojsPlayer extends Module {
       onSpeedChange:  this._onSpeedChange.bind( this ),
       onIsSpeed:      this._onIsSpeed.bind( this )
     });
+
+    this.playButton   = new PlayButton({
+      parent:            left,
+      isOn:              p.isPlaying,
+      onStateChange:     this._onPlayStateChange.bind( this )
+    });
+    this.stopButton   = new StopButton({
+      parent:            left,
+      onTap:             this._onStop.bind( this )
+    });
     
     this.mojsButton   = new IconButton({
       parent:   right,
@@ -93,7 +100,41 @@ class MojsPlayer extends Module {
       link:     'https://github.com/legomushroom/mojs-player',
       title:    'mo • js'
     });
+
     window.addEventListener('beforeunload', this._onUnload.bind(this));
+  }
+  /*
+    Method to init timeline.
+    @private
+  */
+  _initTimeline () {
+    this.timeline = new mojs.Timeline({});
+    this.timeline.add( this._o.add );
+
+    this._sysTween = new mojs.Tween({
+      duration: this.timeline._props.repeatTime,
+      onProgress: (p) => {
+        this.playerSlider.setTrackProgress( p );
+        let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1;
+        if ( p >= rightBound ) {
+          this._onSysTweenComplete( true );
+        }
+      },
+      onComplete: this._onSysTweenComplete.bind( this )
+    });
+  }
+  /*
+    Method that is invoked on system tween completion.
+    @private
+    @param {Boolean} If forward direction.
+  */
+  _onSysTweenComplete ( isForward ) {
+    if ( this._props.isPlaying && isForward ) {
+      if ( this._props.isRepeat ) {
+        this._sysTween.stop();
+        this._play();
+      }
+    }
   }
   /*
     Method that is invoked play button state change.
@@ -102,6 +143,18 @@ class MojsPlayer extends Module {
   */
   _onPlayStateChange ( isPlay ) {
     this._props.isPlaying = isPlay;
+    if ( isPlay ) { this._play(); } else { this._sysTween.pause(); }
+  }
+  /*
+    Method to play system tween from progress.
+    @private
+  */
+  _play () {
+    let p         = this._props,
+        leftBound = ( p.isBounds ) ? p.leftBound : p.progress;
+    this._sysTween
+      .setProgress( p.progress )
+      .play();
   }
   /*
     Method that is invoked on stop button tap.
@@ -129,7 +182,10 @@ class MojsPlayer extends Module {
     @param {Number} Speed value.
     @param {Number} Slider progress.
   */
-  _onSpeedChange ( speed, progress ) { this._props.speed = progress; }
+  _onSpeedChange ( speed, progress ) {
+    this._props.speed = progress;
+    this._sysTween.setSpeed( speed );
+  }
   /*
     Method that is invoked on speed state change.
     @private
@@ -147,7 +203,14 @@ class MojsPlayer extends Module {
     @private
     @param {Number} Progress value [0...1].
   */
-  _onProgress ( progress ) { this._props.progress = progress; }
+  _onProgress ( progress ) {
+    // console.log(progress)
+    this._props.progress = progress;
+    if ( !this.timeline._prevTime ) {
+      this.timeline.setProgress( 0 );
+    }
+    this.timeline.setProgress( progress );
+  }
   /*
     Method that is invoked on timeline's right bound progress.
     @private
@@ -172,9 +235,18 @@ class MojsPlayer extends Module {
   _fallbackTo ( prop, fallback ) { return ( prop != null ) ? prop : fallback; }
 }
 
-let mojsPlayer = new MojsPlayer({
-
+let el = document.querySelector( '#js-el' );
+let tw = new mojs.Tween({
+  duration:  4000,
+  onUpdate (p) {
+    el.style.transform = `translateX(${ 1000 * p }px)`;
+  }
 });
+
+let mojsPlayer = new MojsPlayer({
+  add: tw
+});
+// mojsPlayer.add( tw );
 
 
 export default MojsPlayer;
