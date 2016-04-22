@@ -159,12 +159,6 @@
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	  };
 	  /*
-	    Method to add tween/timeline to the self timeline.
-	    @public
-	    @param {Object} Tween/timeline to add.
-	  */
-	  // add ( timeline ) { this.timeline.add( timeline ); }
-	  /*
 	    Method to render the module.
 	    @private
 	    @overrides @ Module
@@ -213,14 +207,16 @@
 	      onIsSpeed: this._onIsSpeed.bind(this)
 	    });
 
+	    this.stopButton = new _stopButton2.default({
+	      parent: left,
+	      isPrepend: true,
+	      onPointerUp: this._onStop.bind(this)
+	    });
 	    this.playButton = new _playButton2.default({
 	      parent: left,
 	      isOn: p.isPlaying,
+	      isPrepend: true,
 	      onStateChange: this._onPlayStateChange.bind(this)
-	    });
-	    this.stopButton = new _stopButton2.default({
-	      parent: left,
-	      onPointerUp: this._onStop.bind(this)
 	    });
 
 	    this.mojsButton = new _iconButton2.default({
@@ -246,25 +242,7 @@
 
 	    this._sysTween = new mojs.Tween({
 	      duration: this.timeline._props.repeatTime,
-	      onProgress: function onProgress(p) {
-	        _this2.playerSlider.setTrackProgress(p);
-	        var rightBound = _this2._props.isBounds ? _this2._props.rightBound : 1;
-	        var leftBound = _this2._props.isBounds ? _this2._props.leftBound : -1;
-	        if (p < leftBound && p !== 0) {
-	          _this2._sysTween.pause();
-	          setTimeout(function () {
-	            _this2._play();
-	          }, 1);
-	        }
-	        if (p >= rightBound) {
-	          _this2._sysTween.pause();
-	          setTimeout(function () {
-	            if (_this2._props.isRepeat) {
-	              _this2._play();
-	            }
-	          }, 1);
-	        }
-	      },
+	      onProgress: this._onSysProgress.bind(this),
 	      onComplete: this._onSysTweenComplete.bind(this),
 	      onPlaybackStop: function onPlaybackStop() {
 	        _this2._setPlayState('off');
@@ -276,6 +254,29 @@
 	        _this2._setPlayState('on');
 	      }
 	    });
+	  };
+	  /*
+	    Method that is invoked on system tween progress.
+	    @private
+	    @param {Number} Progress value [0...1].
+	  */
+
+
+	  MojsPlayer.prototype._onSysProgress = function _onSysProgress(p) {
+	    this.playerSlider.setTrackProgress(p);
+	    var rightBound = this._props.isBounds ? this._props.rightBound : 1,
+	        leftBound = this._props.isBounds ? this._props.leftBound : -1;
+
+	    if (p < leftBound && p !== 0) {
+	      this._sysTween.pause();
+	      this._defer(this._play);
+	    }
+	    if (p >= rightBound) {
+	      this._sysTween.pause();
+	      if (this._props.isRepeat) {
+	        this._defer(this._play);
+	      }
+	    }
 	  };
 	  /*
 	    Method to set play button state.
@@ -458,6 +459,16 @@
 	        fallback = boundName === 'left' ? 0 : 1;
 
 	    return p.isBounds ? p[boundName + 'Bound'] : fallback;
+	  };
+	  /*
+	    Method to defer a method.
+	    @private
+	    @param {Function} Function that should be defered.
+	  */
+
+
+	  MojsPlayer.prototype._defer = function _defer(fn) {
+	    setTimeout(fn.bind(this), 1);
 	  };
 
 	  return MojsPlayer;
@@ -1935,7 +1946,8 @@
 	  Module.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
 	      className: '',
-	      parent: document.body
+	      parent: document.body,
+	      isPrepend: false
 	    };
 	  };
 	  /*
@@ -2022,7 +2034,9 @@
 
 	    this.el = this._createElement(tagName);
 	    this._addMainClasses();
-	    p.parent.appendChild(this.el);
+
+	    var method = p.isPrepend ? 'prepend' : 'append';
+	    this['_' + method + 'Child'](p.parent, this.el);
 	  };
 	  /*
 	    Method to classes on `this.el`.
@@ -2122,6 +2136,28 @@
 	    className && child.classList.add(className);
 	    this.el.appendChild(child);
 	    return child;
+	  };
+	  /*
+	    Method to prepend child to the el.
+	    @private
+	    @param {Object} Parent HTMLElement.
+	    @param {Object} Child HTMLElement.
+	  */
+
+
+	  Module.prototype._appendChild = function _appendChild(el, childEl) {
+	    el.appendChild(childEl);
+	  };
+	  /*
+	    Method to prepend child to the el.
+	    @private
+	    @param {Object} Parent HTMLElement.
+	    @param {Object} Child HTMLElement.
+	  */
+
+
+	  Module.prototype._prependChild = function _prependChild(el, childEl) {
+	    el.insertBefore(childEl, el.firstChild);
 	  };
 
 	  return Module;
@@ -13285,7 +13321,7 @@
 
 
 	// module
-	exports.push([module.id, "._handle_1wxcg_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0);\n          transform:      translateX(0)\n  /*backface-visibility: hidden;*/\n}\n._handle__inner_1wxcg_1, ._handle__shadow_1wxcg_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  /*transform:      translateZ(0);*/\n  -webkit-backface-visibility:          hidden;\n          backface-visibility:          hidden\n}\n._handle__inner_1wxcg_1 {\n  background:          #FFF\n}\n._handle__shadow_1wxcg_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_1wxcg_5:hover ._handle__inner_1wxcg_1, ._handle_1wxcg_5:hover ._handle__shadow_1wxcg_1 {\n  -webkit-transform:          scale(1.1);\n          transform:          scale(1.1)\n}\n._handle_1wxcg_5:active ._handle__inner_1wxcg_1 {\n  -webkit-transform:          scale(1.2);\n          transform:          scale(1.2)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_1wxcg_5:active ._handle__shadow_1wxcg_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1);\n          transform:          scale(1)\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px;\n  margin-top:          -10px;\n  margin-top:          -0.625rem\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1 {\n  background:          #FF512F;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__inner_1wxcg_1, ._handle_1wxcg_5._is-bound_1wxcg_54 ._handle__shadow_1wxcg_1 {\n  border-radius:          0.1875rem\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 {\n  margin-left:          0\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__shadow_1wxcg_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__inner_1wxcg_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_1wxcg_5._is-inversed_1wxcg_81 ._handle__inner_1wxcg_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
+	exports.push([module.id, "._handle_q1som_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0);\n          transform:      translateX(0)\n  /*backface-visibility: hidden;*/\n}\n._handle__inner_q1som_1, ._handle__shadow_q1som_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  /*transform:      translateZ(0);*/\n  -webkit-backface-visibility:          hidden;\n          backface-visibility:          hidden\n}\n._handle__inner_q1som_1 {\n  background:          #FFF\n}\n._handle__shadow_q1som_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_q1som_5:hover ._handle__inner_q1som_1, ._handle_q1som_5:hover ._handle__shadow_q1som_1 {\n  -webkit-transform:          scale(1.1);\n          transform:          scale(1.1)\n}\n._handle_q1som_5:active ._handle__inner_q1som_1 {\n  -webkit-transform:          scale(1.2);\n          transform:          scale(1.2)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_q1som_5:active ._handle__shadow_q1som_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1);\n          transform:          scale(1)\n}\n._handle_q1som_5._is-bound_q1som_54 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px;\n  margin-top:          -10px;\n  margin-top:          -0.625rem\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1 {\n  background:          #FF512F\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1, ._handle_q1som_5._is-bound_q1som_54 ._handle__shadow_q1som_1 {\n  border-top-left-radius:          3px;\n  border-top-left-radius:          3px;\n  border-top-left-radius:          0.1875rem;\n  border-bottom-left-radius:          3px;\n  border-bottom-left-radius:          3px;\n  border-bottom-left-radius:          0.1875rem;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_q1som_5._is-inversed_q1som_82 {\n  margin-left:          0\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__shadow_q1som_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__inner_q1som_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__inner_q1som_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
 
 	// exports
 
@@ -13603,11 +13639,11 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_1wxcg_5",
-		"handle__inner": "_handle__inner_1wxcg_1",
-		"handle__shadow": "_handle__shadow_1wxcg_1",
-		"is-bound": "_is-bound_1wxcg_54",
-		"is-inversed": "_is-inversed_1wxcg_81"
+		"handle": "_handle_q1som_5",
+		"handle__inner": "_handle__inner_q1som_1",
+		"handle__shadow": "_handle__shadow_q1som_1",
+		"is-bound": "_is-bound_q1som_54",
+		"is-inversed": "_is-inversed_q1som_82"
 	};
 
 /***/ },

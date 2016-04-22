@@ -59,8 +59,6 @@ $handleHeight: 13;
   }
   &.is-bound &__inner {
     background:     $c-orange;
-    border-top-right-radius:     0;
-    border-bottom-right-radius:  0;
     $lineHeight: 40;
     &:after {
       content:      '';
@@ -75,7 +73,10 @@ $handleHeight: 13;
   }
   &.is-bound &__inner,
   &.is-bound &__shadow {
-    border-radius:  $BRADIUS;
+    border-top-left-radius:      $BRADIUS;
+    border-bottom-left-radius:   $BRADIUS;
+    border-top-right-radius:     0;
+    border-bottom-right-radius:  0;
   }
 
   &.is-inversed {

@@ -22,6 +22,7 @@ class Module {
     this._defaults = {
       className:  '',
       parent:     document.body,
+      isPrepend:  false
     };
   }
   /*
@@ -88,7 +89,9 @@ class Module {
 
     this.el = this._createElement( tagName );
     this._addMainClasses();
-    p.parent.appendChild( this.el );
+
+    let method = ( p.isPrepend ) ? 'prepend' : 'append' ;
+    this[ `_${ method }Child` ]( p.parent, this.el );
   }
   /*
     Method to classes on `this.el`.
@@ -165,6 +168,20 @@ class Module {
     this.el.appendChild( child );
     return child;
   }
+  /*
+    Method to prepend child to the el.
+    @private
+    @param {Object} Parent HTMLElement.
+    @param {Object} Child HTMLElement.
+  */
+  _appendChild ( el, childEl ) { el.appendChild( childEl ); }
+  /*
+    Method to prepend child to the el.
+    @private
+    @param {Object} Parent HTMLElement.
+    @param {Object} Child HTMLElement.
+  */
+  _prependChild ( el, childEl ) { el.insertBefore(childEl, el.firstChild); }
 }
 
 export default Module;

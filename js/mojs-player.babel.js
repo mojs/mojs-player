@@ -34,12 +34,6 @@ class MojsPlayer extends Module {
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
   }
   /*
-    Method to add tween/timeline to the self timeline.
-    @public
-    @param {Object} Tween/timeline to add.
-  */
-  // add ( timeline ) { this.timeline.add( timeline ); }
-  /*
     Method to render the module.
     @private
     @overrides @ Module
@@ -86,14 +80,16 @@ class MojsPlayer extends Module {
       onIsSpeed:      this._onIsSpeed.bind( this )
     });
 
-    this.playButton   = new PlayButton({
-      parent:            left,
-      isOn:              p.isPlaying,
-      onStateChange:     this._onPlayStateChange.bind( this )
-    });
     this.stopButton   = new StopButton({
-      parent:            left,
-      onPointerUp:       this._onStop.bind( this )
+      parent:         left,
+      isPrepend:      true,
+      onPointerUp:    this._onStop.bind( this )
+    });
+    this.playButton   = new PlayButton({
+      parent:         left,
+      isOn:           p.isPlaying,
+      isPrepend:      true,
+      onStateChange:  this._onPlayStateChange.bind( this )
     });
     
     this.mojsButton   = new IconButton({
@@ -114,27 +110,32 @@ class MojsPlayer extends Module {
     this.timeline.add( this._o.add );
 
     this._sysTween = new mojs.Tween({
-      duration: this.timeline._props.repeatTime,
-      onProgress: (p) => {
-        this.playerSlider.setTrackProgress( p );
-        let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1;
-        let leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
-        if ( p < leftBound && p !== 0 ) {
-          this._sysTween.pause()
-          setTimeout( () => { this._play(); }, 1 );
-        }
-        if ( p >= rightBound ) {
-          this._sysTween.pause()
-          setTimeout( () => {
-            if ( this._props.isRepeat ) { this._play(); }
-          }, 1 );
-        }
-      },
-      onComplete: this._onSysTweenComplete.bind( this ),
+      duration:        this.timeline._props.repeatTime,
+      onProgress:      this._onSysProgress.bind( this ),
+      onComplete:      this._onSysTweenComplete.bind( this ),
       onPlaybackStop:  () => { this._setPlayState( 'off' ); },
       onPlaybackPause: () => { this._setPlayState( 'off' ); },
       onPlaybackStart: () => { this._setPlayState( 'on' ) }
     });
+  }
+  /*
+    Method that is invoked on system tween progress.
+    @private
+    @param {Number} Progress value [0...1].
+  */
+  _onSysProgress ( p ) {
+    this.playerSlider.setTrackProgress( p );
+    let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1,
+        leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
+
+    if ( p < leftBound && p !== 0 ) {
+      this._sysTween.pause();
+      this._defer( this._play );
+    }
+    if ( p >= rightBound ) {
+      this._sysTween.pause();
+      if ( this._props.isRepeat ) { this._defer( this._play ); }
+    }
   }
   /*
     Method to set play button state.
@@ -276,6 +277,12 @@ class MojsPlayer extends Module {
    
     return ( p.isBounds ) ? p[ `${ boundName }Bound` ] : fallback;
   }
+  /*
+    Method to defer a method.
+    @private
+    @param {Function} Function that should be defered.
+  */
+  _defer (fn) { setTimeout( fn.bind(this), 1 ); }
 }
 
 let el = document.querySelector( '#js-el' );
