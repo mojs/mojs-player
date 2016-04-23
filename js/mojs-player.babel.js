@@ -1,32 +1,25 @@
 
+import Polyfill       from 'classlist-polyfill';
 import Module         from './components/module';
 import PlayerSlider   from './components/player-slider';
-import Polyfill       from 'classlist-polyfill';
-import Icon           from './components/icon';
 import IconButton     from './components/icon-button';
-import IconFork       from './components/icon-fork';
 import SpeedControl   from './components/speed-control';
-import Button         from './components/button';
-import PlayerButton   from './components/player-button';
 import PlayButton     from './components/play-button';
 import StopButton     from './components/stop-button';
-import OpacitySwitch  from './components/opacity-switch';
 import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
-import LabelButton    from './components/label-button';
+import Icons          from './components/icons';
 
 require('css/blocks/mojs-player.postcss.css');
 let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
 /*
   TODO:
-    - add track ripple
-    - add logo ripple
     - add hide button
     - add shortcuts
-    - delay option for player
     - fix window resize issue
     - encapsulate icons
+    - add logo ripple
 */
 
 class MojsPlayer extends Module {
@@ -52,7 +45,8 @@ class MojsPlayer extends Module {
   _render () {
     this._initTimeline();
     let p         = this._props,
-        className = 'mojs-player';
+        className = 'mojs-player',
+        icons     = new Icons();
     super._render();
     this.el.classList.add( CLASSES[ className ] );
     this.el.setAttribute( 'id', 'js-mojs-player' );
