@@ -12,7 +12,8 @@ class IconButton extends Button {
   */
   _declareDefaults () {
     super._declareDefaults();
-    this._defaults.icon = '';
+    this._defaults.icon      = '';
+    this._defaults.iconClass = '';
   }
   /*
     Initial render method.
@@ -22,13 +23,14 @@ class IconButton extends Button {
   */
   _render () {
     super._render();
-    let className = 'icon-button';
+    let p         = this._props,
+        className = 'icon-button';
     this.el.classList.add( CLASSES[ className ] );
-    
+      
     let icon = new Icon({
-      shape: this._props.icon,
-      parent: this.el,
-      className: CLASSES[ `icon` ]
+      shape:      this._props.icon,
+      parent:     this.el,
+      className:  [ CLASSES[ `icon` ], p.iconClass ]
     });
   }
 }

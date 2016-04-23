@@ -2,31 +2,28 @@
 @import '../assets/globals.postcss.css';
 
 .mojs-player {
-  position:     fixed;
-  left:         0;
-  bottom:       0;
-  width:        100%;
-  height:       calc( 40 * $PX );
-  
-  background:   rgba( 58, 8, 57, .85 );
+  position:       fixed;
+  left:           0;
+  bottom:         0;
+  width:          100%;
+  height:         calc( 40 * $PX );
+  background:     rgba( 58, 8, 57, .85 );
+  /*transition:     all .15s ease-out;*/
   
   $btnWidth: 35;
   $btnCount: 5;
   $leftWidth: calc( $btnCount * $btnWidth * $PX );
   &__left {
-    position:   absolute;
-    left:       0;
-    /*outline:  1px solid cyan;*/
-    width:      $leftWidth;
+    position:     absolute;
+    left:         0;
+    width:        $leftWidth;
   }
 
   &__mid {
     position:     absolute;
     left:         $leftWidth;
     right:        calc( $btnWidth * $PX );
-    /*outline:      1px solid yellow;*/
     overflow:     hidden;
-    /*margin-left:  calc( $btnCount * $btnWidth * $PX );*/
     padding:      0 calc( 20 * $PX );
   }
 
@@ -35,6 +32,14 @@
     right:        0;
   }
 
+  &__hide-button {
+    position:     absolute;
+    right:        calc( 7 * $PX );
+    bottom:       100%;
+  }
 
+  &.is-hidden {
+    transform:    translateY(100%);
+  }
 }
 

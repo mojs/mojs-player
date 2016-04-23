@@ -1,0 +1,28 @@
+
+@import '../assets/globals.postcss.css';
+
+.hide-button {
+  
+  width:        calc( 22 * $PX );
+  height:       calc( 16 * $PX );
+  
+  background:   $c-purple;
+
+  border-top-left-radius:  $BRADIUS;
+  border-top-right-radius: $BRADIUS;
+  
+  &__icon {
+    position:     absolute;
+    left:         50%;
+    top:          50%;
+    width:        calc( 8 * $PX );
+    height:       calc( 8 * $PX );
+    margin-top:   calc( 1 * $PX );
+    transform:    translate( -50%, -50% );
+  }
+
+  &.is-hidden &__icon {
+    transform:    translate( -50%, -65% ) rotate( 180deg ); 
+  }
+}
+

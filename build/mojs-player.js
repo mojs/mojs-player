@@ -71,57 +71,61 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _classlistPolyfill = __webpack_require__(130);
+	var _classlistPolyfill = __webpack_require__(78);
 
 	var _classlistPolyfill2 = _interopRequireDefault(_classlistPolyfill);
 
-	var _module = __webpack_require__(78);
-
-	var _module2 = _interopRequireDefault(_module);
-
-	var _playerSlider = __webpack_require__(79);
-
-	var _playerSlider2 = _interopRequireDefault(_playerSlider);
-
-	var _iconButton = __webpack_require__(135);
-
-	var _iconButton2 = _interopRequireDefault(_iconButton);
-
-	var _speedControl = __webpack_require__(151);
-
-	var _speedControl2 = _interopRequireDefault(_speedControl);
-
-	var _playButton = __webpack_require__(163);
-
-	var _playButton2 = _interopRequireDefault(_playButton);
-
-	var _stopButton = __webpack_require__(167);
-
-	var _stopButton2 = _interopRequireDefault(_stopButton);
-
-	var _repeatButton = __webpack_require__(175);
-
-	var _repeatButton2 = _interopRequireDefault(_repeatButton);
-
-	var _boundsButton = __webpack_require__(179);
-
-	var _boundsButton2 = _interopRequireDefault(_boundsButton);
-
-	var _icons = __webpack_require__(183);
+	var _icons = __webpack_require__(79);
 
 	var _icons2 = _interopRequireDefault(_icons);
 
+	var _module = __webpack_require__(80);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _playerSlider = __webpack_require__(81);
+
+	var _playerSlider2 = _interopRequireDefault(_playerSlider);
+
+	var _iconButton = __webpack_require__(132);
+
+	var _iconButton2 = _interopRequireDefault(_iconButton);
+
+	var _speedControl = __webpack_require__(144);
+
+	var _speedControl2 = _interopRequireDefault(_speedControl);
+
+	var _playButton = __webpack_require__(156);
+
+	var _playButton2 = _interopRequireDefault(_playButton);
+
+	var _stopButton = __webpack_require__(164);
+
+	var _stopButton2 = _interopRequireDefault(_stopButton);
+
+	var _repeatButton = __webpack_require__(168);
+
+	var _repeatButton2 = _interopRequireDefault(_repeatButton);
+
+	var _boundsButton = __webpack_require__(176);
+
+	var _boundsButton2 = _interopRequireDefault(_boundsButton);
+
+	var _hideButton = __webpack_require__(177);
+
+	var _hideButton2 = _interopRequireDefault(_hideButton);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(180);
-	var CLASSES = __webpack_require__(182);
+	__webpack_require__(181);
+	var CLASSES = __webpack_require__(183);
 
 	/*
 	  TODO:
 	    - add hide button
-	    - add shortcuts
 	    - fix window resize issue
-	    - encapsulate icons
+	    - add shortcuts
+	    - optimize arrays in args calls
 	    - add logo ripple
 	*/
 
@@ -146,6 +150,7 @@
 	    this._defaults.speed = this._fallbackTo(m.speed, .5);
 	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
+	    this._defaults.isHidden = this._fallbackTo(m.isHidden, false);
 	  };
 	  /*
 	    Method to render the module.
@@ -218,6 +223,14 @@
 	      icon: 'mojs',
 	      link: 'https://github.com/legomushroom/mojs-player',
 	      title: 'mo • js'
+	    });
+
+	    console.log(CLASSES[className + '__hide-button']);
+	    this.hideButton = new _hideButton2.default({
+	      parent: this.el,
+	      className: CLASSES[className + '__hide-button'],
+	      isOn: p.isHidden,
+	      onStateChange: this._onHideStateChange.bind(this)
 	    });
 
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
@@ -294,6 +307,8 @@
 	      this._sysTween.pause();
 	      if (this._props.isRepeat) {
 	        this._defer(this._play);
+	      } else {
+	        this._props.isPlaying = false;
 	      }
 	    }
 	  };
@@ -341,6 +356,18 @@
 	    } else {
 	      this._sysTween.pause();
 	    }
+	  };
+	  /*
+	    Callback for hide button change state.
+	    @private
+	    @param {Boolean}
+	  */
+
+
+	  MojsPlayer.prototype._onHideStateChange = function _onHideStateChange(isHidden) {
+	    this._props.isHidden = isHidden;
+	    var method = isHidden ? 'add' : 'remove';
+	    this.el.classList[method](CLASSES['is-hidden']);
 	  };
 	  /*
 	    Method to play system tween from progress.
@@ -504,7 +531,6 @@
 	var mojsPlayer = new MojsPlayer({
 	  add: tw
 	});
-	// mojsPlayer.add( tw );
 
 	exports.default = MojsPlayer;
 
@@ -1919,6 +1945,312 @@
 
 /***/ },
 /* 78 */
+/***/ function(module, exports) {
+
+	/*
+	 * classList.js: Cross-browser full element.classList implementation.
+	 * 2014-07-23
+	 *
+	 * By Eli Grey, http://eligrey.com
+	 * Public Domain.
+	 * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+	 */
+
+	/*global self, document, DOMException */
+
+	/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
+
+	/* Copied from MDN:
+	 * https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
+	 */
+
+	if ("document" in window.self) {
+
+	  // Full polyfill for browsers with no classList support
+	  if (!("classList" in document.createElement("_"))) {
+
+	  (function (view) {
+
+	    "use strict";
+
+	    if (!('Element' in view)) return;
+
+	    var
+	        classListProp = "classList"
+	      , protoProp = "prototype"
+	      , elemCtrProto = view.Element[protoProp]
+	      , objCtr = Object
+	      , strTrim = String[protoProp].trim || function () {
+	        return this.replace(/^\s+|\s+$/g, "");
+	      }
+	      , arrIndexOf = Array[protoProp].indexOf || function (item) {
+	        var
+	            i = 0
+	          , len = this.length
+	        ;
+	        for (; i < len; i++) {
+	          if (i in this && this[i] === item) {
+	            return i;
+	          }
+	        }
+	        return -1;
+	      }
+	      // Vendors: please allow content code to instantiate DOMExceptions
+	      , DOMEx = function (type, message) {
+	        this.name = type;
+	        this.code = DOMException[type];
+	        this.message = message;
+	      }
+	      , checkTokenAndGetIndex = function (classList, token) {
+	        if (token === "") {
+	          throw new DOMEx(
+	              "SYNTAX_ERR"
+	            , "An invalid or illegal string was specified"
+	          );
+	        }
+	        if (/\s/.test(token)) {
+	          throw new DOMEx(
+	              "INVALID_CHARACTER_ERR"
+	            , "String contains an invalid character"
+	          );
+	        }
+	        return arrIndexOf.call(classList, token);
+	      }
+	      , ClassList = function (elem) {
+	        var
+	            trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+	          , classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+	          , i = 0
+	          , len = classes.length
+	        ;
+	        for (; i < len; i++) {
+	          this.push(classes[i]);
+	        }
+	        this._updateClassName = function () {
+	          elem.setAttribute("class", this.toString());
+	        };
+	      }
+	      , classListProto = ClassList[protoProp] = []
+	      , classListGetter = function () {
+	        return new ClassList(this);
+	      }
+	    ;
+	    // Most DOMException implementations don't allow calling DOMException's toString()
+	    // on non-DOMExceptions. Error's toString() is sufficient here.
+	    DOMEx[protoProp] = Error[protoProp];
+	    classListProto.item = function (i) {
+	      return this[i] || null;
+	    };
+	    classListProto.contains = function (token) {
+	      token += "";
+	      return checkTokenAndGetIndex(this, token) !== -1;
+	    };
+	    classListProto.add = function () {
+	      var
+	          tokens = arguments
+	        , i = 0
+	        , l = tokens.length
+	        , token
+	        , updated = false
+	      ;
+	      do {
+	        token = tokens[i] + "";
+	        if (checkTokenAndGetIndex(this, token) === -1) {
+	          this.push(token);
+	          updated = true;
+	        }
+	      }
+	      while (++i < l);
+
+	      if (updated) {
+	        this._updateClassName();
+	      }
+	    };
+	    classListProto.remove = function () {
+	      var
+	          tokens = arguments
+	        , i = 0
+	        , l = tokens.length
+	        , token
+	        , updated = false
+	        , index
+	      ;
+	      do {
+	        token = tokens[i] + "";
+	        index = checkTokenAndGetIndex(this, token);
+	        while (index !== -1) {
+	          this.splice(index, 1);
+	          updated = true;
+	          index = checkTokenAndGetIndex(this, token);
+	        }
+	      }
+	      while (++i < l);
+
+	      if (updated) {
+	        this._updateClassName();
+	      }
+	    };
+	    classListProto.toggle = function (token, force) {
+	      token += "";
+
+	      var
+	          result = this.contains(token)
+	        , method = result ?
+	          force !== true && "remove"
+	        :
+	          force !== false && "add"
+	      ;
+
+	      if (method) {
+	        this[method](token);
+	      }
+
+	      if (force === true || force === false) {
+	        return force;
+	      } else {
+	        return !result;
+	      }
+	    };
+	    classListProto.toString = function () {
+	      return this.join(" ");
+	    };
+
+	    if (objCtr.defineProperty) {
+	      var classListPropDesc = {
+	          get: classListGetter
+	        , enumerable: true
+	        , configurable: true
+	      };
+	      try {
+	        objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	      } catch (ex) { // IE 8 doesn't support enumerable:true
+	        if (ex.number === -0x7FF5EC54) {
+	          classListPropDesc.enumerable = false;
+	          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+	        }
+	      }
+	    } else if (objCtr[protoProp].__defineGetter__) {
+	      elemCtrProto.__defineGetter__(classListProp, classListGetter);
+	    }
+
+	    }(window.self));
+
+	    } else {
+	    // There is full or partial native classList support, so just check if we need
+	    // to normalize the add/remove and toggle APIs.
+
+	    (function () {
+	      "use strict";
+
+	      var testElement = document.createElement("_");
+
+	      testElement.classList.add("c1", "c2");
+
+	      // Polyfill for IE 10/11 and Firefox <26, where classList.add and
+	      // classList.remove exist but support only one argument at a time.
+	      if (!testElement.classList.contains("c2")) {
+	        var createMethod = function(method) {
+	          var original = DOMTokenList.prototype[method];
+
+	          DOMTokenList.prototype[method] = function(token) {
+	            var i, len = arguments.length;
+
+	            for (i = 0; i < len; i++) {
+	              token = arguments[i];
+	              original.call(this, token);
+	            }
+	          };
+	        };
+	        createMethod('add');
+	        createMethod('remove');
+	      }
+
+	      testElement.classList.toggle("c3", false);
+
+	      // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
+	      // support the second argument.
+	      if (testElement.classList.contains("c3")) {
+	        var _toggle = DOMTokenList.prototype.toggle;
+
+	        DOMTokenList.prototype.toggle = function(token, force) {
+	          if (1 in arguments && !this.contains(token) === !force) {
+	            return force;
+	          } else {
+	            return _toggle.call(this, token);
+	          }
+	        };
+
+	      }
+
+	      testElement = null;
+	    }());
+	  }
+	}
+
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(80);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Icons = function (_Module) {
+	  (0, _inherits3.default)(Icons, _Module);
+
+	  function Icons() {
+	    (0, _classCallCheck3.default)(this, Icons);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Icons.prototype._render = function _render() {
+	    this.el = this._createElement('div');
+	    this.el.innerHTML = this.getIcons();
+	    this.el.setAttribute('id', 'mojs-player-icons');
+	    this._prependChild(document.body, this.el);
+	  };
+	  /*
+	    Method to get icons shapes.
+	    @private
+	  */
+
+
+	  Icons.prototype.getIcons = function getIcons() {
+	    return '<svg id="svg-source" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%; width:0; height:0;" xmlns:xlink="http://www.w3.org/1999/xlink">\n              <path id="play-icon-shape" d="M0.000549111126,31.9982154 C-0.000686388908,21.3321436 0.000549111126,10.6660718 0.000549111126,1.77635684e-15 C10.6678564,5.33118265 21.3339282,10.6648363 32,15.9984899 C21.3339282,21.3321436 10.6678564,26.6657972 0.000549111126,31.9982154 L0.000549111126,31.9982154 Z"></path>\n              <g id="pause-icon-shape">\n                <path d="M-8.8817842e-16,0 C3.55529197,-0.000248559134 7.11058393,-0.000248559134 10.6666667,0 C10.6669303,10.6669152 10.6669303,21.3330848 10.6666667,32 C7.11058393,32.0002486 3.55529197,32.0002486 -8.8817842e-16,32 L-8.8817842e-16,0 L-8.8817842e-16,0 Z"></path>\n                <path d="M21.3333333,0 C24.8894161,-0.000248559134 28.444708,-0.000248559134 32,0 L32,32 C28.444708,32.0002486 24.8894161,32.0002486 21.3333333,32 C21.3330697,21.3330848 21.3330697,10.6669152 21.3333333,0 L21.3333333,0 Z"></path>\n              </g>\n              <rect id="stop-icon-shape" x="0" y="0" width="32" height="32"></rect>\n              <path id="repeat-icon-shape" d="M9.871,1.48 C12.322,0.209 15.176,-0.247 17.906,0.137 C20.914,0.556 23.762,2.041 25.823,4.274 C27.359,5.896 28.452,7.916 29.033,10.069 C29.472,9.674 29.825,9.123 30.422,8.955 C31.003,8.779 31.696,9.094 31.909,9.67 C32.106,10.155 31.972,10.736 31.6,11.1 C30.713,12.013 29.808,12.908 28.91,13.811 C28.709,14.011 28.506,14.231 28.23,14.323 C27.772,14.498 27.224,14.379 26.881,14.03 C25.918,13.021 24.913,12.052 23.938,11.055 C23.542,10.656 23.511,9.982 23.82,9.523 C24.104,9.072 24.681,8.844 25.196,8.988 C25.679,9.098 25.966,9.536 26.31,9.852 C25.345,7.149 23.302,4.829 20.694,3.611 C18.713,2.653 16.434,2.344 14.264,2.689 C10.576,3.238 7.291,5.853 5.897,9.306 C5.697,9.872 5.1,10.301 4.488,10.184 C3.863,10.113 3.366,9.501 3.399,8.878 C3.413,8.644 3.512,8.429 3.601,8.216 C4.804,5.321 7.089,2.911 9.871,1.48 Z M3.374,12.873 C3.855,12.401 4.7,12.476 5.151,12.952 C6.038,13.863 6.935,14.765 7.839,15.659 C8.049,15.864 8.261,16.088 8.343,16.379 C8.605,17.177 7.852,18.12 7.004,17.996 C6.43,17.963 6.069,17.47 5.692,17.101 C6.657,19.849 8.766,22.168 11.406,23.395 C14.249,24.712 17.666,24.737 20.514,23.423 C22.848,22.38 24.775,20.47 25.864,18.16 C26.072,17.753 26.185,17.255 26.588,16.987 C27.062,16.635 27.776,16.687 28.195,17.101 C28.527,17.419 28.687,17.926 28.541,18.369 C27.351,21.477 24.943,24.088 21.961,25.559 C18.251,27.421 13.67,27.405 9.973,25.52 C6.545,23.823 3.931,20.588 2.96,16.892 C2.624,17.217 2.319,17.58 1.935,17.85 C1.405,18.183 0.615,18.077 0.239,17.56 C-0.143,17.042 -0.048,16.254 0.431,15.828 C1.415,14.846 2.374,13.838 3.374,12.873 Z"></path>\n              <path id="bounds-icon-shape" d="M16,6 L16,-1.13686838e-13 L18,-1.13686838e-13 L18,6 L21.9941413,6 C23.1019465,6 24,6.89821238 24,7.99079514 L24,24.0092049 C24,25.1086907 23.1029399,26 21.9941413,26 L18,26 L18,32 L16,32 L16,26 L12.0058587,26 C10.8980535,26 10,25.1017876 10,24.0092049 L10,7.99079514 C10,6.89130934 10.8970601,6 12.0058587,6 L16,6 Z"></path>\n              <path id="mojs-icon-shape" d="M18.4678907,2.67700048 C19.488586,3.25758625 20.2789227,4.18421651 20.87823,5.1973579 C24.0807788,10.501451 27.2777091,15.8113116 30.480258,21.1154047 C31.1320047,22.1612281 31.7706417,23.2647256 31.9354512,24.5162532 C32.188284,26.0619186 31.6919826,27.7363895 30.5589171,28.80336 C29.4501984,29.8857103 27.8807622,30.3182659 26.3806209,30.3048086 C19.4511293,30.3086535 12.5235106,30.3086535 5.59401901,30.3048086 C3.71556494,30.343258 1.69852104,29.5723478 0.683444165,27.8709623 C-0.406546132,26.1099803 -0.0975282643,23.7914822 0.940022637,22.0843293 C4.34296485,16.4130445 7.76650826,10.7532945 11.1825603,5.08969961 C11.9747698,3.74781595 13.1846215,2.60202418 14.6847628,2.18292584 C15.9451812,1.81573418 17.3348251,2.01182606 18.4678907,2.67700048 Z M15.3334668,9.51526849 C15.6146238,9.03779476 16.0791597,9.02250655 16.3785679,9.4929547 L25.2763555,23.4736913 C25.5723919,23.9388414 25.3568433,24.3159201 24.8074398,24.3159202 L7.62314647,24.3159205 C7.06813505,24.3159206 6.84622798,23.9286889 7.12728913,23.4513779 L15.3334668,9.51526849 Z" fill-rule="evenodd"></path>\n              <path id="hide-icon-shape" d="M18.0297509,24.5024819 C18.1157323,24.4325886 18.1989631,24.3576024 18.2790422,24.2775233 L31.0556518,11.5009137 C32.3147827,10.2417828 32.3147827,8.20347913 31.0556518,6.9443482 C29.7965209,5.68521727 27.7582172,5.68521727 26.4990863,6.9443482 L15.9992406,17.4441939 L5.50091369,6.94586705 C4.24330161,5.68825498 2.20347913,5.68673612 0.944348198,6.94586705 C-0.314782733,8.20499798 -0.314782733,10.2433016 0.944348198,11.5024325 L13.7209578,24.2790422 C14.9005165,25.4586008 16.7638781,25.5331444 18.0298642,24.5026731 L18.0297509,24.5024819 Z"></path>\n            </svg>';
+	  };
+
+	  return Icons;
+	}(_module2.default);
+
+	exports.default = Icons;
+
+/***/ },
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2186,7 +2518,7 @@
 	exports.default = Module;
 
 /***/ },
-/* 79 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2205,19 +2537,19 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _slider = __webpack_require__(80);
+	var _slider = __webpack_require__(82);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(127);
-	var CLASSES = __webpack_require__(129);
-	var SLIDER_CLASSES = __webpack_require__(126);
+	__webpack_require__(129);
+	var CLASSES = __webpack_require__(131);
+	var SLIDER_CLASSES = __webpack_require__(128);
 
 	var PlayerSlider = function (_Module) {
 	  (0, _inherits3.default)(PlayerSlider, _Module);
@@ -2376,7 +2708,7 @@
 	exports.default = PlayerSlider;
 
 /***/ },
-/* 80 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2395,22 +2727,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _handle = __webpack_require__(81);
+	var _handle = __webpack_require__(83);
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _track = __webpack_require__(119);
+	var _track = __webpack_require__(121);
 
 	var _track2 = _interopRequireDefault(_track);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(124);
-	var CLASSES = __webpack_require__(126);
+	__webpack_require__(126);
+	var CLASSES = __webpack_require__(128);
 
 	var Slider = function (_Module) {
 	  (0, _inherits3.default)(Slider, _Module);
@@ -2619,7 +2951,7 @@
 	exports.default = Slider;
 
 /***/ },
-/* 81 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2638,22 +2970,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(82);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _moJs = __webpack_require__(83);
+	var _moJs = __webpack_require__(85);
 
 	var _moJs2 = _interopRequireDefault(_moJs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(114);
-	var CLASSES = __webpack_require__(118);
+	__webpack_require__(116);
+	var CLASSES = __webpack_require__(120);
 
 	var Handle = function (_Module) {
 	  (0, _inherits3.default)(Handle, _Module);
@@ -3000,7 +3332,7 @@
 	exports.default = Handle;
 
 /***/ },
-/* 82 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*! Hammer.JS - v2.0.6 - 2015-12-23
@@ -5574,76 +5906,76 @@
 
 
 /***/ },
-/* 83 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _shapesShapesMap = __webpack_require__(85);
+	var _shapesShapesMap = __webpack_require__(87);
 
 	var _shapesShapesMap2 = _interopRequireDefault(_shapesShapesMap);
 
-	var _burst = __webpack_require__(95);
+	var _burst = __webpack_require__(97);
 
 	var _burst2 = _interopRequireDefault(_burst);
 
-	var _transit = __webpack_require__(96);
+	var _transit = __webpack_require__(98);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _swirl = __webpack_require__(109);
+	var _swirl = __webpack_require__(111);
 
 	var _swirl2 = _interopRequireDefault(_swirl);
 
-	var _stagger = __webpack_require__(110);
+	var _stagger = __webpack_require__(112);
 
 	var _stagger2 = _interopRequireDefault(_stagger);
 
-	var _spriter = __webpack_require__(111);
+	var _spriter = __webpack_require__(113);
 
 	var _spriter2 = _interopRequireDefault(_spriter);
 
-	var _motionPath = __webpack_require__(112);
+	var _motionPath = __webpack_require__(114);
 
 	var _motionPath2 = _interopRequireDefault(_motionPath);
 
-	var _tweenTween = __webpack_require__(99);
+	var _tweenTween = __webpack_require__(101);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(107);
+	var _tweenTimeline = __webpack_require__(109);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var _tweenTweener = __webpack_require__(100);
+	var _tweenTweener = __webpack_require__(102);
 
 	var _tweenTweener2 = _interopRequireDefault(_tweenTweener);
 
-	var _tweenTweenable = __webpack_require__(98);
+	var _tweenTweenable = __webpack_require__(100);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _thenable = __webpack_require__(97);
+	var _thenable = __webpack_require__(99);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
-	var _tunable = __webpack_require__(108);
+	var _tunable = __webpack_require__(110);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _module2 = __webpack_require__(87);
+	var _module2 = __webpack_require__(89);
 
 	var _module3 = _interopRequireDefault(_module2);
 
 	var _tweenTweener3 = _interopRequireDefault(_tweenTweener);
 
-	var _easingEasing = __webpack_require__(103);
+	var _easingEasing = __webpack_require__(105);
 
 	var _easingEasing2 = _interopRequireDefault(_easingEasing);
 
@@ -5679,7 +6011,7 @@
 	}
 
 /***/ },
-/* 84 */
+/* 86 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -6339,29 +6671,29 @@
 
 
 /***/ },
-/* 85 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var Bit, BitsMap, Circle, Cross, Equal, Line, Polygon, Rect, Zigzag, h;
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
-	  Circle = __webpack_require__(88);
+	  Circle = __webpack_require__(90);
 
-	  Line = __webpack_require__(89);
+	  Line = __webpack_require__(91);
 
-	  Zigzag = __webpack_require__(90);
+	  Zigzag = __webpack_require__(92);
 
-	  Rect = __webpack_require__(91);
+	  Rect = __webpack_require__(93);
 
-	  Polygon = __webpack_require__(92);
+	  Polygon = __webpack_require__(94);
 
-	  Cross = __webpack_require__(93);
+	  Cross = __webpack_require__(95);
 
-	  Equal = __webpack_require__(94);
+	  Equal = __webpack_require__(96);
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
 	  BitsMap = (function() {
 	    function BitsMap() {}
@@ -6396,7 +6728,7 @@
 
 
 /***/ },
-/* 86 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6415,11 +6747,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _module2 = __webpack_require__(87);
+	var _module2 = __webpack_require__(89);
 
 	var _module3 = _interopRequireDefault(_module2);
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -6610,7 +6942,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 87 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6625,7 +6957,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	/*
 	  Base class for module. Extends and parses defaults.
@@ -7048,7 +7380,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 88 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7059,7 +7391,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Circle = (function(_super) {
 	    __extends(Circle, _super);
@@ -7101,7 +7433,7 @@
 
 
 /***/ },
-/* 89 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7112,7 +7444,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Line = (function(_super) {
 	    __extends(Line, _super);
@@ -7143,7 +7475,7 @@
 
 
 /***/ },
-/* 90 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7154,7 +7486,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Zigzag = (function(_super) {
 	    __extends(Zigzag, _super);
@@ -7206,7 +7538,7 @@
 
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7217,7 +7549,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Rect = (function(_super) {
 	    __extends(Rect, _super);
@@ -7264,7 +7596,7 @@
 
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7275,9 +7607,9 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
 	  Polygon = (function(_super) {
 	    __extends(Polygon, _super);
@@ -7338,7 +7670,7 @@
 
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7349,7 +7681,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Cross = (function(_super) {
 	    __extends(Cross, _super);
@@ -7399,7 +7731,7 @@
 
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -7410,7 +7742,7 @@
 	    __hasProp = {}.hasOwnProperty,
 	    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-	  Bit = __webpack_require__(86)["default"] || __webpack_require__(86);
+	  Bit = __webpack_require__(88)["default"] || __webpack_require__(88);
 
 	  Equal = (function(_super) {
 	    __extends(Equal, _super);
@@ -7461,7 +7793,7 @@
 
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7480,23 +7812,23 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _transit = __webpack_require__(96);
+	var _transit = __webpack_require__(98);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _tweenTimeline = __webpack_require__(107);
+	var _tweenTimeline = __webpack_require__(109);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var _swirl = __webpack_require__(109);
+	var _swirl = __webpack_require__(111);
 
 	var _swirl2 = _interopRequireDefault(_swirl);
 
-	var _tunable = __webpack_require__(108);
+	var _tunable = __webpack_require__(110);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -8019,7 +8351,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8038,27 +8370,27 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _module2 = __webpack_require__(87);
+	var _module2 = __webpack_require__(89);
 
 	var _module3 = _interopRequireDefault(_module2);
 
-	var _thenable = __webpack_require__(97);
+	var _thenable = __webpack_require__(99);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
-	var _tunable = __webpack_require__(108);
+	var _tunable = __webpack_require__(110);
 
 	var _tunable2 = _interopRequireDefault(_tunable);
 
-	var _tweenTweenable = __webpack_require__(98);
+	var _tweenTweenable = __webpack_require__(100);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _tweenTween = __webpack_require__(99);
+	var _tweenTween = __webpack_require__(101);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(107);
+	var _tweenTimeline = __webpack_require__(109);
 
 	// TODO
 	//  - refactor
@@ -8068,9 +8400,9 @@
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
-	var h = __webpack_require__(84);
-	var Bit = __webpack_require__(86);
-	var shapesMap = __webpack_require__(85);
+	var h = __webpack_require__(86);
+	var Bit = __webpack_require__(88);
+	var shapesMap = __webpack_require__(87);
 
 	var Transit = (function (_Tunable) {
 	  _inherits(Transit, _Tunable);
@@ -8587,7 +8919,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8608,11 +8940,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _tweenTweenable = __webpack_require__(98);
+	var _tweenTweenable = __webpack_require__(100);
 
 	var _tweenTweenable2 = _interopRequireDefault(_tweenTweenable);
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	/*
 	  The Thenable class adds .then public method and
@@ -8892,7 +9224,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8911,15 +9243,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _tween = __webpack_require__(99);
+	var _tween = __webpack_require__(101);
 
 	var _tween2 = _interopRequireDefault(_tween);
 
-	var _timeline = __webpack_require__(107);
+	var _timeline = __webpack_require__(109);
 
 	var _timeline2 = _interopRequireDefault(_timeline);
 
-	var _module2 = __webpack_require__(87);
+	var _module2 = __webpack_require__(89);
 
 	/*
 	  Class to define a module ancestor
@@ -9109,7 +9441,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// import h from '../h';
@@ -9129,19 +9461,19 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweener = __webpack_require__(100);
+	var _tweener = __webpack_require__(102);
 
 	var _tweener2 = _interopRequireDefault(_tweener);
 
-	var _easingEasing = __webpack_require__(103);
+	var _easingEasing = __webpack_require__(105);
 
 	var _easingEasing2 = _interopRequireDefault(_easingEasing);
 
-	var _module2 = __webpack_require__(87);
+	var _module2 = __webpack_require__(89);
 
 	var _module3 = _interopRequireDefault(_module2);
 
@@ -10327,7 +10659,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -10342,11 +10674,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	__webpack_require__(101);
+	__webpack_require__(103);
 
-	__webpack_require__(102);
+	__webpack_require__(104);
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
@@ -10478,7 +10810,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports) {
 
 	
@@ -10517,7 +10849,7 @@
 
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports) {
 
 	
@@ -10544,19 +10876,19 @@
 
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var Easing, PathEasing, bezier, easing, h, mix;
 
-	  bezier = __webpack_require__(104);
+	  bezier = __webpack_require__(106);
 
-	  PathEasing = __webpack_require__(105);
+	  PathEasing = __webpack_require__(107);
 
-	  mix = __webpack_require__(106);
+	  mix = __webpack_require__(108);
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
 	  Easing = (function() {
 	    function Easing() {}
@@ -10847,14 +11179,14 @@
 
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function() {
 	  var BezierEasing, bezierEasing, h,
 	    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
 
 	  /**
@@ -11027,13 +11359,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var PathEasing, h;
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
 	  PathEasing = (function() {
 	    PathEasing.prototype._vars = function() {
@@ -11266,7 +11598,7 @@
 
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -11342,7 +11674,7 @@
 
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11361,15 +11693,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweener = __webpack_require__(100);
+	var _tweener = __webpack_require__(102);
 
 	var _tweener2 = _interopRequireDefault(_tweener);
 
-	var _tween = __webpack_require__(99);
+	var _tween = __webpack_require__(101);
 
 	var _tween2 = _interopRequireDefault(_tween);
 
@@ -11682,7 +12014,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11703,11 +12035,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _thenable = __webpack_require__(97);
+	var _thenable = __webpack_require__(99);
 
 	var _thenable2 = _interopRequireDefault(_thenable);
 
@@ -11954,7 +12286,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 109 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -11973,11 +12305,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
-	var _transit = __webpack_require__(96);
+	var _transit = __webpack_require__(98);
 
 	var _transit2 = _interopRequireDefault(_transit);
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	/*
 	  *TODO:*
@@ -12185,7 +12517,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 110 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12196,11 +12528,11 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweenTimeline = __webpack_require__(107);
+	var _tweenTimeline = __webpack_require__(109);
 
 	var _tweenTimeline2 = _interopRequireDefault(_tweenTimeline);
 
@@ -12335,7 +12667,7 @@
 	};
 
 /***/ },
-/* 111 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -12350,15 +12682,15 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _h = __webpack_require__(84);
+	var _h = __webpack_require__(86);
 
 	var _h2 = _interopRequireDefault(_h);
 
-	var _tweenTween = __webpack_require__(99);
+	var _tweenTween = __webpack_require__(101);
 
 	var _tweenTween2 = _interopRequireDefault(_tweenTween);
 
-	var _tweenTimeline = __webpack_require__(107);
+	var _tweenTimeline = __webpack_require__(109);
 
 	/*
 	  Class for toggling opacity on bunch of elements
@@ -12612,20 +12944,20 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 112 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	(function() {
 	  var MotionPath, Timeline, Tween, h, resize,
 	    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-	  h = __webpack_require__(84);
+	  h = __webpack_require__(86);
 
-	  resize = __webpack_require__(113);
+	  resize = __webpack_require__(115);
 
-	  Tween = __webpack_require__(99)["default"];
+	  Tween = __webpack_require__(101)["default"];
 
-	  Timeline = __webpack_require__(107)["default"];
+	  Timeline = __webpack_require__(109)["default"];
 
 	  MotionPath = (function() {
 	    MotionPath.prototype.defaults = {
@@ -13150,7 +13482,7 @@
 
 
 /***/ },
-/* 113 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
@@ -13376,16 +13708,16 @@
 
 
 /***/ },
-/* 114 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(115);
+	var content = __webpack_require__(117);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -13402,10 +13734,10 @@
 	}
 
 /***/ },
-/* 115 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -13416,7 +13748,7 @@
 
 
 /***/ },
-/* 116 */
+/* 118 */
 /***/ function(module, exports) {
 
 	/*
@@ -13472,7 +13804,7 @@
 
 
 /***/ },
-/* 117 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -13724,7 +14056,7 @@
 
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -13736,7 +14068,7 @@
 	};
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13755,22 +14087,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _handle = __webpack_require__(81);
+	var _handle = __webpack_require__(83);
 
 	var _handle2 = _interopRequireDefault(_handle);
 
-	var _hammerjs = __webpack_require__(82);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _ripple = __webpack_require__(120);
+	var _ripple = __webpack_require__(122);
 
 	var _ripple2 = _interopRequireDefault(_ripple);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(121);
-	var CLASSES = __webpack_require__(123);
+	__webpack_require__(123);
+	var CLASSES = __webpack_require__(125);
 
 	var Track = function (_Handle) {
 	  (0, _inherits3.default)(Track, _Handle);
@@ -13901,7 +14233,7 @@
 	exports.default = Track;
 
 /***/ },
-/* 120 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13920,15 +14252,15 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(82);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _moJs = __webpack_require__(83);
+	var _moJs = __webpack_require__(85);
 
 	var _moJs2 = _interopRequireDefault(_moJs);
 
@@ -14052,16 +14384,16 @@
 	exports.default = Ripple;
 
 /***/ },
-/* 121 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(122);
+	var content = __webpack_require__(124);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14078,10 +14410,10 @@
 	}
 
 /***/ },
-/* 122 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -14092,7 +14424,7 @@
 
 
 /***/ },
-/* 123 */
+/* 125 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14106,16 +14438,16 @@
 	};
 
 /***/ },
-/* 124 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(125);
+	var content = __webpack_require__(127);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14132,10 +14464,10 @@
 	}
 
 /***/ },
-/* 125 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -14146,7 +14478,7 @@
 
 
 /***/ },
-/* 126 */
+/* 128 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14159,16 +14491,16 @@
 	};
 
 /***/ },
-/* 127 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(128);
+	var content = __webpack_require__(130);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14185,10 +14517,10 @@
 	}
 
 /***/ },
-/* 128 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -14199,7 +14531,7 @@
 
 
 /***/ },
-/* 129 */
+/* 131 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14208,252 +14540,7 @@
 	};
 
 /***/ },
-/* 130 */
-/***/ function(module, exports) {
-
-	/*
-	 * classList.js: Cross-browser full element.classList implementation.
-	 * 2014-07-23
-	 *
-	 * By Eli Grey, http://eligrey.com
-	 * Public Domain.
-	 * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
-	 */
-
-	/*global self, document, DOMException */
-
-	/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
-
-	/* Copied from MDN:
-	 * https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
-	 */
-
-	if ("document" in window.self) {
-
-	  // Full polyfill for browsers with no classList support
-	  if (!("classList" in document.createElement("_"))) {
-
-	  (function (view) {
-
-	    "use strict";
-
-	    if (!('Element' in view)) return;
-
-	    var
-	        classListProp = "classList"
-	      , protoProp = "prototype"
-	      , elemCtrProto = view.Element[protoProp]
-	      , objCtr = Object
-	      , strTrim = String[protoProp].trim || function () {
-	        return this.replace(/^\s+|\s+$/g, "");
-	      }
-	      , arrIndexOf = Array[protoProp].indexOf || function (item) {
-	        var
-	            i = 0
-	          , len = this.length
-	        ;
-	        for (; i < len; i++) {
-	          if (i in this && this[i] === item) {
-	            return i;
-	          }
-	        }
-	        return -1;
-	      }
-	      // Vendors: please allow content code to instantiate DOMExceptions
-	      , DOMEx = function (type, message) {
-	        this.name = type;
-	        this.code = DOMException[type];
-	        this.message = message;
-	      }
-	      , checkTokenAndGetIndex = function (classList, token) {
-	        if (token === "") {
-	          throw new DOMEx(
-	              "SYNTAX_ERR"
-	            , "An invalid or illegal string was specified"
-	          );
-	        }
-	        if (/\s/.test(token)) {
-	          throw new DOMEx(
-	              "INVALID_CHARACTER_ERR"
-	            , "String contains an invalid character"
-	          );
-	        }
-	        return arrIndexOf.call(classList, token);
-	      }
-	      , ClassList = function (elem) {
-	        var
-	            trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
-	          , classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
-	          , i = 0
-	          , len = classes.length
-	        ;
-	        for (; i < len; i++) {
-	          this.push(classes[i]);
-	        }
-	        this._updateClassName = function () {
-	          elem.setAttribute("class", this.toString());
-	        };
-	      }
-	      , classListProto = ClassList[protoProp] = []
-	      , classListGetter = function () {
-	        return new ClassList(this);
-	      }
-	    ;
-	    // Most DOMException implementations don't allow calling DOMException's toString()
-	    // on non-DOMExceptions. Error's toString() is sufficient here.
-	    DOMEx[protoProp] = Error[protoProp];
-	    classListProto.item = function (i) {
-	      return this[i] || null;
-	    };
-	    classListProto.contains = function (token) {
-	      token += "";
-	      return checkTokenAndGetIndex(this, token) !== -1;
-	    };
-	    classListProto.add = function () {
-	      var
-	          tokens = arguments
-	        , i = 0
-	        , l = tokens.length
-	        , token
-	        , updated = false
-	      ;
-	      do {
-	        token = tokens[i] + "";
-	        if (checkTokenAndGetIndex(this, token) === -1) {
-	          this.push(token);
-	          updated = true;
-	        }
-	      }
-	      while (++i < l);
-
-	      if (updated) {
-	        this._updateClassName();
-	      }
-	    };
-	    classListProto.remove = function () {
-	      var
-	          tokens = arguments
-	        , i = 0
-	        , l = tokens.length
-	        , token
-	        , updated = false
-	        , index
-	      ;
-	      do {
-	        token = tokens[i] + "";
-	        index = checkTokenAndGetIndex(this, token);
-	        while (index !== -1) {
-	          this.splice(index, 1);
-	          updated = true;
-	          index = checkTokenAndGetIndex(this, token);
-	        }
-	      }
-	      while (++i < l);
-
-	      if (updated) {
-	        this._updateClassName();
-	      }
-	    };
-	    classListProto.toggle = function (token, force) {
-	      token += "";
-
-	      var
-	          result = this.contains(token)
-	        , method = result ?
-	          force !== true && "remove"
-	        :
-	          force !== false && "add"
-	      ;
-
-	      if (method) {
-	        this[method](token);
-	      }
-
-	      if (force === true || force === false) {
-	        return force;
-	      } else {
-	        return !result;
-	      }
-	    };
-	    classListProto.toString = function () {
-	      return this.join(" ");
-	    };
-
-	    if (objCtr.defineProperty) {
-	      var classListPropDesc = {
-	          get: classListGetter
-	        , enumerable: true
-	        , configurable: true
-	      };
-	      try {
-	        objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-	      } catch (ex) { // IE 8 doesn't support enumerable:true
-	        if (ex.number === -0x7FF5EC54) {
-	          classListPropDesc.enumerable = false;
-	          objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-	        }
-	      }
-	    } else if (objCtr[protoProp].__defineGetter__) {
-	      elemCtrProto.__defineGetter__(classListProp, classListGetter);
-	    }
-
-	    }(window.self));
-
-	    } else {
-	    // There is full or partial native classList support, so just check if we need
-	    // to normalize the add/remove and toggle APIs.
-
-	    (function () {
-	      "use strict";
-
-	      var testElement = document.createElement("_");
-
-	      testElement.classList.add("c1", "c2");
-
-	      // Polyfill for IE 10/11 and Firefox <26, where classList.add and
-	      // classList.remove exist but support only one argument at a time.
-	      if (!testElement.classList.contains("c2")) {
-	        var createMethod = function(method) {
-	          var original = DOMTokenList.prototype[method];
-
-	          DOMTokenList.prototype[method] = function(token) {
-	            var i, len = arguments.length;
-
-	            for (i = 0; i < len; i++) {
-	              token = arguments[i];
-	              original.call(this, token);
-	            }
-	          };
-	        };
-	        createMethod('add');
-	        createMethod('remove');
-	      }
-
-	      testElement.classList.toggle("c3", false);
-
-	      // Polyfill for IE 10 and Firefox <24, where classList.toggle does not
-	      // support the second argument.
-	      if (testElement.classList.contains("c3")) {
-	        var _toggle = DOMTokenList.prototype.toggle;
-
-	        DOMTokenList.prototype.toggle = function(token, force) {
-	          if (1 in arguments && !this.contains(token) === !force) {
-	            return force;
-	          } else {
-	            return _toggle.call(this, token);
-	          }
-	        };
-
-	      }
-
-	      testElement = null;
-	    }());
-	  }
-	}
-
-
-/***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14472,18 +14559,96 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _icon = __webpack_require__(133);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	var _button = __webpack_require__(137);
+
+	var _button2 = _interopRequireDefault(_button);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(141);
+	var CLASSES = __webpack_require__(143);
+
+	var IconButton = function (_Button) {
+	  (0, _inherits3.default)(IconButton, _Button);
+
+	  function IconButton() {
+	    (0, _classCallCheck3.default)(this, IconButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Button
+	  */
+
+	  IconButton.prototype._declareDefaults = function _declareDefaults() {
+	    _Button.prototype._declareDefaults.call(this);
+	    this._defaults.icon = '';
+	    this._defaults.iconClass = '';
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  IconButton.prototype._render = function _render() {
+	    _Button.prototype._render.call(this);
+	    var p = this._props,
+	        className = 'icon-button';
+	    this.el.classList.add(CLASSES[className]);
+
+	    var icon = new _icon2.default({
+	      shape: this._props.icon,
+	      parent: this.el,
+	      className: [CLASSES['icon'], p.iconClass]
+	    });
+	  };
+
+	  return IconButton;
+	}(_button2.default);
+
+	exports.default = IconButton;
+
+/***/ },
+/* 133 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(82);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(132);
-	var CLASSES = __webpack_require__(134);
+	__webpack_require__(134);
+	var CLASSES = __webpack_require__(136);
 
 	var Icon = function (_Module) {
 	  (0, _inherits3.default)(Icon, _Module);
@@ -14558,16 +14723,16 @@
 	exports.default = Icon;
 
 /***/ },
-/* 132 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(133);
+	var content = __webpack_require__(135);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14584,10 +14749,10 @@
 	}
 
 /***/ },
-/* 133 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -14598,7 +14763,7 @@
 
 
 /***/ },
-/* 134 */
+/* 136 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14607,7 +14772,7 @@
 	};
 
 /***/ },
-/* 135 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14626,98 +14791,22 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _icon = __webpack_require__(131);
-
-	var _icon2 = _interopRequireDefault(_icon);
-
-	var _button = __webpack_require__(136);
-
-	var _button2 = _interopRequireDefault(_button);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(140);
-	var CLASSES = __webpack_require__(142);
-
-	var IconButton = function (_Button) {
-	  (0, _inherits3.default)(IconButton, _Button);
-
-	  function IconButton() {
-	    (0, _classCallCheck3.default)(this, IconButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare _defaults.
-	    @private
-	    @overrides @ Button
-	  */
-
-	  IconButton.prototype._declareDefaults = function _declareDefaults() {
-	    _Button.prototype._declareDefaults.call(this);
-	    this._defaults.icon = '';
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-
-	  IconButton.prototype._render = function _render() {
-	    _Button.prototype._render.call(this);
-	    var className = 'icon-button';
-	    this.el.classList.add(CLASSES[className]);
-
-	    var icon = new _icon2.default({
-	      shape: this._props.icon,
-	      parent: this.el,
-	      className: CLASSES['icon']
-	    });
-	  };
-
-	  return IconButton;
-	}(_button2.default);
-
-	exports.default = IconButton;
-
-/***/ },
-/* 136 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(5);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(6);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(70);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _hammerjs = __webpack_require__(82);
+	var _hammerjs = __webpack_require__(84);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _ripple = __webpack_require__(120);
+	var _ripple = __webpack_require__(122);
 
 	var _ripple2 = _interopRequireDefault(_ripple);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(137);
-	var CLASSES = __webpack_require__(139);
+	__webpack_require__(138);
+	var CLASSES = __webpack_require__(140);
 
 	var Button = function (_Module) {
 	  (0, _inherits3.default)(Button, _Module);
@@ -14831,16 +14920,16 @@
 	exports.default = Button;
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(138);
+	var content = __webpack_require__(139);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14857,39 +14946,39 @@
 	}
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "._button_zrcgz_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block\n  /*transform:  translateZ(0);*/\n  /*&__icon {*/\n  /*> div {\n    position:   absolute;\n    top:        50%;\n    left:       50%;\n    transform:  translate( -50%, -50% );\n  }*/\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n._button__ripple_zrcgz_1 {\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   5;\n  overflow:   hidden\n}\n._button__ripple_zrcgz_1:after {\n  content:   \"\";\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   1;\n  cursor:   pointer\n}\n._button_zrcgz_4:hover {\n  opacity:   .85\n}\n._button_zrcgz_4:active {\n  opacity:   1\n}\n\n", ""]);
+	exports.push([module.id, "._button_r3ni6_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block\n}\n._button__ripple_r3ni6_1 {\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   5;\n  overflow:   hidden\n}\n._button__ripple_r3ni6_1:after {\n  content:   \"\";\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   1;\n  cursor:   pointer\n}\n._button_r3ni6_4:hover {\n  opacity:   .85\n}\n._button_r3ni6_4:active {\n  opacity:   1\n}\n\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"button": "_button_zrcgz_4",
-		"button__ripple": "_button__ripple_zrcgz_1"
+		"button": "_button_r3ni6_4",
+		"button__ripple": "_button__ripple_r3ni6_1"
 	};
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(141);
+	var content = __webpack_require__(142);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -14906,10 +14995,10 @@
 	}
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -14920,93 +15009,13 @@
 
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"icon-button": "_icon-button_1yshr_4",
 		"icon": "_icon_1yshr_4"
 	};
-
-/***/ },
-/* 143 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(5);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(6);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(70);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _buttonSwitch = __webpack_require__(144);
-
-	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
-
-	var _icon = __webpack_require__(131);
-
-	var _icon2 = _interopRequireDefault(_icon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// import HammerJS from 'hammerjs'
-
-	__webpack_require__(148);
-	var CLASSES = __webpack_require__(150);
-
-	var IconFork = function (_ButtonSwitch) {
-	  (0, _inherits3.default)(IconFork, _ButtonSwitch);
-
-	  function IconFork() {
-	    (0, _classCallCheck3.default)(this, IconFork);
-	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
-	  }
-
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Icon
-	    @returns this
-	  */
-
-	  IconFork.prototype._render = function _render() {
-	    _ButtonSwitch.prototype._render.call(this);
-	    this.el.classList.add(CLASSES['icon-fork']);
-	    var p = this._props,
-	        parent = this.el,
-	        className = CLASSES.icon;
-
-	    this.icon1 = new _icon2.default({ shape: p.icon1, parent: parent, className: className });
-	    this.icon2 = new _icon2.default({ shape: p.icon2, parent: parent, className: className });
-	  };
-	  /*
-	    Method that should be called on state change.
-	    @private
-	    @override @ IconSwitch
-	  */
-
-
-	  IconFork.prototype._setState = function _setState() {
-	    var p = this._props,
-	        classList = this.el.classList,
-	        method = p.isOn ? 'add' : 'remove';
-
-	    classList[method](CLASSES['is-on']);
-	  };
-
-	  return IconFork;
-	}(_buttonSwitch2.default);
-
-	exports.default = IconFork;
 
 /***/ },
 /* 144 */
@@ -15028,270 +15037,26 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _button = __webpack_require__(136);
-
-	var _button2 = _interopRequireDefault(_button);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(145);
-	var CLASSES = __webpack_require__(147);
-
-	var ButtonSwitch = function (_Button) {
-	  (0, _inherits3.default)(ButtonSwitch, _Button);
-
-	  function ButtonSwitch() {
-	    (0, _classCallCheck3.default)(this, ButtonSwitch);
-	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare _defaults.
-	    @private
-	    @overrides @ Button
-	  */
-
-	  ButtonSwitch.prototype._declareDefaults = function _declareDefaults() {
-	    _Button.prototype._declareDefaults.call(this);
-	    this._defaults.isOn = false;
-	    this._defaults.onStateChange = null;
-	  };
-	  /*
-	    Method to set the state to `true`.
-	    @public
-	    @param {Boolean} If should invoke callback.
-	  */
-
-
-	  ButtonSwitch.prototype.on = function on() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-	    // set to true because the next step is toggle
-	    this._props.isOn = true;
-	    this._reactOnStateChange(isCallback);
-	  };
-	  /*
-	    Method to set the state to `false`.
-	    @public
-	    @param {Boolean} If should invoke callback.
-	  */
-
-
-	  ButtonSwitch.prototype.off = function off() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-	    // set to true because the next step is toggle
-	    this._props.isOn = false;
-	    this._reactOnStateChange(isCallback);
-	  };
-
-	  // ---
-
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-
-	  ButtonSwitch.prototype._render = function _render() {
-	    _Button.prototype._render.call(this);
-	    this.el.classList.add(CLASSES['button-switch']);
-	    this._setState();
-	    this._reactOnStateChange();
-	  };
-	  /*
-	    Method to invoke onPointerUp callback if excist.
-	    @private
-	    @overrides @ Button
-	    @param {Object} Original event object.
-	  */
-
-
-	  ButtonSwitch.prototype._pointerUp = function _pointerUp(e) {
-	    this._changeState();
-	    _Button.prototype._pointerUp.call(this, e);
-	  };
-	  /*
-	    Method to switch icons.
-	    @private
-	  */
-
-
-	  ButtonSwitch.prototype._changeState = function _changeState() {
-	    this._props.isOn = !this._props.isOn;
-	    this._reactOnStateChange();
-	  };
-	  /*
-	    Method to react on state change.
-	    @private
-	    @param {Boolean} If should invoke callback.
-	  */
-
-
-	  ButtonSwitch.prototype._reactOnStateChange = function _reactOnStateChange() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-
-	    if (isCallback) {
-	      this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
-	    }
-	    this._setState();
-	  };
-	  /*
-	    Method that have been called on switch state change.
-	    @private
-	  */
-
-
-	  ButtonSwitch.prototype._setState = function _setState() {
-	    // console.log('change');
-	  };
-
-	  return ButtonSwitch;
-	}(_button2.default);
-
-	exports.default = ButtonSwitch;
-
-/***/ },
-/* 145 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(146);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./button-switch.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./button-switch.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 146 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._button-switch_1g5lg_4 {\n  position:     relative;\n  display:      inline-block\n}\n._button-switch_1g5lg_4 > ._icon_1g5lg_8 {\n  position:     absolute\n}\n._button-switch_1g5lg_4:after {\n  content:     \"\";\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 147 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"button-switch": "_button-switch_1g5lg_4",
-		"icon": "_icon_1g5lg_8"
-	};
-
-/***/ },
-/* 148 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(149);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 149 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._icon-fork_csg7t_4 {\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4 {\n    /*position:   absolute;*/\n    opacity: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate( -50%, -50% );\n            transform: translate( -50%, -50% )\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4:nth-of-type(3) {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(2) {\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(3) {\n    opacity: 0\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 150 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"icon-fork": "_icon-fork_csg7t_4",
-		"icon": "_icon_csg7t_4",
-		"is-on": "_is-on_csg7t_18"
-	};
-
-/***/ },
-/* 151 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(5);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(6);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(70);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _module = __webpack_require__(78);
+	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _labelButton = __webpack_require__(152);
+	var _labelButton = __webpack_require__(145);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
-	var _slider = __webpack_require__(80);
+	var _slider = __webpack_require__(82);
 
 	var _slider2 = _interopRequireDefault(_slider);
 
-	var _moJs = __webpack_require__(83);
+	var _moJs = __webpack_require__(85);
 
 	var _moJs2 = _interopRequireDefault(_moJs);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(156);
-	var CLASSES = __webpack_require__(158);
+	__webpack_require__(153);
+	var CLASSES = __webpack_require__(155);
 
 	var SpeedControl = function (_Module) {
 	  (0, _inherits3.default)(SpeedControl, _Module);
@@ -15442,7 +15207,7 @@
 	exports.default = SpeedControl;
 
 /***/ },
-/* 152 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15461,14 +15226,14 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _buttonSwitch = __webpack_require__(144);
+	var _buttonSwitch = __webpack_require__(146);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(153);
-	var CLASSES = __webpack_require__(155);
+	__webpack_require__(150);
+	var CLASSES = __webpack_require__(152);
 
 	var LabelButton = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(LabelButton, _ButtonSwitch);
@@ -15549,118 +15314,7 @@
 	exports.default = LabelButton;
 
 /***/ },
-/* 153 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(154);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 154 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._label-button_1cxps_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white\n}\n._label-button__label_1cxps_1 {\n  position:        absolute;\n  left:        50%;\n  top:        50%;\n  -webkit-transform:        translate( -50%, -50% );\n          transform:        translate( -50%, -50% )\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 155 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"label-button": "_label-button_1cxps_4",
-		"label-button__label": "_label-button__label_1cxps_1"
-	};
-
-/***/ },
-/* 156 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(157);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 157 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._speed-control_1svrw_4 {\n  position:       relative;\n  display:        inline-block;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem\n}\n._speed-control__slider_1svrw_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n._speed-control__slider_1svrw_1:before, ._speed-control__slider_1svrw_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_1svrw_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_1svrw_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_1svrw_1 {\n  border:       1px solid cyan\n}\n._speed-control_1svrw_4._is-on_1svrw_48 ._speed-control__slider_1svrw_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 158 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"speed-control": "_speed-control_1svrw_4",
-		"speed-control__slider": "_speed-control__slider_1svrw_1",
-		"speed-control__button": "_speed-control__button_1svrw_1",
-		"is-on": "_is-on_1svrw_48"
-	};
-
-/***/ },
-/* 159 */,
-/* 160 */,
-/* 161 */,
-/* 162 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"player-button": "_player-button_14zxa_4"
-	};
-
-/***/ },
-/* 163 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15679,15 +15333,309 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _iconFork = __webpack_require__(143);
+	var _button = __webpack_require__(137);
+
+	var _button2 = _interopRequireDefault(_button);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(147);
+	var CLASSES = __webpack_require__(149);
+
+	var ButtonSwitch = function (_Button) {
+	  (0, _inherits3.default)(ButtonSwitch, _Button);
+
+	  function ButtonSwitch() {
+	    (0, _classCallCheck3.default)(this, ButtonSwitch);
+	    return (0, _possibleConstructorReturn3.default)(this, _Button.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare _defaults.
+	    @private
+	    @overrides @ Button
+	  */
+
+	  ButtonSwitch.prototype._declareDefaults = function _declareDefaults() {
+	    _Button.prototype._declareDefaults.call(this);
+	    this._defaults.isOn = false;
+	    this._defaults.onStateChange = null;
+	  };
+	  /*
+	    Method to set the state to `true`.
+	    @public
+	    @param {Boolean} If should invoke callback.
+	  */
+
+
+	  ButtonSwitch.prototype.on = function on() {
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+	    // set to true because the next step is toggle
+	    this._props.isOn = true;
+	    this._reactOnStateChange(isCallback);
+	  };
+	  /*
+	    Method to set the state to `false`.
+	    @public
+	    @param {Boolean} If should invoke callback.
+	  */
+
+
+	  ButtonSwitch.prototype.off = function off() {
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+	    // set to true because the next step is toggle
+	    this._props.isOn = false;
+	    this._reactOnStateChange(isCallback);
+	  };
+
+	  // ---
+
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  ButtonSwitch.prototype._render = function _render() {
+	    _Button.prototype._render.call(this);
+	    this.el.classList.add(CLASSES['button-switch']);
+	    this._setState();
+	    this._reactOnStateChange();
+	  };
+	  /*
+	    Method to invoke onPointerUp callback if excist.
+	    @private
+	    @overrides @ Button
+	    @param {Object} Original event object.
+	  */
+
+
+	  ButtonSwitch.prototype._pointerUp = function _pointerUp(e) {
+	    this._changeState();
+	    _Button.prototype._pointerUp.call(this, e);
+	  };
+	  /*
+	    Method to switch icons.
+	    @private
+	  */
+
+
+	  ButtonSwitch.prototype._changeState = function _changeState() {
+	    this._props.isOn = !this._props.isOn;
+	    this._reactOnStateChange();
+	  };
+	  /*
+	    Method to react on state change.
+	    @private
+	    @param {Boolean} If should invoke callback.
+	  */
+
+
+	  ButtonSwitch.prototype._reactOnStateChange = function _reactOnStateChange() {
+	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+
+	    if (isCallback) {
+	      this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
+	    }
+	    this._setState();
+	  };
+	  /*
+	    Method that have been called on switch state change.
+	    @private
+	  */
+
+
+	  ButtonSwitch.prototype._setState = function _setState() {
+	    // console.log('change');
+	  };
+
+	  return ButtonSwitch;
+	}(_button2.default);
+
+	exports.default = ButtonSwitch;
+
+/***/ },
+/* 147 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(148);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./button-switch.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./button-switch.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 148 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._button-switch_1g5lg_4 {\n  position:     relative;\n  display:      inline-block\n}\n._button-switch_1g5lg_4 > ._icon_1g5lg_8 {\n  position:     absolute\n}\n._button-switch_1g5lg_4:after {\n  content:     \"\";\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 149 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"button-switch": "_button-switch_1g5lg_4",
+		"icon": "_icon_1g5lg_8"
+	};
+
+/***/ },
+/* 150 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(151);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./label-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._label-button_1cxps_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white\n}\n._label-button__label_1cxps_1 {\n  position:        absolute;\n  left:        50%;\n  top:        50%;\n  -webkit-transform:        translate( -50%, -50% );\n          transform:        translate( -50%, -50% )\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 152 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"label-button": "_label-button_1cxps_4",
+		"label-button__label": "_label-button__label_1cxps_1"
+	};
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(154);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./speed-control.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._speed-control_1svrw_4 {\n  position:       relative;\n  display:        inline-block;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem\n}\n._speed-control__slider_1svrw_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n._speed-control__slider_1svrw_1:before, ._speed-control__slider_1svrw_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_1svrw_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_1svrw_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_1svrw_1 {\n  border:       1px solid cyan\n}\n._speed-control_1svrw_4._is-on_1svrw_48 ._speed-control__slider_1svrw_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 155 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"speed-control": "_speed-control_1svrw_4",
+		"speed-control__slider": "_speed-control__slider_1svrw_1",
+		"speed-control__button": "_speed-control__button_1svrw_1",
+		"is-on": "_is-on_1svrw_48"
+	};
+
+/***/ },
+/* 156 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _iconFork = __webpack_require__(157);
 
 	var _iconFork2 = _interopRequireDefault(_iconFork);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(164);
-	var CLASSES = __webpack_require__(166),
-	    PLAYER_BTN_CLASSES = __webpack_require__(162);
+	__webpack_require__(161);
+	var CLASSES = __webpack_require__(163);
+	// PLAYER_BTN_CLASSES = require('css/blocks/player-button.postcss.css.json');
 
 	var PlayButton = function (_IconFork) {
 	  (0, _inherits3.default)(PlayButton, _IconFork);
@@ -15718,7 +15666,7 @@
 	  PlayButton.prototype._render = function _render() {
 	    _IconFork.prototype._render.call(this);
 	    this._addClass(this.el, CLASSES['play-button']);
-	    this._addClass(this.el, PLAYER_BTN_CLASSES['player-button']);
+	    // this._addClass( this.el, PLAYER_BTN_CLASSES[ 'player-button' ] );
 	  };
 
 	  return PlayButton;
@@ -15727,55 +15675,7 @@
 	exports.default = PlayButton;
 
 /***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(165);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 166 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"play-button": "_play-button_16uj5_4"
-	};
-
-/***/ },
-/* 167 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15794,14 +15694,192 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _iconButton = __webpack_require__(135);
+	var _buttonSwitch = __webpack_require__(146);
+
+	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
+
+	var _icon = __webpack_require__(133);
+
+	var _icon2 = _interopRequireDefault(_icon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// import HammerJS from 'hammerjs'
+
+	__webpack_require__(158);
+	var CLASSES = __webpack_require__(160);
+
+	var IconFork = function (_ButtonSwitch) {
+	  (0, _inherits3.default)(IconFork, _ButtonSwitch);
+
+	  function IconFork() {
+	    (0, _classCallCheck3.default)(this, IconFork);
+	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Icon
+	    @returns this
+	  */
+
+	  IconFork.prototype._render = function _render() {
+	    _ButtonSwitch.prototype._render.call(this);
+	    this.el.classList.add(CLASSES['icon-fork']);
+	    var p = this._props,
+	        parent = this.el,
+	        className = CLASSES.icon;
+
+	    this.icon1 = new _icon2.default({ shape: p.icon1, parent: parent, className: className });
+	    this.icon2 = new _icon2.default({ shape: p.icon2, parent: parent, className: className });
+	  };
+	  /*
+	    Method that should be called on state change.
+	    @private
+	    @override @ IconSwitch
+	  */
+
+
+	  IconFork.prototype._setState = function _setState() {
+	    var p = this._props,
+	        classList = this.el.classList,
+	        method = p.isOn ? 'add' : 'remove';
+
+	    classList[method](CLASSES['is-on']);
+	  };
+
+	  return IconFork;
+	}(_buttonSwitch2.default);
+
+	exports.default = IconFork;
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(159);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./icon-fork.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._icon-fork_csg7t_4 {\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4 {\n    /*position:   absolute;*/\n    opacity: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate( -50%, -50% );\n            transform: translate( -50%, -50% )\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4:nth-of-type(3) {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(2) {\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(3) {\n    opacity: 0\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 160 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"icon-fork": "_icon-fork_csg7t_4",
+		"icon": "_icon_csg7t_4",
+		"is-on": "_is-on_csg7t_18"
+	};
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(162);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./play-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 163 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"play-button": "_play-button_16uj5_4"
+	};
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _iconButton = __webpack_require__(132);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(168);
-	var CLASSES = __webpack_require__(170);
+	__webpack_require__(165);
+	var CLASSES = __webpack_require__(167);
 
 	var StopButton = function (_IconButton) {
 	  (0, _inherits3.default)(StopButton, _IconButton);
@@ -15835,16 +15913,16 @@
 	exports.default = StopButton;
 
 /***/ },
-/* 168 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(169);
+	var content = __webpack_require__(166);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -15861,10 +15939,10 @@
 	}
 
 /***/ },
-/* 169 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -15875,7 +15953,7 @@
 
 
 /***/ },
-/* 170 */
+/* 167 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15883,7 +15961,7 @@
 	};
 
 /***/ },
-/* 171 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15902,18 +15980,85 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _icon = __webpack_require__(131);
+	var _opacitySwitch = __webpack_require__(169);
+
+	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	__webpack_require__(173);
+	var CLASSES = __webpack_require__(175);
+
+	var RepeatButton = function (_OpacitySwitch) {
+	  (0, _inherits3.default)(RepeatButton, _OpacitySwitch);
+
+	  function RepeatButton() {
+	    (0, _classCallCheck3.default)(this, RepeatButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _OpacitySwitch.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ OpacitySwitch
+	  */
+
+	  RepeatButton.prototype._declareDefaults = function _declareDefaults() {
+	    _OpacitySwitch.prototype._declareDefaults.call(this);
+	    this._defaults.icon = 'repeat';
+	    this._defaults.iconSize = 'x2';
+	    this._defaults.title = 'repeat';
+	  };
+	  /*
+	    Initial render method.
+	    @private
+	    @overrides @ Button
+	    @returns this
+	  */
+
+
+	  RepeatButton.prototype._render = function _render() {
+	    _OpacitySwitch.prototype._render.call(this);
+	    this._addClass(this.el, CLASSES['repeat-button']);
+	  };
+
+	  return RepeatButton;
+	}(_opacitySwitch2.default);
+
+	exports.default = RepeatButton;
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _icon = __webpack_require__(133);
 
 	var _icon2 = _interopRequireDefault(_icon);
 
-	var _buttonSwitch = __webpack_require__(144);
+	var _buttonSwitch = __webpack_require__(146);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(172);
-	var CLASSES = __webpack_require__(174);
+	__webpack_require__(170);
+	var CLASSES = __webpack_require__(172);
 
 	var OpacitySwitch = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(OpacitySwitch, _ButtonSwitch);
@@ -15970,16 +16115,16 @@
 	exports.default = OpacitySwitch;
 
 /***/ },
-/* 172 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(173);
+	var content = __webpack_require__(171);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -15996,107 +16141,40 @@
 	}
 
 /***/ },
-/* 173 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "._opacity-switch_sxfs6_4 {\n  opacity: .5;\n}\n._opacity-switch_sxfs6_4 ._icon_sxfs6_6 {\n  position:   absolute;\n  left:       50%;\n  top:        50%;\n  -webkit-transform:  translate(-50%, -50%);\n          transform:  translate(-50%, -50%);\n}\n._opacity-switch_sxfs6_4._is-on_sxfs6_12 {\n  opacity: 1;\n}\n", ""]);
+	exports.push([module.id, "._opacity-switch_17z5s_4 {\n  opacity:      .5;\n\n\n\n\n}\n._opacity-switch_17z5s_4 ._icon_17z5s_6 {\n  position:   absolute;\n  left:       50%;\n  top:        50%;\n  -webkit-transform:  translate(-50%, -50%);\n          transform:  translate(-50%, -50%);\n\n\n\n\n}\n._opacity-switch_17z5s_4:hover {\n  opacity:      .4;\n\n\n\n\n}\n._opacity-switch_17z5s_4._is-on_17z5s_15 {\n  opacity:      1;\n\n\n\n\n}\n._opacity-switch_17z5s_4._is-on_17z5s_15:hover {\n  opacity:      .85;\n\n\n\n\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 174 */
+/* 172 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"opacity-switch": "_opacity-switch_sxfs6_4",
-		"icon": "_icon_sxfs6_6",
-		"is-on": "_is-on_sxfs6_12"
+		"opacity-switch": "_opacity-switch_17z5s_4",
+		"icon": "_icon_17z5s_6",
+		"is-on": "_is-on_17z5s_15"
 	};
 
 /***/ },
-/* 175 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(5);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(6);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(70);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _opacitySwitch = __webpack_require__(171);
-
-	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	__webpack_require__(176);
-	var CLASSES = __webpack_require__(178);
-
-	var RepeatButton = function (_OpacitySwitch) {
-	  (0, _inherits3.default)(RepeatButton, _OpacitySwitch);
-
-	  function RepeatButton() {
-	    (0, _classCallCheck3.default)(this, RepeatButton);
-	    return (0, _possibleConstructorReturn3.default)(this, _OpacitySwitch.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to declare defaults.
-	    @private
-	    @overrides @ OpacitySwitch
-	  */
-
-	  RepeatButton.prototype._declareDefaults = function _declareDefaults() {
-	    _OpacitySwitch.prototype._declareDefaults.call(this);
-	    this._defaults.icon = 'repeat';
-	    this._defaults.iconSize = 'x2';
-	    this._defaults.title = 'repeat';
-	  };
-	  /*
-	    Initial render method.
-	    @private
-	    @overrides @ Button
-	    @returns this
-	  */
-
-
-	  RepeatButton.prototype._render = function _render() {
-	    _OpacitySwitch.prototype._render.call(this);
-	    this._addClass(this.el, CLASSES['repeat-button']);
-	  };
-
-	  return RepeatButton;
-	}(_opacitySwitch2.default);
-
-	exports.default = RepeatButton;
-
-/***/ },
-/* 176 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(177);
+	var content = __webpack_require__(174);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
+	var update = __webpack_require__(119)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -16113,10 +16191,10 @@
 	}
 
 /***/ },
-/* 177 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(116)();
+	exports = module.exports = __webpack_require__(118)();
 	// imports
 
 
@@ -16127,7 +16205,7 @@
 
 
 /***/ },
-/* 178 */
+/* 175 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -16135,7 +16213,7 @@
 	};
 
 /***/ },
-/* 179 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16154,7 +16232,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _repeatButton = __webpack_require__(175);
+	var _repeatButton = __webpack_require__(168);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
@@ -16189,58 +16267,7 @@
 	exports.default = BoundsButton;
 
 /***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// style-loader: Adds some css to the DOM by adding a <style> tag
-
-	// load the styles
-	var content = __webpack_require__(181);
-	if(typeof content === 'string') content = [[module.id, content, '']];
-	// add the styles to the DOM
-	var update = __webpack_require__(117)(content, {});
-	if(content.locals) module.exports = content.locals;
-	// Hot Module Replacement
-	if(false) {
-		// When the styles change, update the <style> tags
-		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css");
-				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-				update(newContent);
-			});
-		}
-		// When the module is disposed, remove the <style> tags
-		module.hot.dispose(function() { update(); });
-	}
-
-/***/ },
-/* 181 */
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(116)();
-	// imports
-
-
-	// module
-	exports.push([module.id, "._mojs-player_11jsv_4 {\n  position:     fixed;\n  left:         0;\n  bottom:       0;\n  width:        100%;\n  height:     40px;\n  height:     40px;\n  height:       2.5rem;\n  \n  background:   rgba( 58, 8, 57, .85 )\n\n\n}\n._mojs-player__left_11jsv_1 {\n  position:     absolute;\n  left:     0;\n  /*outline:  1px solid cyan;*/\n  width:     175px;\n  width:     175px;\n  width:     10.9375rem\n\n\n}\n._mojs-player__mid_11jsv_1 {\n  position:     absolute;\n  left:     175px;\n  left:     175px;\n  left:     10.9375rem;\n  right:     35px;\n  right:     35px;\n  right:     2.1875rem;\n  /*outline:      1px solid yellow;*/\n  overflow:     hidden;\n  /*margin-left:  calc( $btnCount * $btnWidth * $PX );*/\n  padding:     0 20px;\n  padding:     0 20px;\n  padding:     0 1.25rem\n\n\n}\n._mojs-player__right_11jsv_1 {\n  position:     absolute;\n  right:     0\n\n\n}\n\n", ""]);
-
-	// exports
-
-
-/***/ },
-/* 182 */
-/***/ function(module, exports) {
-
-	module.exports = {
-		"mojs-player": "_mojs-player_11jsv_4",
-		"mojs-player__left": "_mojs-player__left_11jsv_1",
-		"mojs-player__mid": "_mojs-player__mid_11jsv_1",
-		"mojs-player__right": "_mojs-player__right_11jsv_1"
-	};
-
-/***/ },
-/* 183 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16259,46 +16286,172 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _module = __webpack_require__(78);
+	var _buttonSwitch = __webpack_require__(146);
 
-	var _module2 = _interopRequireDefault(_module);
+	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
+
+	var _icon = __webpack_require__(133);
+
+	var _icon2 = _interopRequireDefault(_icon);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var Icons = function (_Module) {
-	  (0, _inherits3.default)(Icons, _Module);
+	__webpack_require__(178);
+	var CLASSES = __webpack_require__(180),
+	    className = 'hide-button';
 
-	  function Icons() {
-	    (0, _classCallCheck3.default)(this, Icons);
-	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	var HideButton = function (_ButtonSwitch) {
+	  (0, _inherits3.default)(HideButton, _ButtonSwitch);
+
+	  function HideButton() {
+	    (0, _classCallCheck3.default)(this, HideButton);
+	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
 	  }
 
 	  /*
 	    Initial render method.
 	    @private
-	    @overrides @ Module
+	    @overrides @ Button
+	    @returns this
 	  */
 
-	  Icons.prototype._render = function _render() {
-	    this.el = this._createElement('div');
-	    this.el.innerHTML = this.getIcons();
-	    this.el.setAttribute('id', 'mojs-player-icons');
-	    this._prependChild(document.body, this.el);
+	  HideButton.prototype._render = function _render() {
+	    _ButtonSwitch.prototype._render.call(this);
+	    this.el.classList.add(CLASSES[className]);
+	    this._addIcon();
 	  };
 	  /*
-	    Method to get icons shapes.
+	    Method to add icon.
 	    @private
 	  */
 
 
-	  Icons.prototype.getIcons = function getIcons() {
-	    return '<svg id="svg-source" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%; width:0; height:0;" xmlns:xlink="http://www.w3.org/1999/xlink">\n              <path d="M0.000549111126,31.9982154 C-0.000686388908,21.3321436 0.000549111126,10.6660718 0.000549111126,1.77635684e-15 C10.6678564,5.33118265 21.3339282,10.6648363 32,15.9984899 C21.3339282,21.3321436 10.6678564,26.6657972 0.000549111126,31.9982154 L0.000549111126,31.9982154 Z" id="play-icon-shape"></path>\n              <g id="pause-icon-shape">\n                <path d="M-8.8817842e-16,0 C3.55529197,-0.000248559134 7.11058393,-0.000248559134 10.6666667,0 C10.6669303,10.6669152 10.6669303,21.3330848 10.6666667,32 C7.11058393,32.0002486 3.55529197,32.0002486 -8.8817842e-16,32 L-8.8817842e-16,0 L-8.8817842e-16,0 Z"></path>\n                <path d="M21.3333333,0 C24.8894161,-0.000248559134 28.444708,-0.000248559134 32,0 L32,32 C28.444708,32.0002486 24.8894161,32.0002486 21.3333333,32 C21.3330697,21.3330848 21.3330697,10.6669152 21.3333333,0 L21.3333333,0 Z"></path>\n              </g>\n              <rect id="stop-icon-shape" x="0" y="0" width="32" height="32"></rect>\n              <path d="M9.871,1.48 C12.322,0.209 15.176,-0.247 17.906,0.137 C20.914,0.556 23.762,2.041 25.823,4.274 C27.359,5.896 28.452,7.916 29.033,10.069 C29.472,9.674 29.825,9.123 30.422,8.955 C31.003,8.779 31.696,9.094 31.909,9.67 C32.106,10.155 31.972,10.736 31.6,11.1 C30.713,12.013 29.808,12.908 28.91,13.811 C28.709,14.011 28.506,14.231 28.23,14.323 C27.772,14.498 27.224,14.379 26.881,14.03 C25.918,13.021 24.913,12.052 23.938,11.055 C23.542,10.656 23.511,9.982 23.82,9.523 C24.104,9.072 24.681,8.844 25.196,8.988 C25.679,9.098 25.966,9.536 26.31,9.852 C25.345,7.149 23.302,4.829 20.694,3.611 C18.713,2.653 16.434,2.344 14.264,2.689 C10.576,3.238 7.291,5.853 5.897,9.306 C5.697,9.872 5.1,10.301 4.488,10.184 C3.863,10.113 3.366,9.501 3.399,8.878 C3.413,8.644 3.512,8.429 3.601,8.216 C4.804,5.321 7.089,2.911 9.871,1.48 Z M3.374,12.873 C3.855,12.401 4.7,12.476 5.151,12.952 C6.038,13.863 6.935,14.765 7.839,15.659 C8.049,15.864 8.261,16.088 8.343,16.379 C8.605,17.177 7.852,18.12 7.004,17.996 C6.43,17.963 6.069,17.47 5.692,17.101 C6.657,19.849 8.766,22.168 11.406,23.395 C14.249,24.712 17.666,24.737 20.514,23.423 C22.848,22.38 24.775,20.47 25.864,18.16 C26.072,17.753 26.185,17.255 26.588,16.987 C27.062,16.635 27.776,16.687 28.195,17.101 C28.527,17.419 28.687,17.926 28.541,18.369 C27.351,21.477 24.943,24.088 21.961,25.559 C18.251,27.421 13.67,27.405 9.973,25.52 C6.545,23.823 3.931,20.588 2.96,16.892 C2.624,17.217 2.319,17.58 1.935,17.85 C1.405,18.183 0.615,18.077 0.239,17.56 C-0.143,17.042 -0.048,16.254 0.431,15.828 C1.415,14.846 2.374,13.838 3.374,12.873 Z" id="repeat-icon-shape"></path>\n              <path d="M16,6 L16,-1.13686838e-13 L18,-1.13686838e-13 L18,6 L21.9941413,6 C23.1019465,6 24,6.89821238 24,7.99079514 L24,24.0092049 C24,25.1086907 23.1029399,26 21.9941413,26 L18,26 L18,32 L16,32 L16,26 L12.0058587,26 C10.8980535,26 10,25.1017876 10,24.0092049 L10,7.99079514 C10,6.89130934 10.8970601,6 12.0058587,6 L16,6 Z" id="bounds-icon-shape"></path>\n              <path d="M18.4678907,2.67700048 C19.488586,3.25758625 20.2789227,4.18421651 20.87823,5.1973579 C24.0807788,10.501451 27.2777091,15.8113116 30.480258,21.1154047 C31.1320047,22.1612281 31.7706417,23.2647256 31.9354512,24.5162532 C32.188284,26.0619186 31.6919826,27.7363895 30.5589171,28.80336 C29.4501984,29.8857103 27.8807622,30.3182659 26.3806209,30.3048086 C19.4511293,30.3086535 12.5235106,30.3086535 5.59401901,30.3048086 C3.71556494,30.343258 1.69852104,29.5723478 0.683444165,27.8709623 C-0.406546132,26.1099803 -0.0975282643,23.7914822 0.940022637,22.0843293 C4.34296485,16.4130445 7.76650826,10.7532945 11.1825603,5.08969961 C11.9747698,3.74781595 13.1846215,2.60202418 14.6847628,2.18292584 C15.9451812,1.81573418 17.3348251,2.01182606 18.4678907,2.67700048 Z M15.3334668,9.51526849 C15.6146238,9.03779476 16.0791597,9.02250655 16.3785679,9.4929547 L25.2763555,23.4736913 C25.5723919,23.9388414 25.3568433,24.3159201 24.8074398,24.3159202 L7.62314647,24.3159205 C7.06813505,24.3159206 6.84622798,23.9286889 7.12728913,23.4513779 L15.3334668,9.51526849 Z" id="mojs-icon-shape" fill-rule="evenodd"></path>\n            </svg>';
+	  HideButton.prototype._addIcon = function _addIcon() {
+	    this.icon = new _icon2.default({
+	      parent: this.el,
+	      className: CLASSES[className + '__icon'],
+	      shape: 'hide'
+	    });
+	  };
+	  /*
+	    Method that have been called on switch state change.
+	    @private
+	    @override @ ButtonSwitch
+	  */
+
+
+	  HideButton.prototype._setState = function _setState() {
+	    var method = this._props.isOn ? 'add' : 'remove';
+	    this.el.classList[method](CLASSES['is-hidden']);
 	  };
 
-	  return Icons;
-	}(_module2.default);
+	  return HideButton;
+	}(_buttonSwitch2.default);
 
-	exports.default = Icons;
+	exports.default = HideButton;
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(179);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./hide-button.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./hide-button.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._hide-button_1hqr2_4 {\n  \n  width:        22px;\n  \n  width:        22px;\n  \n  width:        1.375rem;\n  height:        16px;\n  height:        16px;\n  height:       1rem;\n  \n  background:   #3A0839;\n\n  border-top-left-radius:        3px;\n  border-top-left-radius:        3px;\n  border-top-left-radius:  0.1875rem;\n  border-top-right-radius:        3px;\n  border-top-right-radius:        3px;\n  border-top-right-radius: 0.1875rem\n}\n._hide-button__icon_1hqr2_1 {\n  \n  position:        absolute;\n  \n  left:        50%;\n  \n  top:        50%;\n  \n  width:        8px;\n  \n  width:        8px;\n  \n  width:        0.5rem;\n  \n  height:        8px;\n  \n  height:        8px;\n  \n  height:        0.5rem;\n  \n  margin-top:        1px;\n  \n  margin-top:        1px;\n  \n  margin-top:        0.0625rem;\n  \n  -webkit-transform:        translate( -50%, -50% );\n  \n          transform:        translate( -50%, -50% )\n}\n._hide-button_1hqr2_4._is-hidden_1hqr2_24 ._hide-button__icon_1hqr2_1 {\n  \n  -webkit-transform:        translate( -50%, -65% ) rotate( 180deg );\n  \n          transform:        translate( -50%, -65% ) rotate( 180deg )\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 180 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"hide-button": "_hide-button_1hqr2_4",
+		"hide-button__icon": "_hide-button__icon_1hqr2_1",
+		"is-hidden": "_is-hidden_1hqr2_24"
+	};
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(182);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(119)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/postcss-loader/index.js!./mojs-player.postcss.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(118)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "._mojs-player_640z0_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 )\n  /*transition:     all .15s ease-out;*/\n}\n._mojs-player__left_640z0_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_640z0_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_640z0_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_640z0_1 {\n  position:       absolute;\n  right:       7px;\n  right:       7px;\n  right:       0.4375rem;\n  bottom:       100%\n}\n._mojs-player_640z0_4._is-hidden_640z0_41 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n\n", ""]);
+
+	// exports
+
+
+/***/ },
+/* 183 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"mojs-player": "_mojs-player_640z0_4",
+		"mojs-player__left": "_mojs-player__left_640z0_1",
+		"mojs-player__mid": "_mojs-player__mid_640z0_1",
+		"mojs-player__right": "_mojs-player__right_640z0_1",
+		"mojs-player__hide-button": "_mojs-player__hide-button_640z0_1",
+		"is-hidden": "_is-hidden_640z0_41"
+	};
 
 /***/ }
 /******/ ]);
