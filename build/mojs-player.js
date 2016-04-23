@@ -166,8 +166,6 @@
 
 
 	  MojsPlayer.prototype._render = function _render() {
-	    var _this2 = this;
-
 	    this._initTimeline();
 	    var p = this._props,
 	        className = 'mojs-player';
@@ -243,10 +241,6 @@
 	    });
 
 	    this.transit.el.style['z-index'] = 0;
-
-	    this._addPointerDownEvent(this.el, function (e) {
-	      _this2.transit.tune({ x: e.pageX, y: e.layerY + 10 }).replay();
-	    });
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
 	  };
 	  /*
@@ -267,12 +261,12 @@
 
 
 	  MojsPlayer.prototype._onSeekEnd = function _onSeekEnd(e) {
-	    var _this3 = this;
+	    var _this2 = this;
 
 	    clearTimeout(this._endTimer);
 	    this._endTimer = setTimeout(function () {
-	      if (_this3._props.isPlaying) {
-	        _this3._play();
+	      if (_this2._props.isPlaying) {
+	        _this2._play();
 	      }
 	    }, 20);
 	  };
@@ -283,7 +277,7 @@
 
 
 	  MojsPlayer.prototype._initTimeline = function _initTimeline() {
-	    var _this4 = this;
+	    var _this3 = this;
 
 	    this.timeline = new mojs.Timeline({});
 	    this.timeline.add(this._o.add);
@@ -293,13 +287,13 @@
 	      onProgress: this._onSysProgress.bind(this),
 	      onComplete: this._onSysTweenComplete.bind(this),
 	      onPlaybackStop: function onPlaybackStop() {
-	        _this4._setPlayState('off');
+	        _this3._setPlayState('off');
 	      },
 	      onPlaybackPause: function onPlaybackPause() {
-	        _this4._setPlayState('off');
+	        _this3._setPlayState('off');
 	      },
 	      onPlaybackStart: function onPlaybackStart() {
-	        _this4._setPlayState('on');
+	        _this3._setPlayState('on');
 	      }
 	    });
 	  };
@@ -334,11 +328,11 @@
 
 
 	  MojsPlayer.prototype._setPlayState = function _setPlayState(method) {
-	    var _this5 = this;
+	    var _this4 = this;
 
 	    clearTimeout(this._playTimeout);
 	    this._playTimeout = setTimeout(function () {
-	      _this5.playButton && _this5.playButton[method](false);
+	      _this4.playButton && _this4.playButton[method](false);
 	    }, 2);
 	  };
 	  /*
@@ -13783,23 +13777,12 @@
 	  /*
 	    Method to declare _defaults.
 	    @private
-	    @overrides @ Module
+	    @overrides @ Handle
 	  */
 
 	  Track.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      onProgress: null,
-	      onSeekStart: null,
-	      onSeekEnd: null,
-	      isProgress: true, // if should render bold progress line
-	      isBound: false,
-	      isInversed: false,
-	      direction: 'x',
-	      minBound: 0,
-	      maxBound: 1
-	    };
+	    _Handle.prototype._declareDefaults.call(this);
+	    this._defaults.isProgress = true;
 	  };
 	  /*
 	    Method to set handle shift.
@@ -13809,13 +13792,9 @@
 	    @param {Boolean} It should invoke onProgress callback.
 	    @returns {Number}.
 	  */
-
-
-	  Track.prototype._setShift = function _setShift(shift) {
-	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-
-	    return _Handle.prototype._setShift.call(this, shift, isCallback);
-	  };
+	  // _setShift ( shift, isCallback = true ) {
+	  //   return super._setShift( shift, isCallback );
+	  // }
 	  /*
 	    Method to apply shift to the DOMElement.
 	    @private
