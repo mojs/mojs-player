@@ -136,6 +136,15 @@
 	__webpack_require__(179);
 	var CLASSES = __webpack_require__(181);
 
+	/*
+	  TODO:
+	    - add track ripple
+	    - add hide button
+	    - delay option for player
+	    - fix window resize issue
+	    - encapsulate icons
+	*/
+
 	var MojsPlayer = function (_Module) {
 	  (0, _inherits3.default)(MojsPlayer, _Module);
 
@@ -230,17 +239,6 @@
 	      title: 'mo • js'
 	    });
 
-	    this.transit = new mojs.Transit({
-	      parent: this.el,
-	      strokeWidth: { 40: 0 },
-	      fill: 'none',
-	      // stroke:       '#FF512F',
-	      stroke: 'white',
-	      opacity: { .15: 0 },
-	      isShowEnd: false
-	    });
-
-	    this.transit.el.style['z-index'] = 0;
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
 	  };
 	  /*
@@ -2200,6 +2198,30 @@
 
 	  Module.prototype._prependChild = function _prependChild(el, childEl) {
 	    el.insertBefore(childEl, el.firstChild);
+	  };
+	  /*
+	    Method to get ripple options.
+	    @private
+	    @returns {Object} Ripple transit options.
+	  */
+
+
+	  Module.prototype._getRippleOptions = function _getRippleOptions() {
+	    var _ref;
+
+	    return _ref = {
+	      strokeWidth: { 10: 0 },
+	      fill: 'none',
+	      // stroke:       'white',
+	      stroke: 'hotpink'
+	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .5: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
+	      this.isRipple = false;
+	    }, _ref.onUpdate = function onUpdate(p) {
+	      if (p >= .15 && !this.isRipple && !this.isUp) {
+	        this.setSpeed(.02);
+	        this.isRipple = true;
+	      }
+	    }, _ref;
 	  };
 
 	  return Module;
@@ -14500,9 +14522,14 @@
 
 	  IconButton.prototype._render = function _render() {
 	    _Button.prototype._render.call(this);
-	    this.el.classList.add(CLASSES['icon-button']);
+	    var className = 'icon-button';
+	    this.el.classList.add(CLASSES[className]);
 
-	    var icon = new _icon2.default({ shape: this._props.icon, parent: this.el });
+	    var icon = new _icon2.default({
+	      shape: this._props.icon,
+	      parent: this.el,
+	      className: CLASSES['icon']
+	    });
 	  };
 
 	  return IconButton;
@@ -14537,6 +14564,10 @@
 	var _hammerjs = __webpack_require__(82);
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
+	var _ripple = __webpack_require__(182);
+
+	var _ripple2 = _interopRequireDefault(_ripple);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14582,7 +14613,11 @@
 	    this.el.setAttribute('title', p.title);
 	    p.link && this.el.setAttribute('href', p.link);
 	    this._addListeners();
-	    // this._createChild( 'div', CLASSES[ `${ className }__hover` ] )
+
+	    this.ripple = new _ripple2.default({
+	      className: CLASSES[className + '__ripple'],
+	      parent: this.el
+	    });
 	  };
 	  /*
 	    Method to add event listeners to the icon.
@@ -14593,30 +14628,50 @@
 	  Button.prototype._addListeners = function _addListeners() {
 	    this._addPointerDownEvent(this.el, this._pointerDown.bind(this));
 	    this._addPointerUpEvent(this.el, this._pointerUp.bind(this));
+	    this._addPointerUpEvent(document, this._pointerCancel.bind(this));
 	    (0, _hammerjs2.default)(this.el).on('doubletap', this._doubleTap.bind(this));
 	  };
 	  /*
-	    Method to invoke onPointerDown callback if excist.
+	    Method to invoke onPointerDown callback if exist.
 	    @private
 	    @param {Object} Original event object.
 	  */
 
 
 	  Button.prototype._pointerDown = function _pointerDown(e) {
+	    this.wasTouched = true;
 	    this._callIfFunction(this._props.onPointerDown);
+	    this.ripple._hold(e);
 	  };
 	  /*
-	    Method to invoke onPointerUp callback if excist.
+	    Method to invoke onPointerUp callback if exist.
 	    @private
 	    @param {Object} Original event object.
 	  */
 
 
 	  Button.prototype._pointerUp = function _pointerUp(e) {
+	    this.wasTouched = false;
+	    e.stopPropagation();
 	    this._callIfFunction(this._props.onPointerUp);
+	    this.ripple._release();
 	  };
 	  /*
-	    Method to invoke onDoubleTap callback if excist.
+	    Method to invoke onPointerCancel callback if exist.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Button.prototype._pointerCancel = function _pointerCancel(e) {
+	    if (!this.wasTouched) {
+	      return;
+	    };
+	    this.wasTouched = false;
+	    this.ripple._cancel();
+	  };
+	  /*
+	    Method to invoke onDoubleTap callback if exist.
 	    @private
 	    @param {Object} Original event object.
 	  */
@@ -14666,7 +14721,7 @@
 
 
 	// module
-	exports.push([module.id, "._button_1mh5t_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block;\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n/*transform:  translateZ(0);*/\n._button_1mh5t_4 > div {\n  position:   absolute;\n  top:        50%;\n  left:       50%;\n  -webkit-transform:  translate( -50%, -50% );\n          transform:  translate( -50%, -50% );\n}\n._button_1mh5t_4:hover {\n  opacity:   .85;\n}\n._button_1mh5t_4:active {\n  opacity:   1;\n}\n\n", ""]);
+	exports.push([module.id, "._button_zrcgz_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block\n  /*transform:  translateZ(0);*/\n  /*&__icon {*/\n  /*> div {\n    position:   absolute;\n    top:        50%;\n    left:       50%;\n    transform:  translate( -50%, -50% );\n  }*/\n  /*&__hover {\n    position:   absolute;\n    top:        0;\n    right:      0;\n    width:      100%;\n    height:     100%;\n    background: rgba(0, 0, 0, .15);\n    opacity:    0;\n    backface-visibility: hidden;\n    z-index:    0;\n  }*/\n  /*&:hover &__hover {\n    opacity:    1; \n  }*/\n  /*&:active &__hover {\n    opacity:    0;\n  }*/\n}\n._button__ripple_zrcgz_1 {\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   5;\n  overflow:   hidden\n}\n._button__ripple_zrcgz_1:after {\n  content:   \"\";\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   1;\n  cursor:   pointer\n}\n._button_zrcgz_4:hover {\n  opacity:   .85\n}\n._button_zrcgz_4:active {\n  opacity:   1\n}\n\n", ""]);
 
 	// exports
 
@@ -14676,7 +14731,8 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"button": "_button_1mh5t_4"
+		"button": "_button_zrcgz_4",
+		"button__ripple": "_button__ripple_zrcgz_1"
 	};
 
 /***/ },
@@ -14714,7 +14770,7 @@
 
 
 	// module
-	exports.push([module.id, "._icon-button_1t5fa_4 {\n  /* styles */\n}\n\n", ""]);
+	exports.push([module.id, "._icon-button_1yshr_4 {\n  /* styles */\n}\n._icon-button_1yshr_4 ._icon_1yshr_4 {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate( -50%, -50% );\n          transform: translate( -50%, -50% )\n}\n\n", ""]);
 
 	// exports
 
@@ -14724,7 +14780,8 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"icon-button": "_icon-button_1t5fa_4"
+		"icon-button": "_icon-button_1yshr_4",
+		"icon": "_icon_1yshr_4"
 	};
 
 /***/ },
@@ -15036,7 +15093,7 @@
 
 
 	// module
-	exports.push([module.id, "._icon-fork_m7uax_4 {\n}\n._icon-fork_m7uax_4 > ._icon_m7uax_4 {\n    position: absolute;\n    opacity: 0\n}\n._icon-fork_m7uax_4 > ._icon_m7uax_4:last-of-type {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_m7uax_4._is-on_m7uax_14 > ._icon_m7uax_4:first-of-type {\n    opacity: 1\n}\n._icon-fork_m7uax_4._is-on_m7uax_14 > ._icon_m7uax_4:last-of-type {\n    opacity: 0\n}\n\n", ""]);
+	exports.push([module.id, "._icon-fork_csg7t_4 {\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4 {\n    /*position:   absolute;*/\n    opacity: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate( -50%, -50% );\n            transform: translate( -50%, -50% )\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4:nth-of-type(3) {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(2) {\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(3) {\n    opacity: 0\n}\n\n", ""]);
 
 	// exports
 
@@ -15046,9 +15103,9 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"icon-fork": "_icon-fork_m7uax_4",
-		"icon": "_icon_m7uax_4",
-		"is-on": "_is-on_m7uax_14"
+		"icon-fork": "_icon-fork_csg7t_4",
+		"icon": "_icon_csg7t_4",
+		"is-on": "_is-on_csg7t_18"
 	};
 
 /***/ },
@@ -15382,7 +15439,7 @@
 
 
 	// module
-	exports.push([module.id, "._label-button_1p6kr_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white;\n  /*&__label {  }*/\n}\n", ""]);
+	exports.push([module.id, "._label-button_1cxps_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white\n}\n._label-button__label_1cxps_1 {\n  position:        absolute;\n  left:        50%;\n  top:        50%;\n  -webkit-transform:        translate( -50%, -50% );\n          transform:        translate( -50%, -50% )\n}\n", ""]);
 
 	// exports
 
@@ -15392,7 +15449,8 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"label-button": "_label-button_1p6kr_4"
+		"label-button": "_label-button_1cxps_4",
+		"label-button__label": "_label-button__label_1cxps_1"
 	};
 
 /***/ },
@@ -15836,7 +15894,8 @@
 	    var icon = new _icon2.default({
 	      parent: this.el,
 	      shape: this._props.icon,
-	      size: this._props.iconSize
+	      size: this._props.iconSize,
+	      className: CLASSES['icon']
 	    });
 	    this.el.appendChild(icon.el);
 	  };
@@ -15892,7 +15951,7 @@
 
 
 	// module
-	exports.push([module.id, "._opacity-switch_x3c4d_4 {\n  opacity: .5\n}\n._opacity-switch_x3c4d_4._is-on_x3c4d_6 {\n  opacity: 1\n}\n", ""]);
+	exports.push([module.id, "._opacity-switch_sxfs6_4 {\n  opacity: .5;\n}\n._opacity-switch_sxfs6_4 ._icon_sxfs6_6 {\n  position:   absolute;\n  left:       50%;\n  top:        50%;\n  -webkit-transform:  translate(-50%, -50%);\n          transform:  translate(-50%, -50%);\n}\n._opacity-switch_sxfs6_4._is-on_sxfs6_12 {\n  opacity: 1;\n}\n", ""]);
 
 	// exports
 
@@ -15902,8 +15961,9 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"opacity-switch": "_opacity-switch_x3c4d_4",
-		"is-on": "_is-on_x3c4d_6"
+		"opacity-switch": "_opacity-switch_sxfs6_4",
+		"icon": "_icon_sxfs6_6",
+		"is-on": "_is-on_sxfs6_12"
 	};
 
 /***/ },
@@ -16125,6 +16185,114 @@
 		"mojs-player__mid": "_mojs-player__mid_11jsv_1",
 		"mojs-player__right": "_mojs-player__right_11jsv_1"
 	};
+
+/***/ },
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(78);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _hammerjs = __webpack_require__(82);
+
+	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
+	var _moJs = __webpack_require__(83);
+
+	var _moJs2 = _interopRequireDefault(_moJs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// require('css/blocks/handle.postcss.css');
+	// let CLASSES = require('css/blocks/handle.postcss.css.json');
+
+	var Ripple = function (_Module) {
+	  (0, _inherits3.default)(Ripple, _Module);
+
+	  function Ripple() {
+	    (0, _classCallCheck3.default)(this, Ripple);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to render the component.
+	    @private
+	    @overrides @ Module
+	  */
+
+	  Ripple.prototype._render = function _render() {
+	    var _this2 = this,
+	        _ref;
+
+	    _Module.prototype._render.call(this);
+	    this.transit = new _moJs2.default.Transit((_ref = {
+	      parent: this.el,
+	      strokeWidth: { 10: 0 },
+	      fill: 'none',
+	      // stroke:       'white',
+	      stroke: 'hotpink'
+	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .5: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
+	      _this2.isStart = true;
+	    }, _ref.onUpdate = function onUpdate(p) {
+	      if (p >= .15 && _this2.isStart && !_this2.isRelease) {
+	        _this2.setSpeed(.02);
+	        _this2.isStart = false;
+	      }
+	    }, _ref));
+	  };
+	  /*
+	    Method that should be run on touch serface release.
+	    @private
+	  */
+
+
+	  Ripple.prototype._release = function _release() {
+	    this.isRelease = true;
+	    this.transit.setSpeed(1).play();
+	  };
+	  /*
+	    Method that should be run on touch serface hold.
+	    @private
+	    @param {Object} Origin event object.
+	  */
+
+
+	  Ripple.prototype._hold = function _hold(e) {
+	    this.isRelease = false;
+	    this.transit.tune({ x: e.layerX, y: e.layerY }).replay();
+	  };
+	  /*
+	    Method that should be run on touch serface cancel.
+	    @private
+	  */
+
+
+	  Ripple.prototype._cancel = function _cancel() {
+	    this.isRelease = true;
+	    this.transit.pause().setSpeed(1).playBackward();
+	  };
+
+	  return Ripple;
+	}(_module2.default);
+
+	exports.default = Ripple;
 
 /***/ }
 /******/ ]);

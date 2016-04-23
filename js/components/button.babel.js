@@ -1,5 +1,6 @@
 import Module   from './module';
 import HammerJS from 'hammerjs';
+import Ripple   from './ripple';
 
 require('css/blocks/button.postcss.css');
 let CLASSES = require('css/blocks/button.postcss.css.json');
@@ -33,7 +34,11 @@ class Button extends Module {
     this.el.setAttribute( 'title', p.title );
     p.link && this.el.setAttribute( 'href', p.link );
     this._addListeners();
-    // this._createChild( 'div', CLASSES[ `${ className }__hover` ] )
+
+    this.ripple = new Ripple({
+      className: CLASSES[ `${className}__ripple` ],
+      parent:    this.el
+    });
   }
   /*
     Method to add event listeners to the icon.
@@ -42,26 +47,42 @@ class Button extends Module {
   _addListeners () {
     this._addPointerDownEvent( this.el, this._pointerDown.bind( this ) );
     this._addPointerUpEvent( this.el, this._pointerUp.bind( this ) );
+    this._addPointerUpEvent( document, this._pointerCancel.bind( this ) );
     HammerJS(this.el).on('doubletap', this._doubleTap.bind( this ) );
   }
   /*
-    Method to invoke onPointerDown callback if excist.
+    Method to invoke onPointerDown callback if exist.
     @private
     @param {Object} Original event object.
   */
   _pointerDown ( e ) {
+    this.wasTouched = true;
     this._callIfFunction( this._props.onPointerDown );
+    this.ripple._hold( e );
   }
   /*
-    Method to invoke onPointerUp callback if excist.
+    Method to invoke onPointerUp callback if exist.
     @private
     @param {Object} Original event object.
   */
   _pointerUp ( e ) {
+    this.wasTouched = false;
+    e.stopPropagation();
     this._callIfFunction( this._props.onPointerUp );
+    this.ripple._release();
   }
   /*
-    Method to invoke onDoubleTap callback if excist.
+    Method to invoke onPointerCancel callback if exist.
+    @private
+    @param {Object} Original event object.
+  */
+  _pointerCancel ( e ) {
+    if ( !this.wasTouched ) { return; };
+    this.wasTouched = false;
+    this.ripple._cancel();
+  }
+  /*
+    Method to invoke onDoubleTap callback if exist.
     @private
     @param {Object} Original event object.
   */

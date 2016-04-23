@@ -18,6 +18,15 @@ import LabelButton    from './components/label-button';
 require('css/blocks/mojs-player.postcss.css');
 let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
+/*
+  TODO:
+    - add track ripple
+    - add hide button
+    - delay option for player
+    - fix window resize issue
+    - encapsulate icons
+*/
+
 class MojsPlayer extends Module {
   _declareDefaults () {
     super._declareDefaults();
@@ -103,17 +112,6 @@ class MojsPlayer extends Module {
       title:    'mo • js'
     });
 
-    this.transit = new mojs.Transit({
-      parent:       this.el,
-      strokeWidth:  { 40 : 0 },
-      fill:         'none',
-      // stroke:       '#FF512F',
-      stroke:       'white',
-      opacity:      { .15: 0 },
-      isShowEnd:    false
-    });
-
-    this.transit.el.style[ 'z-index' ] = 0;
     window.addEventListener('beforeunload', this._onUnload.bind(this));
   }
   /*

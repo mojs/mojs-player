@@ -6,5 +6,10 @@
   font-size:          calc( 9 * $PX );
   letter-spacing:     calc( .5* $PX );
   color:              white;
-  /*&__label {  }*/
+  &__label {
+    position:         absolute;
+    left:             50%;
+    top:              50%;
+    transform:        translate( -50%, -50% );
+  }
 }
