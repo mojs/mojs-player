@@ -22,7 +22,8 @@ class Module {
     this._defaults = {
       className:  '',
       parent:     document.body,
-      isPrepend:  false
+      isPrepend:  false,
+      isRipple:   false
     };
   }
   /*
@@ -182,33 +183,6 @@ class Module {
     @param {Object} Child HTMLElement.
   */
   _prependChild ( el, childEl ) { el.insertBefore(childEl, el.firstChild); }
-  /*
-    Method to get ripple options.
-    @private
-    @returns {Object} Ripple transit options.
-  */
-  _getRippleOptions () {
-    return {
-      strokeWidth:  { 10 : 0 },
-      fill:         'none',
-      // stroke:       'white',
-      stroke:       'hotpink',
-      fill:         'hotpink',
-      fillOpacity:  .75,
-      opacity:      { .5: 0 },
-      radius:       { 0: 40 },
-      isShowEnd:    false,
-      onStart: function () {
-        this.isRipple = false;
-      },
-      onUpdate: function ( p ) {
-        if ( p >= .15 && !this.isRipple && !this.isUp ) {
-          this.setSpeed( .02 );
-          this.isRipple = true;
-        }
-      }
-    }
-  }
 }
 
 export default Module;

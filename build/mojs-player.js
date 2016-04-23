@@ -91,11 +91,11 @@
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _iconFork = __webpack_require__(142);
+	var _iconFork = __webpack_require__(143);
 
 	var _iconFork2 = _interopRequireDefault(_iconFork);
 
-	var _speedControl = __webpack_require__(150);
+	var _speedControl = __webpack_require__(151);
 
 	var _speedControl2 = _interopRequireDefault(_speedControl);
 
@@ -103,43 +103,45 @@
 
 	var _button2 = _interopRequireDefault(_button);
 
-	var _playerButton = __webpack_require__(158);
+	var _playerButton = __webpack_require__(159);
 
 	var _playerButton2 = _interopRequireDefault(_playerButton);
 
-	var _playButton = __webpack_require__(162);
+	var _playButton = __webpack_require__(163);
 
 	var _playButton2 = _interopRequireDefault(_playButton);
 
-	var _stopButton = __webpack_require__(166);
+	var _stopButton = __webpack_require__(167);
 
 	var _stopButton2 = _interopRequireDefault(_stopButton);
 
-	var _opacitySwitch = __webpack_require__(170);
+	var _opacitySwitch = __webpack_require__(171);
 
 	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
 
-	var _repeatButton = __webpack_require__(174);
+	var _repeatButton = __webpack_require__(175);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
-	var _boundsButton = __webpack_require__(178);
+	var _boundsButton = __webpack_require__(179);
 
 	var _boundsButton2 = _interopRequireDefault(_boundsButton);
 
-	var _labelButton = __webpack_require__(151);
+	var _labelButton = __webpack_require__(152);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(179);
-	var CLASSES = __webpack_require__(181);
+	__webpack_require__(180);
+	var CLASSES = __webpack_require__(182);
 
 	/*
 	  TODO:
 	    - add track ripple
+	    - add logo ripple
 	    - add hide button
+	    - add shortcuts
 	    - delay option for player
 	    - fix window resize issue
 	    - encapsulate icons
@@ -263,9 +265,7 @@
 
 	    clearTimeout(this._endTimer);
 	    this._endTimer = setTimeout(function () {
-	      if (_this2._props.isPlaying) {
-	        _this2._play();
-	      }
+	      _this2._props.isPlaying && _this2._play();
 	    }, 20);
 	  };
 	  /*
@@ -1987,7 +1987,8 @@
 	    this._defaults = {
 	      className: '',
 	      parent: document.body,
-	      isPrepend: false
+	      isPrepend: false,
+	      isRipple: false
 	    };
 	  };
 	  /*
@@ -2199,30 +2200,6 @@
 	  Module.prototype._prependChild = function _prependChild(el, childEl) {
 	    el.insertBefore(childEl, el.firstChild);
 	  };
-	  /*
-	    Method to get ripple options.
-	    @private
-	    @returns {Object} Ripple transit options.
-	  */
-
-
-	  Module.prototype._getRippleOptions = function _getRippleOptions() {
-	    var _ref;
-
-	    return _ref = {
-	      strokeWidth: { 10: 0 },
-	      fill: 'none',
-	      // stroke:       'white',
-	      stroke: 'hotpink'
-	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .5: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
-	      this.isRipple = false;
-	    }, _ref.onUpdate = function onUpdate(p) {
-	      if (p >= .15 && !this.isRipple && !this.isUp) {
-	        this.setSpeed(.02);
-	        this.isRipple = true;
-	      }
-	    }, _ref;
-	  };
 
 	  return Module;
 	}();
@@ -2348,6 +2325,7 @@
 	    this.leftBound = new _slider2.default({
 	      isBound: true,
 	      parent: this.el,
+	      isRipple: false,
 	      onProgress: this._onLeftBoundProgress.bind(this)
 	    });
 
@@ -2361,6 +2339,7 @@
 	    this.rightBound = new _slider2.default({
 	      isBound: true,
 	      parent: this.el,
+	      isRipple: false,
 	      isInversed: true,
 	      onProgress: this._onRightBoundProgress.bind(this)
 	    });
@@ -2474,6 +2453,7 @@
 	      parent: document.body,
 	      isBound: false,
 	      isInversed: false,
+	      isRipple: true,
 	      isProgress: true,
 	      onProgress: null,
 	      onSeekStart: null,
@@ -2590,6 +2570,7 @@
 	      onSeekEnd: p.onSeekEnd,
 	      isBound: p.isBound,
 	      isInversed: p.isInversed,
+	      isRipple: p.isRipple,
 	      isProgress: p.isProgress,
 	      parent: rootEl,
 	      direction: p.direction
@@ -2710,20 +2691,17 @@
 	  */
 
 	  Handle.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      minBound: 0,
-	      maxBound: 1,
-	      isBound: false,
-	      isInversed: false,
-	      direction: 'x',
-	      onSeekStart: null,
-	      onSeekEnd: null,
-	      onProgress: null,
-	      snapPoint: 0,
-	      snapStrength: 0
-	    };
+	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.minBound = 0;
+	    this._defaults.maxBound = 1;
+	    this._defaults.isBound = false;
+	    this._defaults.isInversed = false;
+	    this._defaults.direction = 'x';
+	    this._defaults.onSeekStart = null;
+	    this._defaults.onSeekEnd = null;
+	    this._defaults.onProgress = null;
+	    this._defaults.snapPoint = 0;
+	    this._defaults.snapStrength = 0;
 	  };
 	  /*
 	    Method to set handle progress.
@@ -2908,57 +2886,84 @@
 
 
 	  Handle.prototype._hammerTime = function _hammerTime() {
-	    var _this2 = this;
-
 	    var p = this._props,
 	        direction = p.direction === 'x' ? 'HORIZONTAL' : 'VERTICAL',
 	        hm = new _hammerjs2.default.Manager(this.el, {
 	      recognizers: [[_hammerjs2.default.Pan, { direction: _hammerjs2.default['DIRECTION_' + direction] }]]
 	    });
 
-	    hm.on('pan', function (e) {
-	      _this2._delta = p.direction === 'x' ? e.deltaX : -e.deltaY;
-	      // get progress from the shift to undestand how far is the snapPoint
-	      var shift = _this2._shift + _this2._delta,
-	          proc = _this2._shiftToProgress(shift);
-	      // if progress is around snapPoint set it to the snap point
-	      proc = Math.abs(proc - p.snapPoint) < p.snapStrength ? p.snapPoint : proc;
-	      // recalculate the progress to shift and set it
-	      _this2._setShift(_this2._progressToShift(proc));
-	    });
-
-	    hm.on('panend', function (e) {
-	      _this2._saveDelta();
-	      _this2._callIfFunction(p.onSeekEnd, [e]);
-	    });
-
-	    this._addPointerDownEvent(this.el, function (e) {
-	      _this2._isPointerDown = true;
-	      _this2._callIfFunction(p.onSeekStart, [e]);
-	    });
-
-	    this._addPointerUpEvents();
+	    hm.on('pan', this._pan.bind(this));
+	    hm.on('panend', this._panEnd.bind(this));
+	    this._addPointerDownEvent(this.el, this._pointerDown.bind(this));
+	    this._addPointerUpEvent(this.el, this._pointerUp.bind(this));
+	    // add listener on document to cover edge cases
+	    // like when you press -> leave the element -> release
+	    this._addPointerUpEvent(document, this._pointerUpDoc.bind(this));
 	  };
 	  /*
-	    Method to add pointer up events to handle the pointer up event.
+	    Callback for pan end on main el.
+	    @private
+	    @param {Object} Original event object.
 	  */
 
 
-	  Handle.prototype._addPointerUpEvents = function _addPointerUpEvents() {
-	    var _this3 = this;
-
+	  Handle.prototype._pan = function _pan(e) {
 	    var p = this._props;
-	    this._addPointerUpEvent(this.el, function (e) {
-	      _this3._callIfFunction(p.onSeekEnd, [e]);
-	    });
-	    // add listener on document to cover edge cases
-	    // like when you press -> leave the element -> release
-	    this._addPointerUpEvent(document, function (e) {
-	      if (_this3._isPointerDown) {
-	        _this3._callIfFunction(p.onSeekEnd, [e]);
-	        _this3._isPointerDown = false;
-	      }
-	    });
+	    this._delta = p.direction === 'x' ? e.deltaX : -e.deltaY;
+	    // get progress from the shift to undestand how far is the snapPoint
+	    var shift = this._shift + this._delta,
+	        proc = this._shiftToProgress(shift);
+	    // if progress is around snapPoint set it to the snap point
+	    proc = Math.abs(proc - p.snapPoint) < p.snapStrength ? p.snapPoint : proc;
+	    // recalculate the progress to shift and set it
+	    this._setShift(this._progressToShift(proc));
+	  };
+	  /*
+	    Callback for pan end on main el.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Handle.prototype._panEnd = function _panEnd(e) {
+	    this._saveDelta();
+	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	  };
+	  /*
+	    Callback for pointer down on main el.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Handle.prototype._pointerDown = function _pointerDown(e) {
+	    var p = this._props;
+	    this._isPointerDown = true;
+	    this._callIfFunction(p.onSeekStart, [e]);
+	  };
+	  /*
+	    Callback for pointer up on main el.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Handle.prototype._pointerUp = function _pointerUp(e) {
+	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	  };
+	  /*
+	    Callback for pointer up on document.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Handle.prototype._pointerUpDoc = function _pointerUpDoc(e) {
+	    if (!this._isPointerDown) {
+	      return;
+	    }
+	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	    this._isPointerDown = false;
 	  };
 	  /*
 	    Method to add _delta to _shift.
@@ -13779,9 +13784,9 @@
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _moJs = __webpack_require__(83);
+	var _ripple = __webpack_require__(136);
 
-	var _moJs2 = _interopRequireDefault(_moJs);
+	var _ripple2 = _interopRequireDefault(_ripple);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13805,18 +13810,26 @@
 	  Track.prototype._declareDefaults = function _declareDefaults() {
 	    _Handle.prototype._declareDefaults.call(this);
 	    this._defaults.isProgress = true;
+	    this._defaults.isRipple = true;
 	  };
 	  /*
-	    Method to set handle shift.
+	    Method to render the component.
 	    @private
 	    @overrides @ Handle
-	    @param {Number} Shift in `px`.
-	    @param {Boolean} It should invoke onProgress callback.
-	    @returns {Number}.
 	  */
-	  // _setShift ( shift, isCallback = true ) {
-	  //   return super._setShift( shift, isCallback );
-	  // }
+
+
+	  Track.prototype._render = function _render() {
+	    _Handle.prototype._render.call(this);
+	    if (!this._props.isRipple) {
+	      return;
+	    }
+	    this.ripple = new _ripple2.default({
+	      withHold: false,
+	      className: CLASSES['track__ripple'],
+	      parent: this.el
+	    });
+	  };
 	  /*
 	    Method to apply shift to the DOMElement.
 	    @private
@@ -13832,7 +13845,6 @@
 	    if (this._props.isInversed) {
 	      shift = this._maxWidth - shift;
 	    }
-	    // translateZ(0)
 	    var transform = 'scaleX( ' + shift + ' )';
 	    this.trackProgressEl.style.transform = transform;
 	  };
@@ -13874,7 +13886,6 @@
 	      this.trackProgressEl = trackP;
 	      this.el.appendChild(trackP);
 	    }
-
 	    // track
 	    if (!p.isBound) {
 	      var track = document.createElement('div');
@@ -13882,24 +13893,27 @@
 	      this.el.appendChild(track);
 	    }
 	  };
+	  /*
+	    Callback for pointer down on main el.
+	    @private
+	    @param {Object} Original event object.
+	    @overrides @ Handle
+	  */
 
-	  Track.prototype._hammerTime = function _hammerTime() {
-	    var _this2 = this;
 
-	    var p = this._props;
-	    _Handle.prototype._hammerTime.call(this);
-	    this._addPointerDownEvent(this.el, function (e) {
-	      _this2._isPointerDown = true;
-	      var x = _this2._props.direction === 'x' ? e.layerX : e.layerY;
+	  Track.prototype._pointerDown = function _pointerDown(e) {
+	    var p = this._props,
+	        x = p.direction === 'x' ? e.layerX : e.layerY;
+	    this._isPointerDown = true;
 
-	      if (p.direction === 'y') {
-	        x = _this2._maxWidth - e.layerY;
-	      }
-	      x = _this2._props.isInversed && x < 0 ? _this2._maxWidth + x : x;
-	      _this2.setProgress(_this2._shiftToProgress(x));
+	    if (p.direction === 'y') {
+	      x = this._maxWidth - e.layerY;
+	    }
+	    x = this._props.isInversed && x < 0 ? this._maxWidth + x : x;
+	    this.setProgress(this._shiftToProgress(x));
 
-	      _this2._callIfFunction(p.onSeekStart, [e]);
-	    });
+	    p.isRipple && this.ripple._hold(e);
+	    this._callIfFunction(p.onSeekStart, [e]);
 	  };
 
 	  return Track;
@@ -13942,7 +13956,7 @@
 
 
 	// module
-	exports.push([module.id, "._track_1mvb5_5 {\n  position:           relative;\n  height:             100%\n\n}\n._track__track_1mvb5_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n}\n._track__track_1mvb5_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track__track-progress_1mvb5_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n}\n._track__track-progress_1mvb5_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n}\n._track_1mvb5_5._is-inversed_1mvb5_55 {\n  left:           auto;\n  right:           0\n\n}\n._track_1mvb5_5._is-inversed_1mvb5_55 ._track__track-progress_1mvb5_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n}\n._track_1mvb5_5._is-bound_1mvb5_64 ._track__track-progress_1mvb5_1 {\n  background:           #FF512F\n\n}\n._track_1mvb5_5._is-y_1mvb5_68 ._track__track_1mvb5_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px;\n  width:           1px;\n  width:           0.0625rem\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n}\n\n", ""]);
+	exports.push([module.id, "._track_1inlw_5 {\n  position:           relative;\n  height:             100%\n\n\n}\n._track__track_1inlw_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n\n}\n._track__track_1inlw_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__track-progress_1inlw_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n\n}\n._track__track-progress_1inlw_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__ripple_1inlw_1 {\n  position:           absolute;\n  left:           0;\n  top:           0;\n  right:           0;\n  bottom:           0;\n  overflow:           hidden;\n  z-index:           1\n\n\n}\n._track_1inlw_5._is-inversed_1inlw_65 {\n  left:           auto;\n  right:           0\n\n\n}\n._track_1inlw_5._is-inversed_1inlw_65 ._track__track-progress_1inlw_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n\n}\n._track_1inlw_5._is-bound_1inlw_74 ._track__track-progress_1inlw_1 {\n  background:           #FF512F\n\n\n}\n._track_1inlw_5._is-y_1inlw_78 ._track__track_1inlw_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px;\n  width:           1px;\n  width:           0.0625rem\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n\n}\n\n", ""]);
 
 	// exports
 
@@ -13952,12 +13966,13 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"track": "_track_1mvb5_5",
-		"track__track": "_track__track_1mvb5_1",
-		"track__track-progress": "_track__track-progress_1mvb5_1",
-		"is-inversed": "_is-inversed_1mvb5_55",
-		"is-bound": "_is-bound_1mvb5_64",
-		"is-y": "_is-y_1mvb5_68"
+		"track": "_track_1inlw_5",
+		"track__track": "_track__track_1inlw_1",
+		"track__track-progress": "_track__track-progress_1inlw_1",
+		"track__ripple": "_track__ripple_1inlw_1",
+		"is-inversed": "_is-inversed_1inlw_65",
+		"is-bound": "_is-bound_1inlw_74",
+		"is-y": "_is-y_1inlw_78"
 	};
 
 /***/ },
@@ -14491,8 +14506,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(139);
-	var CLASSES = __webpack_require__(141);
+	__webpack_require__(140);
+	var CLASSES = __webpack_require__(142);
 
 	var IconButton = function (_Button) {
 	  (0, _inherits3.default)(IconButton, _Button);
@@ -14565,14 +14580,14 @@
 
 	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
-	var _ripple = __webpack_require__(182);
+	var _ripple = __webpack_require__(136);
 
 	var _ripple2 = _interopRequireDefault(_ripple);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(136);
-	var CLASSES = __webpack_require__(138);
+	__webpack_require__(137);
+	var CLASSES = __webpack_require__(139);
 
 	var Button = function (_Module) {
 	  (0, _inherits3.default)(Button, _Module);
@@ -14690,10 +14705,161 @@
 /* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	exports.__esModule = true;
+
+	var _classCallCheck2 = __webpack_require__(5);
+
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+	var _possibleConstructorReturn2 = __webpack_require__(6);
+
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+	var _inherits2 = __webpack_require__(70);
+
+	var _inherits3 = _interopRequireDefault(_inherits2);
+
+	var _module = __webpack_require__(78);
+
+	var _module2 = _interopRequireDefault(_module);
+
+	var _hammerjs = __webpack_require__(82);
+
+	var _hammerjs2 = _interopRequireDefault(_hammerjs);
+
+	var _moJs = __webpack_require__(83);
+
+	var _moJs2 = _interopRequireDefault(_moJs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// require('css/blocks/handle.postcss.css');
+	// let CLASSES = require('css/blocks/handle.postcss.css.json');
+
+	var Ripple = function (_Module) {
+	  (0, _inherits3.default)(Ripple, _Module);
+
+	  function Ripple() {
+	    (0, _classCallCheck3.default)(this, Ripple);
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
+	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ Module.
+	  */
+
+	  Ripple.prototype._declareDefaults = function _declareDefaults() {
+	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.withHold = true;
+	  };
+	  /*
+	    Method to render the component.
+	    @private
+	    @overrides @ Module
+	  */
+
+
+	  Ripple.prototype._render = function _render() {
+	    _Module.prototype._render.call(this);
+	    this._addRipple();
+	  };
+	  /*
+	    Method to construct ripple object.
+	    @private
+	  */
+
+
+	  Ripple.prototype._addRipple = function _addRipple() {
+	    var _ref;
+
+	    this.transit = new _moJs2.default.Transit((_ref = {
+	      parent: this.el,
+	      strokeWidth: { 10: 0 },
+	      fill: 'none',
+	      // stroke:       'white',
+	      stroke: 'hotpink'
+	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .85: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = this._onStart.bind(this), _ref.onUpdate = this._onUpdate.bind(this), _ref));
+	  };
+	  /*
+	    Method that is invoked on ripple start.
+	    @private
+	  */
+
+
+	  Ripple.prototype._onStart = function _onStart() {
+	    this.isStart = true;
+	  };
+	  /*
+	    Method that is invoked on ripple update.
+	    @private
+	    @param {Number} Curret progress [0...1].
+	  */
+
+
+	  Ripple.prototype._onUpdate = function _onUpdate(p) {
+	    if (!this._props.withHold) {
+	      return;
+	    }
+	    if (p >= .15 && this.isStart && !this.isRelease) {
+	      this.isStart = false;
+	      this.transit.setSpeed(.02);
+	    }
+	  };
+	  /*
+	    Method that should be run on touch serface release.
+	    @private
+	  */
+
+
+	  Ripple.prototype._release = function _release() {
+	    if (!this._props.withHold) {
+	      return;
+	    }
+	    this.isRelease = true;
+	    this.transit.setSpeed(1).play();
+	  };
+	  /*
+	    Method that should be run on touch serface hold.
+	    @private
+	    @param {Object} Origin event object.
+	  */
+
+
+	  Ripple.prototype._hold = function _hold(e) {
+	    this.isRelease = false;
+	    this.transit.tune({ x: e.layerX, y: e.layerY }).replay();
+	  };
+	  /*
+	    Method that should be run on touch serface cancel.
+	    @private
+	  */
+
+
+	  Ripple.prototype._cancel = function _cancel() {
+	    if (!this._props.withHold) {
+	      return;
+	    }
+	    this.isRelease = true;
+	    this.transit.pause().setSpeed(1).playBackward();
+	  };
+
+	  return Ripple;
+	}(_module2.default);
+
+	exports.default = Ripple;
+
+/***/ },
+/* 137 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(137);
+	var content = __webpack_require__(138);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -14713,7 +14879,7 @@
 	}
 
 /***/ },
-/* 137 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -14727,7 +14893,7 @@
 
 
 /***/ },
-/* 138 */
+/* 139 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14736,13 +14902,13 @@
 	};
 
 /***/ },
-/* 139 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(140);
+	var content = __webpack_require__(141);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -14762,7 +14928,7 @@
 	}
 
 /***/ },
-/* 140 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -14776,7 +14942,7 @@
 
 
 /***/ },
-/* 141 */
+/* 142 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -14785,7 +14951,7 @@
 	};
 
 /***/ },
-/* 142 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14804,7 +14970,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _buttonSwitch = __webpack_require__(143);
+	var _buttonSwitch = __webpack_require__(144);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
@@ -14816,8 +14982,8 @@
 
 	// import HammerJS from 'hammerjs'
 
-	__webpack_require__(147);
-	var CLASSES = __webpack_require__(149);
+	__webpack_require__(148);
+	var CLASSES = __webpack_require__(150);
 
 	var IconFork = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(IconFork, _ButtonSwitch);
@@ -14865,7 +15031,7 @@
 	exports.default = IconFork;
 
 /***/ },
-/* 143 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14890,8 +15056,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(144);
-	var CLASSES = __webpack_require__(146);
+	__webpack_require__(145);
+	var CLASSES = __webpack_require__(147);
 
 	var ButtonSwitch = function (_Button) {
 	  (0, _inherits3.default)(ButtonSwitch, _Button);
@@ -15010,13 +15176,13 @@
 	exports.default = ButtonSwitch;
 
 /***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(145);
+	var content = __webpack_require__(146);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15036,7 +15202,7 @@
 	}
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15050,7 +15216,7 @@
 
 
 /***/ },
-/* 146 */
+/* 147 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15059,13 +15225,13 @@
 	};
 
 /***/ },
-/* 147 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(148);
+	var content = __webpack_require__(149);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15085,7 +15251,7 @@
 	}
 
 /***/ },
-/* 148 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15099,7 +15265,7 @@
 
 
 /***/ },
-/* 149 */
+/* 150 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15109,7 +15275,7 @@
 	};
 
 /***/ },
-/* 150 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15132,7 +15298,7 @@
 
 	var _module2 = _interopRequireDefault(_module);
 
-	var _labelButton = __webpack_require__(151);
+	var _labelButton = __webpack_require__(152);
 
 	var _labelButton2 = _interopRequireDefault(_labelButton);
 
@@ -15146,8 +15312,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(155);
-	var CLASSES = __webpack_require__(157);
+	__webpack_require__(156);
+	var CLASSES = __webpack_require__(158);
 
 	var SpeedControl = function (_Module) {
 	  (0, _inherits3.default)(SpeedControl, _Module);
@@ -15298,7 +15464,7 @@
 	exports.default = SpeedControl;
 
 /***/ },
-/* 151 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15317,14 +15483,14 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _buttonSwitch = __webpack_require__(143);
+	var _buttonSwitch = __webpack_require__(144);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(152);
-	var CLASSES = __webpack_require__(154);
+	__webpack_require__(153);
+	var CLASSES = __webpack_require__(155);
 
 	var LabelButton = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(LabelButton, _ButtonSwitch);
@@ -15405,13 +15571,13 @@
 	exports.default = LabelButton;
 
 /***/ },
-/* 152 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(153);
+	var content = __webpack_require__(154);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15431,7 +15597,7 @@
 	}
 
 /***/ },
-/* 153 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15445,7 +15611,7 @@
 
 
 /***/ },
-/* 154 */
+/* 155 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15454,13 +15620,13 @@
 	};
 
 /***/ },
-/* 155 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(156);
+	var content = __webpack_require__(157);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15480,7 +15646,7 @@
 	}
 
 /***/ },
-/* 156 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15494,7 +15660,7 @@
 
 
 /***/ },
-/* 157 */
+/* 158 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15505,7 +15671,7 @@
 	};
 
 /***/ },
-/* 158 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15530,8 +15696,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(159);
-	var CLASSES = __webpack_require__(161);
+	__webpack_require__(160);
+	var CLASSES = __webpack_require__(162);
 
 	var PlayerButton = function (_Button) {
 	  (0, _inherits3.default)(PlayerButton, _Button);
@@ -15559,13 +15725,13 @@
 	exports.default = PlayerButton;
 
 /***/ },
-/* 159 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(160);
+	var content = __webpack_require__(161);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15585,7 +15751,7 @@
 	}
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15599,7 +15765,7 @@
 
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15607,7 +15773,7 @@
 	};
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15626,15 +15792,15 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _iconFork = __webpack_require__(142);
+	var _iconFork = __webpack_require__(143);
 
 	var _iconFork2 = _interopRequireDefault(_iconFork);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(163);
-	var CLASSES = __webpack_require__(165),
-	    PLAYER_BTN_CLASSES = __webpack_require__(161);
+	__webpack_require__(164);
+	var CLASSES = __webpack_require__(166),
+	    PLAYER_BTN_CLASSES = __webpack_require__(162);
 
 	var PlayButton = function (_IconFork) {
 	  (0, _inherits3.default)(PlayButton, _IconFork);
@@ -15674,13 +15840,13 @@
 	exports.default = PlayButton;
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(164);
+	var content = __webpack_require__(165);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15700,7 +15866,7 @@
 	}
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15714,7 +15880,7 @@
 
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15722,7 +15888,7 @@
 	};
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15747,8 +15913,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(167);
-	var CLASSES = __webpack_require__(169);
+	__webpack_require__(168);
+	var CLASSES = __webpack_require__(170);
 
 	var StopButton = function (_IconButton) {
 	  (0, _inherits3.default)(StopButton, _IconButton);
@@ -15782,13 +15948,13 @@
 	exports.default = StopButton;
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(168);
+	var content = __webpack_require__(169);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15808,7 +15974,7 @@
 	}
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15822,7 +15988,7 @@
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15830,7 +15996,7 @@
 	};
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15853,14 +16019,14 @@
 
 	var _icon2 = _interopRequireDefault(_icon);
 
-	var _buttonSwitch = __webpack_require__(143);
+	var _buttonSwitch = __webpack_require__(144);
 
 	var _buttonSwitch2 = _interopRequireDefault(_buttonSwitch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(171);
-	var CLASSES = __webpack_require__(173);
+	__webpack_require__(172);
+	var CLASSES = __webpack_require__(174);
 
 	var OpacitySwitch = function (_ButtonSwitch) {
 	  (0, _inherits3.default)(OpacitySwitch, _ButtonSwitch);
@@ -15917,13 +16083,13 @@
 	exports.default = OpacitySwitch;
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(172);
+	var content = __webpack_require__(173);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -15943,7 +16109,7 @@
 	}
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -15957,7 +16123,7 @@
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -15967,7 +16133,7 @@
 	};
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15986,14 +16152,14 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _opacitySwitch = __webpack_require__(170);
+	var _opacitySwitch = __webpack_require__(171);
 
 	var _opacitySwitch2 = _interopRequireDefault(_opacitySwitch);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(175);
-	var CLASSES = __webpack_require__(177);
+	__webpack_require__(176);
+	var CLASSES = __webpack_require__(178);
 
 	var RepeatButton = function (_OpacitySwitch) {
 	  (0, _inherits3.default)(RepeatButton, _OpacitySwitch);
@@ -16034,13 +16200,13 @@
 	exports.default = RepeatButton;
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(176);
+	var content = __webpack_require__(177);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -16060,7 +16226,7 @@
 	}
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -16074,7 +16240,7 @@
 
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -16082,7 +16248,7 @@
 	};
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16101,7 +16267,7 @@
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	var _repeatButton = __webpack_require__(174);
+	var _repeatButton = __webpack_require__(175);
 
 	var _repeatButton2 = _interopRequireDefault(_repeatButton);
 
@@ -16136,13 +16302,13 @@
 	exports.default = BoundsButton;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(180);
+	var content = __webpack_require__(181);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(117)(content, {});
@@ -16162,7 +16328,7 @@
 	}
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(116)();
@@ -16176,7 +16342,7 @@
 
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -16185,114 +16351,6 @@
 		"mojs-player__mid": "_mojs-player__mid_11jsv_1",
 		"mojs-player__right": "_mojs-player__right_11jsv_1"
 	};
-
-/***/ },
-/* 182 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _classCallCheck2 = __webpack_require__(5);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _possibleConstructorReturn2 = __webpack_require__(6);
-
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-	var _inherits2 = __webpack_require__(70);
-
-	var _inherits3 = _interopRequireDefault(_inherits2);
-
-	var _module = __webpack_require__(78);
-
-	var _module2 = _interopRequireDefault(_module);
-
-	var _hammerjs = __webpack_require__(82);
-
-	var _hammerjs2 = _interopRequireDefault(_hammerjs);
-
-	var _moJs = __webpack_require__(83);
-
-	var _moJs2 = _interopRequireDefault(_moJs);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// require('css/blocks/handle.postcss.css');
-	// let CLASSES = require('css/blocks/handle.postcss.css.json');
-
-	var Ripple = function (_Module) {
-	  (0, _inherits3.default)(Ripple, _Module);
-
-	  function Ripple() {
-	    (0, _classCallCheck3.default)(this, Ripple);
-	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
-	  }
-
-	  /*
-	    Method to render the component.
-	    @private
-	    @overrides @ Module
-	  */
-
-	  Ripple.prototype._render = function _render() {
-	    var _this2 = this,
-	        _ref;
-
-	    _Module.prototype._render.call(this);
-	    this.transit = new _moJs2.default.Transit((_ref = {
-	      parent: this.el,
-	      strokeWidth: { 10: 0 },
-	      fill: 'none',
-	      // stroke:       'white',
-	      stroke: 'hotpink'
-	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .5: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
-	      _this2.isStart = true;
-	    }, _ref.onUpdate = function onUpdate(p) {
-	      if (p >= .15 && _this2.isStart && !_this2.isRelease) {
-	        _this2.setSpeed(.02);
-	        _this2.isStart = false;
-	      }
-	    }, _ref));
-	  };
-	  /*
-	    Method that should be run on touch serface release.
-	    @private
-	  */
-
-
-	  Ripple.prototype._release = function _release() {
-	    this.isRelease = true;
-	    this.transit.setSpeed(1).play();
-	  };
-	  /*
-	    Method that should be run on touch serface hold.
-	    @private
-	    @param {Object} Origin event object.
-	  */
-
-
-	  Ripple.prototype._hold = function _hold(e) {
-	    this.isRelease = false;
-	    this.transit.tune({ x: e.layerX, y: e.layerY }).replay();
-	  };
-	  /*
-	    Method that should be run on touch serface cancel.
-	    @private
-	  */
-
-
-	  Ripple.prototype._cancel = function _cancel() {
-	    this.isRelease = true;
-	    this.transit.pause().setSpeed(1).playBackward();
-	  };
-
-	  return Ripple;
-	}(_module2.default);
-
-	exports.default = Ripple;
 
 /***/ }
 /******/ ]);

@@ -74,6 +74,7 @@ class PlayerSlider extends Module {
     this.leftBound = new Slider({
       isBound:        true,
       parent:         this.el,
+      isRipple:       false,
       onProgress:     this._onLeftBoundProgress.bind(this)
     });
 
@@ -87,6 +88,7 @@ class PlayerSlider extends Module {
     this.rightBound = new Slider({
       isBound:        true,
       parent:         this.el,
+      isRipple:       false,
       isInversed:     true,
       onProgress:     this._onRightBoundProgress.bind(this)
     });

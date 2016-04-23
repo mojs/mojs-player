@@ -21,7 +21,9 @@ let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 /*
   TODO:
     - add track ripple
+    - add logo ripple
     - add hide button
+    - add shortcuts
     - delay option for player
     - fix window resize issue
     - encapsulate icons
@@ -128,9 +130,7 @@ class MojsPlayer extends Module {
   _onSeekEnd ( e ) {
     clearTimeout( this._endTimer );
     this._endTimer = setTimeout( () => {
-      if ( this._props.isPlaying ) {
-        this._play();
-      }
+      this._props.isPlaying &&this._play();
     }, 20 );
   }
   /*

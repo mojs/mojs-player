@@ -12,20 +12,17 @@ class Handle extends Module {
     @overrides @ Module
   */
   _declareDefaults () {
-    this._defaults = {
-      className:      '',
-      parent:         document.body,
-      minBound:       0,
-      maxBound:       1,
-      isBound:        false,
-      isInversed:     false,
-      direction:      'x',
-      onSeekStart:    null,
-      onSeekEnd:      null,
-      onProgress:     null,
-      snapPoint:      0,
-      snapStrength:   0
-    }
+    super._declareDefaults();
+    this._defaults.minBound     = 0;
+    this._defaults.maxBound     = 1;
+    this._defaults.isBound      = false;
+    this._defaults.isInversed   = false;
+    this._defaults.direction    = 'x';
+    this._defaults.onSeekStart  = null;
+    this._defaults.onSeekEnd    = null;
+    this._defaults.onProgress   = null;
+    this._defaults.snapPoint    = 0;
+    this._defaults.snapStrength = 0;
   }
   /*
     Method to set handle progress.
@@ -182,46 +179,65 @@ class Handle extends Module {
           ]
         });
 
-    hm.on('pan', ( e ) => {
-      this._delta = ( p.direction === 'x' ) ? e.deltaX : -e.deltaY;
-      // get progress from the shift to undestand how far is the snapPoint
-      let shift = this._shift + this._delta,
-          proc  = this._shiftToProgress( shift );
-      // if progress is around snapPoint set it to the snap point
-      proc = ( Math.abs( proc - p.snapPoint ) < p.snapStrength )
-        ? p.snapPoint : proc;
-      // recalculate the progress to shift and set it
-      this._setShift( this._progressToShift( proc ) );
-    });
-
-    hm.on('panend', ( e ) => {
-      this._saveDelta();
-      this._callIfFunction( p.onSeekEnd, [ e ] );
-    });
-
-    this._addPointerDownEvent( this.el, (e) => {
-      this._isPointerDown = true;
-      this._callIfFunction( p.onSeekStart, [ e ] );
-    });
-    
-    this._addPointerUpEvents();
-  }
-  /*
-    Method to add pointer up events to handle the pointer up event.
-  */
-  _addPointerUpEvents () {
-    let p = this._props;
-    this._addPointerUpEvent( this.el, (e) => {
-      this._callIfFunction( p.onSeekEnd, [ e ] );
-    });
+    hm.on( 'pan', this._pan.bind( this ) );
+    hm.on( 'panend', this._panEnd.bind( this ) );
+    this._addPointerDownEvent( this.el, this._pointerDown.bind(this) );
+    this._addPointerUpEvent( this.el, this._pointerUp.bind( this ) );
     // add listener on document to cover edge cases
     // like when you press -> leave the element -> release
-    this._addPointerUpEvent( document, (e) => {
-      if ( this._isPointerDown ) {
-        this._callIfFunction( p.onSeekEnd, [ e ] );
-        this._isPointerDown = false;
-      }
-    });
+    this._addPointerUpEvent( document, this._pointerUpDoc.bind( this ) );
+  }
+  /*
+    Callback for pan end on main el.
+    @private
+    @param {Object} Original event object.
+  */
+  _pan ( e ) {
+    let p = this._props;
+    this._delta = ( p.direction === 'x' ) ? e.deltaX : -e.deltaY;
+    // get progress from the shift to undestand how far is the snapPoint
+    let shift = this._shift + this._delta,
+        proc  = this._shiftToProgress( shift );
+    // if progress is around snapPoint set it to the snap point
+    proc = ( Math.abs( proc - p.snapPoint ) < p.snapStrength )
+      ? p.snapPoint : proc;
+    // recalculate the progress to shift and set it
+    this._setShift( this._progressToShift( proc ) );
+  }
+  /*
+    Callback for pan end on main el.
+    @private
+    @param {Object} Original event object.
+  */
+  _panEnd ( e ) {
+    this._saveDelta();
+    this._callIfFunction( this._props.onSeekEnd, [ e ] );
+  }
+  /*
+    Callback for pointer down on main el.
+    @private
+    @param {Object} Original event object.
+  */
+  _pointerDown ( e ) {
+    let p = this._props;
+    this._isPointerDown = true;
+    this._callIfFunction( p.onSeekStart, [ e ] );
+  }
+  /*
+    Callback for pointer up on main el.
+    @private
+    @param {Object} Original event object.
+  */
+  _pointerUp ( e ) { this._callIfFunction( this._props.onSeekEnd, [ e ] ); }
+  /*
+    Callback for pointer up on document.
+    @private
+    @param {Object} Original event object.
+  */
+  _pointerUpDoc ( e ) {
+    if ( !this._isPointerDown ) { return }
+    this._callIfFunction( this._props.onSeekEnd, [ e ] );
+    this._isPointerDown = false;
   }
   /*
     Method to add _delta to _shift.

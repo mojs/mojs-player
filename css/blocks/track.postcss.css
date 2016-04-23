@@ -52,6 +52,16 @@ $height: 40;
     }
   }
 
+  &__ripple {
+    position:         absolute;
+    left:             0;
+    top:              0;
+    right:            0;
+    bottom:           0;
+    overflow:         hidden;
+    z-index:          1;
+  }
+
   &.is-inversed {
     left:             auto;
     right:            0;
@@ -74,6 +84,7 @@ $height: 40;
     
     /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */
   }
+
 
 }
 

@@ -17,6 +17,7 @@ class Slider extends Module {
       parent:         document.body,
       isBound:        false,
       isInversed:     false,
+      isRipple:       true,
       isProgress:     true,
       onProgress:     null,
       onSeekStart:    null,
@@ -120,6 +121,7 @@ class Slider extends Module {
       onSeekEnd:      p.onSeekEnd,
       isBound:        p.isBound,
       isInversed:     p.isInversed,
+      isRipple:       p.isRipple,
       isProgress:     p.isProgress,
       parent:         rootEl,
       direction:      p.direction

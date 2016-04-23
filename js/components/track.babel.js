@@ -1,10 +1,9 @@
 import Handle  from './handle';
 import HamerJS from 'hammerjs';
-import mojs    from 'mo-js';
+import Ripple  from './ripple';
 
 require('css/blocks/track.postcss.css');
 let CLASSES = require('css/blocks/track.postcss.css.json');
-
 
 class Track extends Handle {
   /*
@@ -15,18 +14,22 @@ class Track extends Handle {
   _declareDefaults () {
     super._declareDefaults();
     this._defaults.isProgress = true;
+    this._defaults.isRipple   = true;
   }
   /*
-    Method to set handle shift.
+    Method to render the component.
     @private
     @overrides @ Handle
-    @param {Number} Shift in `px`.
-    @param {Boolean} It should invoke onProgress callback.
-    @returns {Number}.
   */
-  // _setShift ( shift, isCallback = true ) {
-  //   return super._setShift( shift, isCallback );
-  // }
+  _render () {
+    super._render();
+    if ( !this._props.isRipple ) { return; }
+    this.ripple = new Ripple({
+      withHold:   false,
+      className:  CLASSES[ `track__ripple` ],
+      parent:     this.el
+    });
+  }
   /*
     Method to apply shift to the DOMElement.
     @private
@@ -36,7 +39,6 @@ class Track extends Handle {
   _applyShift ( shift ) {
     if ( !this._props.isProgress ) { return; }
     if ( this._props.isInversed ) { shift = this._maxWidth - shift; }
-    // translateZ(0)
     let transform = `scaleX( ${shift} )`;
     this.trackProgressEl.style.transform = transform;
   }
@@ -68,7 +70,6 @@ class Track extends Handle {
       this.trackProgressEl = trackP;
       this.el.appendChild( trackP );
     }
-
     // track
     if ( !p.isBound ) {
       let track  = document.createElement('div');
@@ -77,20 +78,23 @@ class Track extends Handle {
     }
     
   }
+  /*
+    Callback for pointer down on main el.
+    @private
+    @param {Object} Original event object.
+    @overrides @ Handle
+  */
+  _pointerDown ( e ) {
+    let p = this._props,
+        x = (p.direction === 'x' ) ? e.layerX : e.layerY;
+    this._isPointerDown = true;
 
-  _hammerTime () {
-    let p = this._props;
-    super._hammerTime();
-    this._addPointerDownEvent( this.el, (e) => {
-      this._isPointerDown = true;
-      let x = (this._props.direction === 'x' ) ? e.layerX : e.layerY;
+    if ( p.direction === 'y' ) { x = this._maxWidth - e.layerY; }
+    x = ( this._props.isInversed && x < 0 ) ? this._maxWidth + x : x;
+    this.setProgress( this._shiftToProgress( x ) );
 
-      if ( p.direction === 'y' ) { x = this._maxWidth - e.layerY; }
-      x = ( this._props.isInversed && x < 0 ) ? this._maxWidth + x : x;
-      this.setProgress( this._shiftToProgress( x ) );
-
-      this._callIfFunction( p.onSeekStart, [ e ] );
-    });
+    p.isRipple && this.ripple._hold( e );
+    this._callIfFunction( p.onSeekStart, [ e ] );
   }
 }
 
