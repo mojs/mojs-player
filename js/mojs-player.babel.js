@@ -1,5 +1,6 @@
 
 import Polyfill       from 'classlist-polyfill';
+import Icons          from './components/icons';
 import Module         from './components/module';
 import PlayerSlider   from './components/player-slider';
 import IconButton     from './components/icon-button';
@@ -8,7 +9,7 @@ import PlayButton     from './components/play-button';
 import StopButton     from './components/stop-button';
 import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
-import Icons          from './components/icons';
+import HideButton     from './components/hide-button';
 
 require('css/blocks/mojs-player.postcss.css');
 let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
@@ -16,9 +17,9 @@ let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 /*
   TODO:
     - add hide button
-    - add shortcuts
     - fix window resize issue
-    - encapsulate icons
+    - add shortcuts
+    - optimize arrays in args calls
     - add logo ripple
 */
 
@@ -36,6 +37,7 @@ class MojsPlayer extends Module {
     this._defaults.speed      = this._fallbackTo( m.speed,      .5 );
     this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
+    this._defaults.isHidden   = this._fallbackTo( m.isHidden,    false );
   }
   /*
     Method to render the module.
@@ -108,6 +110,14 @@ class MojsPlayer extends Module {
       title:    'mo • js'
     });
 
+    console.log(CLASSES[ `${ className }__hide-button` ])
+    this.hideButton   = new HideButton({
+      parent:         this.el,
+      className:      CLASSES[ `${ className }__hide-button` ],
+      isOn:           p.isHidden,
+      onStateChange:  this._onHideStateChange.bind( this )
+    });
+
     window.addEventListener('beforeunload', this._onUnload.bind(this));
   }
   /*
@@ -160,7 +170,9 @@ class MojsPlayer extends Module {
     }
     if ( p >= rightBound ) {
       this._sysTween.pause();
-      if ( this._props.isRepeat ) { this._defer( this._play ); }
+      if ( this._props.isRepeat ) {
+        this._defer( this._play );
+      } else { this._props.isPlaying = false; }
     }
   }
   /*
@@ -195,6 +207,16 @@ class MojsPlayer extends Module {
   _onPlayStateChange ( isPlay ) {
     this._props.isPlaying = isPlay;
     if ( isPlay ) { this._play(); } else { this._sysTween.pause(); }
+  }
+  /*
+    Callback for hide button change state.
+    @private
+    @param {Boolean}
+  */
+  _onHideStateChange ( isHidden ) {
+    this._props.isHidden = isHidden;
+    let method = ( isHidden ) ? 'add' : 'remove';
+    this.el.classList[ method ]( CLASSES[ 'is-hidden' ] );
   }
   /*
     Method to play system tween from progress.
@@ -322,7 +344,5 @@ let tw = new mojs.Tween({
 let mojsPlayer = new MojsPlayer({
   add: tw
 });
-// mojsPlayer.add( tw );
-
 
 export default MojsPlayer;

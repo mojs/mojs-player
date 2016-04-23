@@ -2,14 +2,24 @@
 @import '../assets/globals.postcss.css';
 
 .opacity-switch {
-  opacity: .5;
+  opacity:      .5;
   .icon {
     position:   absolute;
     left:       50%;
     top:        50%;
     transform:  translate(-50%, -50%);
   }
-  &.is-on {
-    opacity: 1;
+  &:hover {
+    opacity:    .4;
   }
+  &.is-on {
+    opacity:    1;
+    &:hover {
+      opacity:  .85;
+    }
+  }
+
+
+
+
 }
