@@ -114,12 +114,6 @@ class MojsPlayer extends Module {
     });
 
     this.transit.el.style[ 'z-index' ] = 0;
-
-    this._addPointerDownEvent( this.el, (e) => {
-      this.transit
-        .tune({ x: e.pageX, y: e.layerY + 10 })
-        .replay()
-    });
     window.addEventListener('beforeunload', this._onUnload.bind(this));
   }
   /*

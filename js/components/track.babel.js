@@ -10,22 +10,11 @@ class Track extends Handle {
   /*
     Method to declare _defaults.
     @private
-    @overrides @ Module
+    @overrides @ Handle
   */
   _declareDefaults () {
-    this._defaults = {
-      className:    '',
-      parent:       document.body,
-      onProgress:   null,
-      onSeekStart:  null,
-      onSeekEnd:    null,
-      isProgress:   true, // if should render bold progress line
-      isBound:      false,
-      isInversed:   false,
-      direction:    'x',
-      minBound:     0,
-      maxBound:     1,
-    }
+    super._declareDefaults();
+    this._defaults.isProgress = true;
   }
   /*
     Method to set handle shift.
@@ -35,9 +24,9 @@ class Track extends Handle {
     @param {Boolean} It should invoke onProgress callback.
     @returns {Number}.
   */
-  _setShift ( shift, isCallback = true ) {
-    return super._setShift( shift, isCallback );
-  }
+  // _setShift ( shift, isCallback = true ) {
+  //   return super._setShift( shift, isCallback );
+  // }
   /*
     Method to apply shift to the DOMElement.
     @private
