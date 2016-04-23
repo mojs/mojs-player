@@ -23,7 +23,6 @@ class Button extends Module {
     Initial render method.
     @private
     @overrides @ Module
-    @returns this
   */
   _render () {
     let p         = this._props,
