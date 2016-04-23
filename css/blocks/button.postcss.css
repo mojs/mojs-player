@@ -9,11 +9,31 @@
   fill:       #FFF;
   display:    inline-block;
   /*transform:  translateZ(0);*/
-  > div {
+  /*&__icon {*/
+  /*> div {
     position:   absolute;
     top:        50%;
     left:       50%;
     transform:  translate( -50%, -50% );
+  }*/
+  &__ripple {
+    position:     absolute;
+    left:         0;
+    right:        0;
+    top:          0;
+    bottom:       0;
+    z-index:      5;
+    overflow:     hidden;
+    &:after {
+      content:    "";
+      position:   absolute;
+      left:       0;
+      right:      0;
+      top:        0;
+      bottom:     0;
+      z-index:    1;
+      cursor:     pointer;
+    }
   }
   /*&__hover {
     position:   absolute;
