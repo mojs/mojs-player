@@ -60,6 +60,32 @@ class PlayerSlider extends Module {
     return this;
   }
   /*
+    Method to decrease progress value.
+    @public
+    @param {Number} Value that the slider should be decreased by.
+    @returns this.
+  */
+  decreaseProgress ( amount = 0.01 ) {
+    let progress = this.track._progress;
+    progress -= amount;
+    progress = ( progress < 0 ) ? 0 : progress;
+    this.setTrackProgress( progress );
+    return this;
+  }
+  /*
+    Method to inclease progress value.
+    @public
+    @param {Number} Value that the slider should be increased by.
+    @returns this.
+  */
+  increaseProgress ( amount = 0.01 ) {
+    let progress = this.track._progress;
+    progress += amount;
+    progress = ( progress > 1 ) ? 1 : progress;
+    this.setTrackProgress( progress );
+    return this;
+  }
+  /*
     Initial render method.
     @private
     @overrides @ Module

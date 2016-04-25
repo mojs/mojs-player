@@ -1,5 +1,4 @@
 import Module  from './module';
-import mojs    from 'mo-js';
 
 // require('css/blocks/handle.postcss.css');
 // let CLASSES = require('css/blocks/handle.postcss.css.json');

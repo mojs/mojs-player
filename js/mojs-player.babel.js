@@ -16,7 +16,7 @@ let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
 /*
   TODO:
-    - optimize arrays in args calls
+    - snap point for track slider
 */
 
 class MojsPlayer extends Module {
@@ -36,7 +36,7 @@ class MojsPlayer extends Module {
     this._defaults.leftBound    = 0;
     this._defaults.rightBound   = 1;
     this._defaults.isSpeed      = false;
-    this._defaults.speedValue   = 1;
+    this._defaults.speed        = 1;
     this._defaults.isHidden     = false;
 
     let str = 'mojs-player';
@@ -75,10 +75,18 @@ class MojsPlayer extends Module {
   _keyUp ( e ) {
     if ( e.altKey ) {
       switch ( e.keyCode ) {
-        case 90: // alt + Z => PLAY/PAUSE TOGGLE
-        // case 32: // alt + P => PLAY/PAUSE TOGGLE
+        // case 90: // alt + Z => PLAY/PAUSE TOGGLE || 32 - space
+        case 80: // alt + P => PLAY/PAUSE TOGGLE
           this._props.isPlaying = !this._props.isPlaying;
           this._onPlayStateChange( this._props.isPlaying );
+          break;
+        case 189: // alt + - => DECREASE PROGRESS
+          this.playButton.off();
+          this.playerSlider.decreaseProgress( ( e.shiftKey ) ? .1 : .01 );
+          break;
+        case 187: // alt + + => INCREASE PROGRESS
+          this.playButton.off();
+          this.playerSlider.increaseProgress( ( e.shiftKey ) ? .1 : .01 );
           break;
         case 83: // alt + S => STOP
           this._onStop();
@@ -102,6 +110,12 @@ class MojsPlayer extends Module {
         case 49: // alt + 1 => RESET SPEED TO 1x
           this.speedControl.reset();
           break;
+        case 50: // alt + 2 => DECREASE SPEEED by .05
+          this.speedControl.decreaseSpeed();
+          break;
+        case 51: // alt + 3 => INCREASE SPEED by .05
+          this.speedControl.increaseSpeed();
+          break;
       }
     }
   }
@@ -119,11 +133,13 @@ class MojsPlayer extends Module {
     @overrides @ Module
   */
   _render () {
+    this.isIt = 1;
     this._initTimeline();
     let p         = this._props,
         className = 'mojs-player',
         icons     = new Icons({ prefix: this._props.prefix });
     super._render();
+    // this.el.classList.add(p.classNAme );
     this.el.classList.add( CLASSES[ className ] );
     this.el.setAttribute( 'id', 'js-mojs-player' );
 
@@ -160,12 +176,18 @@ class MojsPlayer extends Module {
 
     this.speedControl = new SpeedControl({
       parent:         left,
-      progress:       p[ 'raw-speed' ],
+      // progress:       p.speed,
+      speed:          p.speed,
       isOn:           p.isSpeed,
       onSpeedChange:  this._onSpeedChange.bind( this ),
       onIsSpeed:      this._onIsSpeed.bind( this ),
       prefix:         this._props.prefix
     });
+
+    let proc        = 0,
+        progress    = [],
+        procToSpeed = [],
+        speedToProc = [];
 
     this.stopButton   = new StopButton({
       parent:         left,
@@ -322,7 +344,7 @@ class MojsPlayer extends Module {
 
     this._sysTween
       .setProgress( progress )
-      .setSpeed( p.speedValue )
+      .setSpeed( p.speed )
       .play();
   }
   /*
@@ -358,7 +380,7 @@ class MojsPlayer extends Module {
   */
   _onSpeedChange ( speed, progress ) {
     this._props[ 'raw-speed' ] = progress;
-    this._props.speedValue = speed;
+    this._props.speed = speed;
     this._sysTween.setSpeed( speed );
   }
   /*
@@ -402,6 +424,7 @@ class MojsPlayer extends Module {
     }
 
     delete this._props.parent;
+    delete this._props.className;
     delete this._props.isSaveState;
     localStorage.setItem(this._localStorage, JSON.stringify( this._props ) );
   }
@@ -459,6 +482,8 @@ let mojsPlayer = new MojsPlayer({
   add:       tw,
   isPlaying: true,
   progress:  .5,
+  speed:     5,
+  // className: 'lalal'
   // isSaveState: false
 });
 

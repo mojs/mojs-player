@@ -2,7 +2,6 @@
 import Module       from './module'
 import LabelButton  from './label-button';
 import Slider       from './slider';
-import mojs         from  'mo-js'
 
 require('css/blocks/speed-control.postcss.css');
 let CLASSES = require('css/blocks/speed-control.postcss.css.json');
@@ -16,6 +15,7 @@ class SpeedControl extends Module {
   _declareDefaults () {
     super._declareDefaults();
     this._defaults.isOn          = false;
+    this._defaults.speed         = 1;
     this._defaults.progress      = .5;
     this._defaults.onSpeedChange = null;
     this._defaults.onIsSpeed     = null
@@ -26,6 +26,30 @@ class SpeedControl extends Module {
     @returns this
   */
   reset () { this._onDoubleTap(); }
+  /*
+    Method to decrease speed value.
+    @public
+    @returns this.
+  */
+  decreaseSpeed () {
+    let p = this._props;
+    p.progress -= .01;
+    p.progress = ( p.progress < 0 ) ? 0 : p.progress;
+    this.slider.setProgress( p.progress );
+    return this;
+  }
+  /*
+    Method to inclease speed value.
+    @public
+    @returns this.
+  */
+  increaseSpeed () {
+    let p = this._props;
+    p.progress += .01;
+    p.progress = ( p.progress > 1 ) ? 1 : p.progress;
+    this.slider.setProgress( p.progress );
+    return this;
+  }
   /*
     Initial render method.
     @private
@@ -62,8 +86,7 @@ class SpeedControl extends Module {
       snapStrength: .05
     });
 
-    this.slider.setProgress( this._props.progress );
-    // this._onButtonStateChange( p.isOn );
+    this.slider.setProgress( this._speedToProgress( this._props.speed ) );
   }
   /*
     Method that is invoked on slider progress.
@@ -72,7 +95,7 @@ class SpeedControl extends Module {
   */
   _onSliderProgress ( p ) {
     // progress should be at least 0.01
-    p = Math.max( p, 0.01 );
+    p = Math.max( p, 0.0001 );
 
     let props = this._props,
         args  = [  ];
@@ -112,14 +135,32 @@ class SpeedControl extends Module {
   */
   _progressToSpeed ( progress ) {
     let speed = progress;
+    if ( progress < .5 ) {
+      speed = 2*progress;
+    }
     if ( progress === .5 ) { speed = 1; }
     if ( progress > .5 ) {
-      // normalize to 10
-      speed = 1 + 18*(progress-.5);
-      // pipe thru cubic.in easing to have nice pricision for start numbers
-      speed = 1 + (9 * mojs.easing.cubic.in( speed/10 ));
+      progress -= .5;
+      speed = 1 + progress*18;
+      // console.log( speed/10, mojs.easing.cubic.out( speed/10 ) );
+      // console.log( .5 + ( speed - 1 ) / 18 );
     }
     return speed;
+  }
+  /*
+    Method to recalc progress to speed.
+    @private
+    @param   {Number} Progress [0...1].
+    @returns {Number} Speed [0...10].
+  */
+  _speedToProgress ( speed ) {
+    let progress = speed;
+    if ( speed < 1 ) { progress = speed/2; }
+    if ( speed === 1 ) { progress = .5; }
+    if ( speed > 1 ) {
+      progress = .5 + ( ( speed - 1 ) / 18 );
+    }
+    return progress;
   }
   /*
     Method that is invoked on double button tap.
