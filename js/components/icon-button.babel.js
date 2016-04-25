@@ -28,9 +28,10 @@ class IconButton extends Button {
     this.el.classList.add( CLASSES[ className ] );
       
     let icon = new Icon({
-      shape:      this._props.icon,
+      shape:      p.icon,
       parent:     this.el,
-      className:  [ CLASSES[ `icon` ], p.iconClass ]
+      className:  [ CLASSES[ `icon` ], p.iconClass ],
+      prefix:     p.prefix
     });
   }
 }

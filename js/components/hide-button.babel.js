@@ -26,7 +26,8 @@ class HideButton extends ButtonSwitch {
     this.icon = new Icon({
       parent:     this.el,
       className:  CLASSES[ `${ className }__icon` ],
-      shape:      'hide'
+      shape:      'hide',
+      prefix:     this._props.prefix
     });
   }
   /*

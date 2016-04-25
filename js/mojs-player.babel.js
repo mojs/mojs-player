@@ -39,6 +39,7 @@ class MojsPlayer extends Module {
     this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
     this._defaults.isHidden   = this._fallbackTo( m.isHidden,    false );
+    this._defaults.prefix     = 'mojs-player-';
   }
   /*
     Callback for keyup on document.
@@ -94,7 +95,7 @@ class MojsPlayer extends Module {
     this._initTimeline();
     let p         = this._props,
         className = 'mojs-player',
-        icons     = new Icons();
+        icons     = new Icons({ prefix: this._props.prefix });
     super._render();
     this.el.classList.add( CLASSES[ className ] );
     this.el.setAttribute( 'id', 'js-mojs-player' );
@@ -106,7 +107,8 @@ class MojsPlayer extends Module {
     this.repeatButton = new RepeatButton({
       parent:             left,
       isOn:               p.isRepeat,
-      onStateChange:      this._onRepeatStateChange.bind( this )
+      onStateChange:      this._onRepeatStateChange.bind( this ),
+      prefix:             this._props.prefix
     });
 
     this.playerSlider = new PlayerSlider({
@@ -125,7 +127,8 @@ class MojsPlayer extends Module {
     this.boundsButton = new BoundsButton({
       isOn:           p.isBounds,
       parent:         left,
-      onStateChange:  this._boundsStateChange.bind( this )
+      onStateChange:  this._boundsStateChange.bind( this ),
+      prefix:         this._props.prefix
     });
 
     this.speedControl = new SpeedControl({
@@ -133,34 +136,39 @@ class MojsPlayer extends Module {
       progress:       p.speed,
       isOn:           p.isSpeed,
       onSpeedChange:  this._onSpeedChange.bind( this ),
-      onIsSpeed:      this._onIsSpeed.bind( this )
+      onIsSpeed:      this._onIsSpeed.bind( this ),
+      prefix:         this._props.prefix
     });
 
     this.stopButton   = new StopButton({
       parent:         left,
       isPrepend:      true,
-      onPointerUp:    this._onStop.bind( this )
+      onPointerUp:    this._onStop.bind( this ),
+      prefix:         this._props.prefix
     });
 
     this.playButton   = new PlayButton({
       parent:         left,
       isOn:           p.isPlaying,
       isPrepend:      true,
-      onStateChange:  this._onPlayStateChange.bind( this )
+      onStateChange:  this._onPlayStateChange.bind( this ),
+      prefix:         this._props.prefix
     });
     
     this.mojsButton   = new IconButton({
       parent:   right,
       icon:     'mojs',
       link:     'https://github.com/legomushroom/mojs-player',
-      title:    'mo • js'
+      title:    'mo • js',
+      prefix:   this._props.prefix
     });
 
     this.hideButton   = new HideButton({
       parent:         this.el,
       className:      CLASSES[ `${ className }__hide-button` ],
       isOn:           p.isHidden,
-      onStateChange:  this._onHideStateChange.bind( this )
+      onStateChange:  this._onHideStateChange.bind( this ),
+      prefix:         this._props.prefix
     });
 
     this._listen();
