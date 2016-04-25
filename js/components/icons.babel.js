@@ -9,7 +9,7 @@ class Icons extends Module {
   _render () {
     this.el = this._createElement( 'div' );
     this.el.innerHTML = this.getIcons();
-    this.el.setAttribute( 'id', 'mojs-player-icons' );
+    this.el.setAttribute( 'id', `${ this._props.prefix }icons` );
     this._prependChild( document.body, this.el );
   }
   /*
