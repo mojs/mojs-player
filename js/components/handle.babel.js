@@ -186,6 +186,8 @@ class Handle extends Module {
     // add listener on document to cover edge cases
     // like when you press -> leave the element -> release
     this._addPointerUpEvent( document, this._pointerUpDoc.bind( this ) );
+
+    window.addEventListener( 'resize', this._onWindowResize.bind( this ) );
   }
   /*
     Callback for pan end on main el.
@@ -211,7 +213,7 @@ class Handle extends Module {
   */
   _panEnd ( e ) {
     this._saveDelta();
-    this._callIfFunction( this._props.onSeekEnd, [ e ] );
+    this._callIfFunction( this._props.onSeekEnd, e );
   }
   /*
     Callback for pointer down on main el.
@@ -221,14 +223,14 @@ class Handle extends Module {
   _pointerDown ( e ) {
     let p = this._props;
     this._isPointerDown = true;
-    this._callIfFunction( p.onSeekStart, [ e ] );
+    this._callIfFunction( p.onSeekStart, e );
   }
   /*
     Callback for pointer up on main el.
     @private
     @param {Object} Original event object.
   */
-  _pointerUp ( e ) { this._callIfFunction( this._props.onSeekEnd, [ e ] ); }
+  _pointerUp ( e ) { this._callIfFunction( this._props.onSeekEnd, e ); }
   /*
     Callback for pointer up on document.
     @private
@@ -236,7 +238,7 @@ class Handle extends Module {
   */
   _pointerUpDoc ( e ) {
     if ( !this._isPointerDown ) { return }
-    this._callIfFunction( this._props.onSeekEnd, [ e ] );
+    this._callIfFunction( this._props.onSeekEnd, e );
     this._isPointerDown = false;
   }
   /*
@@ -278,6 +280,15 @@ class Handle extends Module {
   */
   _progressToShift ( progress ) {
     return progress*this._maxWidth;
+  }
+  /*
+    Callback for window resize event.
+    @private
+    @param {Object} Original event object.
+  */
+  _onWindowResize ( e ) {
+    this._getMaxWidth();
+    this.setProgress( this._progress );
   }
 }
 

@@ -34,8 +34,15 @@ class Button extends Module {
     p.link && this.el.setAttribute( 'href', p.link );
     this._addListeners();
 
+    this._createRipple();
+  }
+  /*
+    Method to create ripple.
+    @private
+  */
+  _createRipple () {
     this.ripple = new Ripple({
-      className: CLASSES[ `${className}__ripple` ],
+      className: CLASSES[ `button__ripple` ],
       parent:    this.el
     });
   }
@@ -66,7 +73,7 @@ class Button extends Module {
   */
   _pointerUp ( e ) {
     this.wasTouched = false;
-    e.stopPropagation();
+    // e.stopPropagation();
     this._callIfFunction( this._props.onPointerUp );
     this.ripple._release();
   }

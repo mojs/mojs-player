@@ -67,8 +67,9 @@ class Module {
     @param {Function?} A variable to check.
     @param {Array like} Arguments.
   */
-  _callIfFunction ( fn, args ) {
-    this._isFunction( fn ) && fn.apply( this, args );
+  _callIfFunction ( fn ) {
+    Array.prototype.shift.call( arguments );
+    this._isFunction( fn ) && fn.apply( this, arguments );
   }
   /*
     Method to declare module's variables.

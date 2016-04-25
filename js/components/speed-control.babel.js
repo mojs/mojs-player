@@ -21,10 +21,15 @@ class SpeedControl extends Module {
     this._defaults.onIsSpeed     = null
   }
   /*
+    Method to reset speed to 1x.
+    @public
+    @returns this
+  */
+  reset () { this._onDoubleTap(); }
+  /*
     Initial render method.
     @private
     @overrides @ Module
-    @returns this
   */
   _render () {
     let p         = this._props,
@@ -66,14 +71,13 @@ class SpeedControl extends Module {
     @param {Number} Progress of the slider.
   */
   _onSliderProgress ( p ) {
-
     // progress should be at least 0.01
     p = Math.max( p, 0.01 );
 
     let props = this._props,
-        args  = [ this._progressToSpeed(p), p ];
+        args  = [  ];
 
-    this._callIfFunction( props.onSpeedChange, args );
+    this._callIfFunction( props.onSpeedChange, this._progressToSpeed(p), p );
     this.labelButton.setLabelText( this._progressToLabel( props.progress = p ) );
   }
   /*
@@ -84,7 +88,7 @@ class SpeedControl extends Module {
   _onButtonStateChange ( isOn ) {
     let method = ( isOn ) ? 'add' : 'remove' ;
     this.el.classList[ method ]( CLASSES[ 'is-on' ] );
-    this._callIfFunction( this._props.onIsSpeed, [ isOn ] );
+    this._callIfFunction( this._props.onIsSpeed, isOn );
   }
   /*
     Method to recalc progress to label string.
