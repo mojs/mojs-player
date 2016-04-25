@@ -170,7 +170,6 @@ class Slider extends Module {
   */
   _onProgress ( progress ) {
     let p        = this._props;
-
     if ( typeof p.onProgress === 'function' && this._progress !== progress) {
       this._progress = progress;
       p.onProgress.call( this, progress );
