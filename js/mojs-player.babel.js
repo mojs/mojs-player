@@ -39,7 +39,9 @@ class MojsPlayer extends Module {
     this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
     this._defaults.isHidden   = this._fallbackTo( m.isHidden,    false );
-    this._defaults.prefix     = 'mojs-player-';
+
+    let str = 'mojs-player';
+    this._defaults.prefix     = `${str}-${ this._hashCode( str ) }-`;
   }
   /*
     Callback for keyup on document.
@@ -397,6 +399,21 @@ class MojsPlayer extends Module {
     @param {Function} Function that should be defered.
   */
   _defer (fn) { setTimeout( fn.bind(this), 1 ); }
+  /*
+    Method to generate hash code.
+    @private
+    @return {String} Hash code.
+  */
+  _hashCode ( str ) {
+    var hash = 0, i, chr, len;
+    if (str.length === 0) return hash;
+    for (i = 0, len = str.length; i < len; i++) {
+      chr   = str.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  }
 }
 
 let el = document.querySelector( '#js-el' );

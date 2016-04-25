@@ -153,7 +153,9 @@
 	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	    this._defaults.isHidden = this._fallbackTo(m.isHidden, false);
-	    this._defaults.prefix = 'mojs-player-';
+
+	    var str = 'mojs-player';
+	    this._defaults.prefix = str + '-' + this._hashCode(str) + '-';
 	  };
 	  /*
 	    Callback for keyup on document.
@@ -594,6 +596,26 @@
 
 	  MojsPlayer.prototype._defer = function _defer(fn) {
 	    setTimeout(fn.bind(this), 1);
+	  };
+	  /*
+	    Method to generate hash code.
+	    @private
+	    @return {String} Hash code.
+	  */
+
+
+	  MojsPlayer.prototype._hashCode = function _hashCode(str) {
+	    var hash = 0,
+	        i,
+	        chr,
+	        len;
+	    if (str.length === 0) return hash;
+	    for (i = 0, len = str.length; i < len; i++) {
+	      chr = str.charCodeAt(i);
+	      hash = (hash << 5) - hash + chr;
+	      hash |= 0; // Convert to 32bit integer
+	    }
+	    return hash;
 	  };
 
 	  return MojsPlayer;
@@ -2310,7 +2332,7 @@
 	  Icons.prototype._render = function _render() {
 	    this.el = this._createElement('div');
 	    this.el.innerHTML = this.getIcons();
-	    this.el.setAttribute('id', 'mojs-player-icons');
+	    this.el.setAttribute('id', this._props.prefix + 'icons');
 	    this._prependChild(document.body, this.el);
 	  };
 	  /*
