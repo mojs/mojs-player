@@ -7,7 +7,7 @@ class StopButton extends IconButton {
   _declareDefaults () {
     super._declareDefaults();
     this._defaults.icon = 'stop';
-    this._defaults.title = 'stop';
+    this._defaults.title = 'stop (alt + s)';
   }
   /*
     Initial render method.

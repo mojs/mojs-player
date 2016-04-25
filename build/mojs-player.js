@@ -141,21 +141,45 @@
 
 	  MojsPlayer.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
-	    var m = JSON.parse(localStorage.getItem('mojs-player-model')) || {};
 
-	    this._defaults.isBounds = this._fallbackTo(m.isBounds, false);
-	    this._defaults.leftBound = this._fallbackTo(m.leftBound, 0);
-	    this._defaults.rightBound = this._fallbackTo(m.rightBound, 1);
-	    this._defaults.progress = this._fallbackTo(m.progress, 0);
-	    this._defaults.isPlaying = this._fallbackTo(m.isPlaying, false);
-	    this._defaults.isRepeat = this._fallbackTo(m.isRepeat, false);
-	    this._defaults.speed = this._fallbackTo(m.speed, .5);
-	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
-	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
-	    this._defaults.isHidden = this._fallbackTo(m.isHidden, false);
+	    this._defaults.isSaveState = true;
+	    this._defaults.isPlaying = false;
+	    this._defaults.progress = 0;
+	    this._defaults.isRepeat = false;
+	    this._defaults.isBounds = false;
+	    this._defaults.leftBound = 0;
+	    this._defaults.rightBound = 1;
+	    this._defaults.isSpeed = false;
+	    this._defaults.speedValue = 1;
+	    this._defaults.isHidden = false;
 
 	    var str = 'mojs-player';
-	    this._defaults.prefix = str + '-' + this._hashCode(str) + '-';
+	    this._prefix = str + '-' + this._hashCode(str) + '-';
+	    this._localStorage = this._prefix + 'model';
+	  };
+	  /*
+	    Method to copy `_o` options to `_props` object
+	    with fallback to `localStorage` and `_defaults`.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._extendDefaults = function _extendDefaults() {
+	    this._props = {};
+	    var p = this._props,
+	        o = this._o,
+	        defs = this._defaults;
+
+	    // get localstorage regarding isSaveState option
+	    p.isSaveState = this._fallbackTo(o.isSaveState, defs.isSaveState);
+	    var m = p.isSaveState ? JSON.parse(localStorage.getItem(this._localStorage)) || {} : {};
+
+	    for (var key in defs) {
+	      var value = this._fallbackTo(m[key], o[key]);
+	      this._assignProp(key, this._fallbackTo(value, defs[key]));
+	    }
+	    // get raw-speed option
+	    this._props['raw-speed'] = this._fallbackTo(m['raw-speed'], .5);
 	  };
 	  /*
 	    Callback for keyup on document.
@@ -167,8 +191,9 @@
 	  MojsPlayer.prototype._keyUp = function _keyUp(e) {
 	    if (e.altKey) {
 	      switch (e.keyCode) {
-	        case 80:
-	          // alt + P => PLAY/PAUSE TOGGLE
+	        case 90:
+	          // alt + Z => PLAY/PAUSE TOGGLE
+	          // case 32: // alt + P => PLAY/PAUSE TOGGLE
 	          this._props.isPlaying = !this._props.isPlaying;
 	          this._onPlayStateChange(this._props.isPlaying);
 	          break;
@@ -261,7 +286,7 @@
 
 	    this.speedControl = new _speedControl2.default({
 	      parent: left,
-	      progress: p.speed,
+	      progress: p['raw-speed'],
 	      isOn: p.isSpeed,
 	      onSpeedChange: this._onSpeedChange.bind(this),
 	      onIsSpeed: this._onIsSpeed.bind(this),
@@ -504,7 +529,7 @@
 
 
 	  MojsPlayer.prototype._onSpeedChange = function _onSpeedChange(speed, progress) {
-	    this._props.speed = progress;
+	    this._props['raw-speed'] = progress;
 	    this._props.speedValue = speed;
 	    this._sysTween.setSpeed(speed);
 	  };
@@ -560,7 +585,13 @@
 
 
 	  MojsPlayer.prototype._onUnload = function _onUnload(e) {
-	    localStorage.setItem('mojs-player-model', (0, _stringify2.default)(this._props));
+	    if (!this._props.isSaveState) {
+	      return localStorage.removeItem(this._localStorage);
+	    }
+
+	    delete this._props.parent;
+	    delete this._props.isSaveState;
+	    localStorage.setItem(this._localStorage, (0, _stringify2.default)(this._props));
 	  };
 	  /*
 	    Method that returns the second argument if the first one isn't set.
@@ -630,9 +661,12 @@
 	});
 
 	var mojsPlayer = new MojsPlayer({
-	  add: tw
+	  add: tw,
+	  isPlaying: true,
+	  progress: .5
 	});
 
+	// isSaveState: false
 	exports.default = MojsPlayer;
 
 /***/ },
@@ -2560,9 +2594,10 @@
 
 	  Module.prototype._extendDefaults = function _extendDefaults() {
 	    this._props = {};
-	    this._deltas = {};
+	    // this._deltas = {};
 	    for (var key in this._defaults) {
 	      var value = this._o[key];
+	      this.isIt && console.log(key);
 	      // copy the properties to the _o object
 	      this._assignProp(key, value != null ? value : this._defaults[key]);
 	    }
@@ -15384,7 +15419,7 @@
 
 	  LabelButton.prototype._declareDefaults = function _declareDefaults() {
 	    _ButtonSwitch.prototype._declareDefaults.call(this);
-	    this._defaults.title = 'speed';
+	    this._defaults.title = 'speed (reset: alt + 1)';
 	  };
 	  /*
 	    Method to populate the label with progress text.
@@ -15775,7 +15810,7 @@
 	    _IconFork.prototype._declareDefaults.call(this);
 	    this._defaults.icon1 = 'pause';
 	    this._defaults.icon2 = 'play';
-	    this._defaults.title = 'play/pause';
+	    this._defaults.title = 'play/pause (alt + z)';
 	  };
 	  /*
 	    Method to render the module.
@@ -16012,7 +16047,7 @@
 	  StopButton.prototype._declareDefaults = function _declareDefaults() {
 	    _IconButton.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'stop';
-	    this._defaults.title = 'stop';
+	    this._defaults.title = 'stop (alt + s)';
 	  };
 	  /*
 	    Initial render method.
@@ -16127,7 +16162,7 @@
 	    _OpacitySwitch.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'repeat';
 	    this._defaults.iconSize = 'x2';
-	    this._defaults.title = 'repeat';
+	    this._defaults.title = 'repeat (alt + r)';
 	  };
 	  /*
 	    Initial render method.
@@ -16381,7 +16416,7 @@
 	  BoundsButton.prototype._declareDefaults = function _declareDefaults() {
 	    _RepeatButton.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'bounds';
-	    this._defaults.title = 'progress bounds';
+	    this._defaults.title = 'progress bounds (alt + b)';
 	  };
 
 	  return BoundsButton;
@@ -16431,12 +16466,17 @@
 	    return (0, _possibleConstructorReturn3.default)(this, _ButtonSwitch.apply(this, arguments));
 	  }
 
+	  HideButton.prototype._declareDefaults = function _declareDefaults() {
+	    _ButtonSwitch.prototype._declareDefaults.call(this);
+	    this._defaults.title = 'hide (alt + h)';
+	  };
 	  /*
 	    Initial render method.
 	    @private
 	    @overrides @ Button
 	    @returns this
 	  */
+
 
 	  HideButton.prototype._render = function _render() {
 	    _ButtonSwitch.prototype._render.call(this);
