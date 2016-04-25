@@ -11,12 +11,9 @@ class Icon extends Module {
     @overrides @ Module
   */
   _declareDefaults () {
-    this._defaults = {
-      className:       '',
-      parent:          document.body,
-      shape:           '',
-      size:            'x1'
-    }
+    super._declareDefaults();
+    this._defaults.shape  = '';
+    this._defaults.size   = 'x1';
     this.NS = 'http://www.w3.org/2000/svg';
   }
   /*
@@ -36,9 +33,11 @@ class Icon extends Module {
     @private
   */
   _renderIcon () {
-    let svg = document.createElementNS( this.NS, 'svg' );
+    let p   = this._props,
+        svg = document.createElementNS( this.NS, 'svg' ),
+        content = `<use xlink:href="#${ p.prefix }${ p.shape }-icon-shape" />`;
     svg.setAttribute( 'viewBox', '0 0 32 32' );
-    this._addSVGHtml( svg, `<use xlink:href="#${ this._props.shape }-icon-shape" />` );
+    this._addSVGHtml( svg, content );
     this.el.appendChild( svg );
   }
   /*

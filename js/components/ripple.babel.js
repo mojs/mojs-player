@@ -75,8 +75,11 @@ class Ripple extends Module {
     @param {Object} Origin event object.
   */
   _hold ( e ) {
+    let x = ( e.offsetX != null ) ? e.offsetX : e.layerX,
+        y = ( e.offsetY != null ) ? e.offsetY : e.layerY;
+
     this.isRelease = false;
-    this.transit.tune({ x: e.layerX, y: e.layerY }).replay();
+    this.transit.tune({ x: x, y: y }).replay();
   }
   /*
     Method that should be run on touch serface cancel.

@@ -23,7 +23,8 @@ class Module {
       className:  '',
       parent:     document.body,
       isPrepend:  false,
-      isRipple:   false
+      isRipple:   false,
+      prefix:     ''
     };
   }
   /*

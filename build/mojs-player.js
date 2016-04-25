@@ -153,6 +153,7 @@
 	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	    this._defaults.isHidden = this._fallbackTo(m.isHidden, false);
+	    this._defaults.prefix = 'mojs-player-';
 	  };
 	  /*
 	    Callback for keyup on document.
@@ -220,7 +221,7 @@
 	    this._initTimeline();
 	    var p = this._props,
 	        className = 'mojs-player',
-	        icons = new _icons2.default();
+	        icons = new _icons2.default({ prefix: this._props.prefix });
 	    _Module.prototype._render.call(this);
 	    this.el.classList.add(CLASSES[className]);
 	    this.el.setAttribute('id', 'js-mojs-player');
@@ -232,7 +233,8 @@
 	    this.repeatButton = new _repeatButton2.default({
 	      parent: left,
 	      isOn: p.isRepeat,
-	      onStateChange: this._onRepeatStateChange.bind(this)
+	      onStateChange: this._onRepeatStateChange.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this.playerSlider = new _playerSlider2.default({
@@ -251,7 +253,8 @@
 	    this.boundsButton = new _boundsButton2.default({
 	      isOn: p.isBounds,
 	      parent: left,
-	      onStateChange: this._boundsStateChange.bind(this)
+	      onStateChange: this._boundsStateChange.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this.speedControl = new _speedControl2.default({
@@ -259,34 +262,39 @@
 	      progress: p.speed,
 	      isOn: p.isSpeed,
 	      onSpeedChange: this._onSpeedChange.bind(this),
-	      onIsSpeed: this._onIsSpeed.bind(this)
+	      onIsSpeed: this._onIsSpeed.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this.stopButton = new _stopButton2.default({
 	      parent: left,
 	      isPrepend: true,
-	      onPointerUp: this._onStop.bind(this)
+	      onPointerUp: this._onStop.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this.playButton = new _playButton2.default({
 	      parent: left,
 	      isOn: p.isPlaying,
 	      isPrepend: true,
-	      onStateChange: this._onPlayStateChange.bind(this)
+	      onStateChange: this._onPlayStateChange.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this.mojsButton = new _iconButton2.default({
 	      parent: right,
 	      icon: 'mojs',
 	      link: 'https://github.com/legomushroom/mojs-player',
-	      title: 'mo • js'
+	      title: 'mo • js',
+	      prefix: this._props.prefix
 	    });
 
 	    this.hideButton = new _hideButton2.default({
 	      parent: this.el,
 	      className: CLASSES[className + '__hide-button'],
 	      isOn: p.isHidden,
-	      onStateChange: this._onHideStateChange.bind(this)
+	      onStateChange: this._onHideStateChange.bind(this),
+	      prefix: this._props.prefix
 	    });
 
 	    this._listen();
@@ -2312,7 +2320,8 @@
 
 
 	  Icons.prototype.getIcons = function getIcons() {
-	    return '<svg id="svg-source" height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%; width:0; height:0;" xmlns:xlink="http://www.w3.org/1999/xlink">\n              <path id="play-icon-shape" d="M0.000549111126,31.9982154 C-0.000686388908,21.3321436 0.000549111126,10.6660718 0.000549111126,1.77635684e-15 C10.6678564,5.33118265 21.3339282,10.6648363 32,15.9984899 C21.3339282,21.3321436 10.6678564,26.6657972 0.000549111126,31.9982154 L0.000549111126,31.9982154 Z"></path>\n              <g id="pause-icon-shape">\n                <path d="M-8.8817842e-16,0 C3.55529197,-0.000248559134 7.11058393,-0.000248559134 10.6666667,0 C10.6669303,10.6669152 10.6669303,21.3330848 10.6666667,32 C7.11058393,32.0002486 3.55529197,32.0002486 -8.8817842e-16,32 L-8.8817842e-16,0 L-8.8817842e-16,0 Z"></path>\n                <path d="M21.3333333,0 C24.8894161,-0.000248559134 28.444708,-0.000248559134 32,0 L32,32 C28.444708,32.0002486 24.8894161,32.0002486 21.3333333,32 C21.3330697,21.3330848 21.3330697,10.6669152 21.3333333,0 L21.3333333,0 Z"></path>\n              </g>\n              <rect id="stop-icon-shape" x="0" y="0" width="32" height="32"></rect>\n              <path id="repeat-icon-shape" d="M9.871,1.48 C12.322,0.209 15.176,-0.247 17.906,0.137 C20.914,0.556 23.762,2.041 25.823,4.274 C27.359,5.896 28.452,7.916 29.033,10.069 C29.472,9.674 29.825,9.123 30.422,8.955 C31.003,8.779 31.696,9.094 31.909,9.67 C32.106,10.155 31.972,10.736 31.6,11.1 C30.713,12.013 29.808,12.908 28.91,13.811 C28.709,14.011 28.506,14.231 28.23,14.323 C27.772,14.498 27.224,14.379 26.881,14.03 C25.918,13.021 24.913,12.052 23.938,11.055 C23.542,10.656 23.511,9.982 23.82,9.523 C24.104,9.072 24.681,8.844 25.196,8.988 C25.679,9.098 25.966,9.536 26.31,9.852 C25.345,7.149 23.302,4.829 20.694,3.611 C18.713,2.653 16.434,2.344 14.264,2.689 C10.576,3.238 7.291,5.853 5.897,9.306 C5.697,9.872 5.1,10.301 4.488,10.184 C3.863,10.113 3.366,9.501 3.399,8.878 C3.413,8.644 3.512,8.429 3.601,8.216 C4.804,5.321 7.089,2.911 9.871,1.48 Z M3.374,12.873 C3.855,12.401 4.7,12.476 5.151,12.952 C6.038,13.863 6.935,14.765 7.839,15.659 C8.049,15.864 8.261,16.088 8.343,16.379 C8.605,17.177 7.852,18.12 7.004,17.996 C6.43,17.963 6.069,17.47 5.692,17.101 C6.657,19.849 8.766,22.168 11.406,23.395 C14.249,24.712 17.666,24.737 20.514,23.423 C22.848,22.38 24.775,20.47 25.864,18.16 C26.072,17.753 26.185,17.255 26.588,16.987 C27.062,16.635 27.776,16.687 28.195,17.101 C28.527,17.419 28.687,17.926 28.541,18.369 C27.351,21.477 24.943,24.088 21.961,25.559 C18.251,27.421 13.67,27.405 9.973,25.52 C6.545,23.823 3.931,20.588 2.96,16.892 C2.624,17.217 2.319,17.58 1.935,17.85 C1.405,18.183 0.615,18.077 0.239,17.56 C-0.143,17.042 -0.048,16.254 0.431,15.828 C1.415,14.846 2.374,13.838 3.374,12.873 Z"></path>\n              <path id="bounds-icon-shape" d="M16,6 L16,-1.13686838e-13 L18,-1.13686838e-13 L18,6 L21.9941413,6 C23.1019465,6 24,6.89821238 24,7.99079514 L24,24.0092049 C24,25.1086907 23.1029399,26 21.9941413,26 L18,26 L18,32 L16,32 L16,26 L12.0058587,26 C10.8980535,26 10,25.1017876 10,24.0092049 L10,7.99079514 C10,6.89130934 10.8970601,6 12.0058587,6 L16,6 Z"></path>\n              <path id="mojs-icon-shape" d="M18.4678907,2.67700048 C19.488586,3.25758625 20.2789227,4.18421651 20.87823,5.1973579 C24.0807788,10.501451 27.2777091,15.8113116 30.480258,21.1154047 C31.1320047,22.1612281 31.7706417,23.2647256 31.9354512,24.5162532 C32.188284,26.0619186 31.6919826,27.7363895 30.5589171,28.80336 C29.4501984,29.8857103 27.8807622,30.3182659 26.3806209,30.3048086 C19.4511293,30.3086535 12.5235106,30.3086535 5.59401901,30.3048086 C3.71556494,30.343258 1.69852104,29.5723478 0.683444165,27.8709623 C-0.406546132,26.1099803 -0.0975282643,23.7914822 0.940022637,22.0843293 C4.34296485,16.4130445 7.76650826,10.7532945 11.1825603,5.08969961 C11.9747698,3.74781595 13.1846215,2.60202418 14.6847628,2.18292584 C15.9451812,1.81573418 17.3348251,2.01182606 18.4678907,2.67700048 Z M15.3334668,9.51526849 C15.6146238,9.03779476 16.0791597,9.02250655 16.3785679,9.4929547 L25.2763555,23.4736913 C25.5723919,23.9388414 25.3568433,24.3159201 24.8074398,24.3159202 L7.62314647,24.3159205 C7.06813505,24.3159206 6.84622798,23.9286889 7.12728913,23.4513779 L15.3334668,9.51526849 Z" fill-rule="evenodd"></path>\n              <path id="hide-icon-shape" d="M18.0297509,24.5024819 C18.1157323,24.4325886 18.1989631,24.3576024 18.2790422,24.2775233 L31.0556518,11.5009137 C32.3147827,10.2417828 32.3147827,8.20347913 31.0556518,6.9443482 C29.7965209,5.68521727 27.7582172,5.68521727 26.4990863,6.9443482 L15.9992406,17.4441939 L5.50091369,6.94586705 C4.24330161,5.68825498 2.20347913,5.68673612 0.944348198,6.94586705 C-0.314782733,8.20499798 -0.314782733,10.2433016 0.944348198,11.5024325 L13.7209578,24.2790422 C14.9005165,25.4586008 16.7638781,25.5331444 18.0298642,24.5026731 L18.0297509,24.5024819 Z"></path>\n            </svg>';
+	    var prefix = this._props.prefix;
+	    return '<svg height="0" version="1.1" xmlns="http://www.w3.org/2000/svg" style="position:absolute; margin-left: -100%; width:0; height:0;" xmlns:xlink="http://www.w3.org/1999/xlink">\n              <path id="' + prefix + 'play-icon-shape" d="M0.000549111126,31.9982154 C-0.000686388908,21.3321436 0.000549111126,10.6660718 0.000549111126,1.77635684e-15 C10.6678564,5.33118265 21.3339282,10.6648363 32,15.9984899 C21.3339282,21.3321436 10.6678564,26.6657972 0.000549111126,31.9982154 L0.000549111126,31.9982154 Z"></path>\n              <g id="' + prefix + 'pause-icon-shape">\n                <path d="M-8.8817842e-16,0 C3.55529197,-0.000248559134 7.11058393,-0.000248559134 10.6666667,0 C10.6669303,10.6669152 10.6669303,21.3330848 10.6666667,32 C7.11058393,32.0002486 3.55529197,32.0002486 -8.8817842e-16,32 L-8.8817842e-16,0 L-8.8817842e-16,0 Z"></path>\n                <path d="M21.3333333,0 C24.8894161,-0.000248559134 28.444708,-0.000248559134 32,0 L32,32 C28.444708,32.0002486 24.8894161,32.0002486 21.3333333,32 C21.3330697,21.3330848 21.3330697,10.6669152 21.3333333,0 L21.3333333,0 Z"></path>\n              </g>\n              <rect id="' + prefix + 'stop-icon-shape" x="0" y="0" width="32" height="32"></rect>\n              <path id="' + prefix + 'repeat-icon-shape" d="M9.871,1.48 C12.322,0.209 15.176,-0.247 17.906,0.137 C20.914,0.556 23.762,2.041 25.823,4.274 C27.359,5.896 28.452,7.916 29.033,10.069 C29.472,9.674 29.825,9.123 30.422,8.955 C31.003,8.779 31.696,9.094 31.909,9.67 C32.106,10.155 31.972,10.736 31.6,11.1 C30.713,12.013 29.808,12.908 28.91,13.811 C28.709,14.011 28.506,14.231 28.23,14.323 C27.772,14.498 27.224,14.379 26.881,14.03 C25.918,13.021 24.913,12.052 23.938,11.055 C23.542,10.656 23.511,9.982 23.82,9.523 C24.104,9.072 24.681,8.844 25.196,8.988 C25.679,9.098 25.966,9.536 26.31,9.852 C25.345,7.149 23.302,4.829 20.694,3.611 C18.713,2.653 16.434,2.344 14.264,2.689 C10.576,3.238 7.291,5.853 5.897,9.306 C5.697,9.872 5.1,10.301 4.488,10.184 C3.863,10.113 3.366,9.501 3.399,8.878 C3.413,8.644 3.512,8.429 3.601,8.216 C4.804,5.321 7.089,2.911 9.871,1.48 Z M3.374,12.873 C3.855,12.401 4.7,12.476 5.151,12.952 C6.038,13.863 6.935,14.765 7.839,15.659 C8.049,15.864 8.261,16.088 8.343,16.379 C8.605,17.177 7.852,18.12 7.004,17.996 C6.43,17.963 6.069,17.47 5.692,17.101 C6.657,19.849 8.766,22.168 11.406,23.395 C14.249,24.712 17.666,24.737 20.514,23.423 C22.848,22.38 24.775,20.47 25.864,18.16 C26.072,17.753 26.185,17.255 26.588,16.987 C27.062,16.635 27.776,16.687 28.195,17.101 C28.527,17.419 28.687,17.926 28.541,18.369 C27.351,21.477 24.943,24.088 21.961,25.559 C18.251,27.421 13.67,27.405 9.973,25.52 C6.545,23.823 3.931,20.588 2.96,16.892 C2.624,17.217 2.319,17.58 1.935,17.85 C1.405,18.183 0.615,18.077 0.239,17.56 C-0.143,17.042 -0.048,16.254 0.431,15.828 C1.415,14.846 2.374,13.838 3.374,12.873 Z"></path>\n              <path id="' + prefix + 'bounds-icon-shape" d="M16,6 L16,-1.13686838e-13 L18,-1.13686838e-13 L18,6 L21.9941413,6 C23.1019465,6 24,6.89821238 24,7.99079514 L24,24.0092049 C24,25.1086907 23.1029399,26 21.9941413,26 L18,26 L18,32 L16,32 L16,26 L12.0058587,26 C10.8980535,26 10,25.1017876 10,24.0092049 L10,7.99079514 C10,6.89130934 10.8970601,6 12.0058587,6 L16,6 Z"></path>\n              <path id="' + prefix + 'mojs-icon-shape" d="M18.4678907,2.67700048 C19.488586,3.25758625 20.2789227,4.18421651 20.87823,5.1973579 C24.0807788,10.501451 27.2777091,15.8113116 30.480258,21.1154047 C31.1320047,22.1612281 31.7706417,23.2647256 31.9354512,24.5162532 C32.188284,26.0619186 31.6919826,27.7363895 30.5589171,28.80336 C29.4501984,29.8857103 27.8807622,30.3182659 26.3806209,30.3048086 C19.4511293,30.3086535 12.5235106,30.3086535 5.59401901,30.3048086 C3.71556494,30.343258 1.69852104,29.5723478 0.683444165,27.8709623 C-0.406546132,26.1099803 -0.0975282643,23.7914822 0.940022637,22.0843293 C4.34296485,16.4130445 7.76650826,10.7532945 11.1825603,5.08969961 C11.9747698,3.74781595 13.1846215,2.60202418 14.6847628,2.18292584 C15.9451812,1.81573418 17.3348251,2.01182606 18.4678907,2.67700048 Z M15.3334668,9.51526849 C15.6146238,9.03779476 16.0791597,9.02250655 16.3785679,9.4929547 L25.2763555,23.4736913 C25.5723919,23.9388414 25.3568433,24.3159201 24.8074398,24.3159202 L7.62314647,24.3159205 C7.06813505,24.3159206 6.84622798,23.9286889 7.12728913,23.4513779 L15.3334668,9.51526849 Z" fill-rule="evenodd"></path>\n              <path id="' + prefix + 'hide-icon-shape" d="M18.0297509,24.5024819 C18.1157323,24.4325886 18.1989631,24.3576024 18.2790422,24.2775233 L31.0556518,11.5009137 C32.3147827,10.2417828 32.3147827,8.20347913 31.0556518,6.9443482 C29.7965209,5.68521727 27.7582172,5.68521727 26.4990863,6.9443482 L15.9992406,17.4441939 L5.50091369,6.94586705 C4.24330161,5.68825498 2.20347913,5.68673612 0.944348198,6.94586705 C-0.314782733,8.20499798 -0.314782733,10.2433016 0.944348198,11.5024325 L13.7209578,24.2790422 C14.9005165,25.4586008 16.7638781,25.5331444 18.0298642,24.5026731 L18.0297509,24.5024819 Z"></path>\n            </svg>';
 	  };
 
 	  return Icons;
@@ -2370,7 +2379,8 @@
 	      className: '',
 	      parent: document.body,
 	      isPrepend: false,
-	      isRipple: false
+	      isRipple: false,
+	      prefix: ''
 	    };
 	  };
 	  /*
@@ -14442,8 +14452,11 @@
 
 
 	  Ripple.prototype._hold = function _hold(e) {
+	    var x = e.offsetX != null ? e.offsetX : e.layerX,
+	        y = e.offsetY != null ? e.offsetY : e.layerY;
+
 	    this.isRelease = false;
-	    this.transit.tune({ x: e.layerX, y: e.layerY }).replay();
+	    this.transit.tune({ x: x, y: y }).replay();
 	  };
 	  /*
 	    Method that should be run on touch serface cancel.
@@ -14687,9 +14700,10 @@
 	    this.el.classList.add(CLASSES[className]);
 
 	    var icon = new _icon2.default({
-	      shape: this._props.icon,
+	      shape: p.icon,
 	      parent: this.el,
-	      className: [CLASSES['icon'], p.iconClass]
+	      className: [CLASSES['icon'], p.iconClass],
+	      prefix: p.prefix
 	    });
 	  };
 
@@ -14746,12 +14760,9 @@
 	  */
 
 	  Icon.prototype._declareDefaults = function _declareDefaults() {
-	    this._defaults = {
-	      className: '',
-	      parent: document.body,
-	      shape: '',
-	      size: 'x1'
-	    };
+	    _Module.prototype._declareDefaults.call(this);
+	    this._defaults.shape = '';
+	    this._defaults.size = 'x1';
 	    this.NS = 'http://www.w3.org/2000/svg';
 	  };
 	  /*
@@ -14775,9 +14786,11 @@
 
 
 	  Icon.prototype._renderIcon = function _renderIcon() {
-	    var svg = document.createElementNS(this.NS, 'svg');
+	    var p = this._props,
+	        svg = document.createElementNS(this.NS, 'svg'),
+	        content = '<use xlink:href="#' + p.prefix + p.shape + '-icon-shape" />';
 	    svg.setAttribute('viewBox', '0 0 32 32');
-	    this._addSVGHtml(svg, '<use xlink:href="#' + this._props.shape + '-icon-shape" />');
+	    this._addSVGHtml(svg, content);
 	    this.el.appendChild(svg);
 	  };
 	  /*
@@ -15751,7 +15764,6 @@
 	  PlayButton.prototype._render = function _render() {
 	    _IconFork.prototype._render.call(this);
 	    this._addClass(this.el, CLASSES['play-button']);
-	    // this._addClass( this.el, PLAYER_BTN_CLASSES[ 'player-button' ] );
 	  };
 
 	  return PlayButton;
@@ -15813,11 +15825,12 @@
 	    _ButtonSwitch.prototype._render.call(this);
 	    this.el.classList.add(CLASSES['icon-fork']);
 	    var p = this._props,
+	        prefix = p.prefix,
 	        parent = this.el,
 	        className = CLASSES.icon;
 
-	    this.icon1 = new _icon2.default({ shape: p.icon1, parent: parent, className: className });
-	    this.icon2 = new _icon2.default({ shape: p.icon2, parent: parent, className: className });
+	    this.icon1 = new _icon2.default({ shape: p.icon1, prefix: prefix, parent: parent, className: className });
+	    this.icon2 = new _icon2.default({ shape: p.icon2, prefix: prefix, parent: parent, className: className });
 	  };
 	  /*
 	    Method that should be called on state change.
@@ -16174,11 +16187,14 @@
 	  OpacitySwitch.prototype._render = function _render() {
 	    _ButtonSwitch.prototype._render.call(this);
 	    this.el.classList.add(CLASSES['opacity-switch']);
-	    var icon = new _icon2.default({
+
+	    var p = this._props,
+	        icon = new _icon2.default({
 	      parent: this.el,
-	      shape: this._props.icon,
-	      size: this._props.iconSize,
-	      className: CLASSES['icon']
+	      shape: p.icon,
+	      size: p.iconSize,
+	      className: CLASSES['icon'],
+	      prefix: p.prefix
 	    });
 	    this.el.appendChild(icon.el);
 	  };
@@ -16415,7 +16431,8 @@
 	    this.icon = new _icon2.default({
 	      parent: this.el,
 	      className: CLASSES[className + '__icon'],
-	      shape: 'hide'
+	      shape: 'hide',
+	      prefix: this._props.prefix
 	    });
 	  };
 	  /*

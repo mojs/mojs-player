@@ -24,7 +24,6 @@ class PlayButton extends IconFork {
   _render () {
     super._render();
     this._addClass( this.el, CLASSES[ 'play-button' ] );
-    // this._addClass( this.el, PLAYER_BTN_CLASSES[ 'player-button' ] );
   }
 }
 
