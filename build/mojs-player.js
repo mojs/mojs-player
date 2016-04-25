@@ -122,11 +122,7 @@
 
 	/*
 	  TODO:
-	    - add hide button
-	    - fix window resize issue
-	    - add shortcuts
 	    - optimize arrays in args calls
-	    - add logo ripple
 	*/
 
 	var MojsPlayer = function (_Module) {
@@ -136,6 +132,12 @@
 	    (0, _classCallCheck3.default)(this, MojsPlayer);
 	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
 	  }
+
+	  /*
+	    Method to declare defaults.
+	    @private
+	    @overrides @ Module
+	  */
 
 	  MojsPlayer.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
@@ -151,6 +153,61 @@
 	    this._defaults.speedValue = this._fallbackTo(m.speedValue, 1);
 	    this._defaults.isSpeed = this._fallbackTo(m.isSpeed, false);
 	    this._defaults.isHidden = this._fallbackTo(m.isHidden, false);
+	  };
+	  /*
+	    Callback for keyup on document.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  MojsPlayer.prototype._keyUp = function _keyUp(e) {
+	    if (e.altKey) {
+	      switch (e.keyCode) {
+	        case 80:
+	          // alt + P => PLAY/PAUSE TOGGLE
+	          this._props.isPlaying = !this._props.isPlaying;
+	          this._onPlayStateChange(this._props.isPlaying);
+	          break;
+	        case 83:
+	          // alt + S => STOP
+	          this._onStop();
+	          break;
+	        case 82:
+	          // alt + R => REPEAT TOGGLE
+	          this._props.isRepeat = !this._props.isRepeat;
+	          var method = this._props.isRepeat ? 'on' : 'off';
+	          this.repeatButton[method]();
+	          break;
+	        case 66:
+	          // alt + B => BOUNDS TOGGLE
+	          this._props.isBounds = !this._props.isBounds;
+	          var method = this._props.isBounds ? 'on' : 'off';
+	          this.boundsButton[method]();
+	          break;
+	        case 72:
+	          // alt + H => HIDE PLAYER TOGGLE
+	          this._props.isHidden = !this._props.isHidden;
+	          this._onHideStateChange(this._props.isHidden);
+	          var method = this._props.isHidden ? 'on' : 'off';
+	          this.hideButton[method]();
+	          break;
+	        case 49:
+	          // alt + 1 => RESET SPEED TO 1x
+	          this.speedControl.reset();
+	          break;
+	      }
+	    }
+	  };
+	  /*
+	    Method to declare properties.
+	    @private
+	    @overrides @ Module
+	  */
+
+
+	  MojsPlayer.prototype._vars = function _vars() {
+	    this._hideCount = 0;
 	  };
 	  /*
 	    Method to render the module.
@@ -225,7 +282,6 @@
 	      title: 'mo • js'
 	    });
 
-	    console.log(CLASSES[className + '__hide-button']);
 	    this.hideButton = new _hideButton2.default({
 	      parent: this.el,
 	      className: CLASSES[className + '__hide-button'],
@@ -233,7 +289,17 @@
 	      onStateChange: this._onHideStateChange.bind(this)
 	    });
 
+	    this._listen();
+	  };
+	  /*
+	    Method to initialize event listeners.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._listen = function _listen() {
 	    window.addEventListener('beforeunload', this._onUnload.bind(this));
+	    document.addEventListener('keyup', this._keyUp.bind(this));
 	  };
 	  /*
 	    Method that is invoked when user touches the track.
@@ -368,6 +434,10 @@
 	    this._props.isHidden = isHidden;
 	    var method = isHidden ? 'add' : 'remove';
 	    this.el.classList[method](CLASSES['is-hidden']);
+	    // enable CSS transition on subsequent calls
+	    if (this._hideCount++ === 1) {
+	      this.el.classList.add(CLASSES['is-transition']);
+	    }
 	  };
 	  /*
 	    Method to play system tween from progress.
@@ -389,6 +459,7 @@
 
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
+	    this._props.isPlaying = false;
 	    // this.playButton.off();
 	    this._sysTween.stop();
 	  };
@@ -2353,8 +2424,9 @@
 	  */
 
 
-	  Module.prototype._callIfFunction = function _callIfFunction(fn, args) {
-	    this._isFunction(fn) && fn.apply(this, args);
+	  Module.prototype._callIfFunction = function _callIfFunction(fn) {
+	    Array.prototype.shift.call(arguments);
+	    this._isFunction(fn) && fn.apply(this, arguments);
 	  };
 	  /*
 	    Method to declare module's variables.
@@ -2669,7 +2741,7 @@
 
 
 	  PlayerSlider.prototype._onTrackProgress = function _onTrackProgress(p) {
-	    this._callIfFunction(this._props.onProgress, [p]);
+	    this._callIfFunction(this._props.onProgress, p);
 	  };
 	  /*
 	    Method that should be called on left bound update.
@@ -2684,7 +2756,7 @@
 	    }
 	    this.track.setMinBound(p);
 	    this.rightBound.setMinBound(p);
-	    this._callIfFunction(this._props.onLeftProgress, [p]);
+	    this._callIfFunction(this._props.onLeftProgress, p);
 	  };
 	  /*
 	    Method that should be called on right bound update.
@@ -2699,7 +2771,7 @@
 	    }
 	    this.track.setMaxBound(p);
 	    this.leftBound.setMaxBound(p);
-	    this._callIfFunction(this._props.onRightProgress, [p]);
+	    this._callIfFunction(this._props.onRightProgress, p);
 	  };
 
 	  return PlayerSlider;
@@ -3210,6 +3282,8 @@
 	    // add listener on document to cover edge cases
 	    // like when you press -> leave the element -> release
 	    this._addPointerUpEvent(document, this._pointerUpDoc.bind(this));
+
+	    window.addEventListener('resize', this._onWindowResize.bind(this));
 	  };
 	  /*
 	    Callback for pan end on main el.
@@ -3238,7 +3312,7 @@
 
 	  Handle.prototype._panEnd = function _panEnd(e) {
 	    this._saveDelta();
-	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	    this._callIfFunction(this._props.onSeekEnd, e);
 	  };
 	  /*
 	    Callback for pointer down on main el.
@@ -3250,7 +3324,7 @@
 	  Handle.prototype._pointerDown = function _pointerDown(e) {
 	    var p = this._props;
 	    this._isPointerDown = true;
-	    this._callIfFunction(p.onSeekStart, [e]);
+	    this._callIfFunction(p.onSeekStart, e);
 	  };
 	  /*
 	    Callback for pointer up on main el.
@@ -3260,7 +3334,7 @@
 
 
 	  Handle.prototype._pointerUp = function _pointerUp(e) {
-	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	    this._callIfFunction(this._props.onSeekEnd, e);
 	  };
 	  /*
 	    Callback for pointer up on document.
@@ -3273,7 +3347,7 @@
 	    if (!this._isPointerDown) {
 	      return;
 	    }
-	    this._callIfFunction(this._props.onSeekEnd, [e]);
+	    this._callIfFunction(this._props.onSeekEnd, e);
 	    this._isPointerDown = false;
 	  };
 	  /*
@@ -3324,6 +3398,17 @@
 
 	  Handle.prototype._progressToShift = function _progressToShift(progress) {
 	    return progress * this._maxWidth;
+	  };
+	  /*
+	    Callback for window resize event.
+	    @private
+	    @param {Object} Original event object.
+	  */
+
+
+	  Handle.prototype._onWindowResize = function _onWindowResize(e) {
+	    this._getMaxWidth();
+	    this.setProgress(this._progress);
 	  };
 
 	  return Handle;
@@ -14224,7 +14309,7 @@
 	    this.setProgress(this._shiftToProgress(x));
 
 	    p.isRipple && this.ripple._hold(e);
-	    this._callIfFunction(p.onSeekStart, [e]);
+	    this._callIfFunction(p.onSeekStart, e);
 	  };
 
 	  return Track;
@@ -14255,10 +14340,6 @@
 	var _module = __webpack_require__(80);
 
 	var _module2 = _interopRequireDefault(_module);
-
-	var _hammerjs = __webpack_require__(84);
-
-	var _hammerjs2 = _interopRequireDefault(_hammerjs);
 
 	var _moJs = __webpack_require__(85);
 
@@ -14847,8 +14928,17 @@
 	    p.link && this.el.setAttribute('href', p.link);
 	    this._addListeners();
 
+	    this._createRipple();
+	  };
+	  /*
+	    Method to create ripple.
+	    @private
+	  */
+
+
+	  Button.prototype._createRipple = function _createRipple() {
 	    this.ripple = new _ripple2.default({
-	      className: CLASSES[className + '__ripple'],
+	      className: CLASSES['button__ripple'],
 	      parent: this.el
 	    });
 	  };
@@ -14885,7 +14975,7 @@
 
 	  Button.prototype._pointerUp = function _pointerUp(e) {
 	    this.wasTouched = false;
-	    e.stopPropagation();
+	    // e.stopPropagation();
 	    this._callIfFunction(this._props.onPointerUp);
 	    this.ripple._release();
 	  };
@@ -15080,10 +15170,19 @@
 	    this._defaults.onIsSpeed = null;
 	  };
 	  /*
+	    Method to reset speed to 1x.
+	    @public
+	    @returns this
+	  */
+
+
+	  SpeedControl.prototype.reset = function reset() {
+	    this._onDoubleTap();
+	  };
+	  /*
 	    Initial render method.
 	    @private
 	    @overrides @ Module
-	    @returns this
 	  */
 
 
@@ -15129,14 +15228,13 @@
 
 
 	  SpeedControl.prototype._onSliderProgress = function _onSliderProgress(p) {
-
 	    // progress should be at least 0.01
 	    p = Math.max(p, 0.01);
 
 	    var props = this._props,
-	        args = [this._progressToSpeed(p), p];
+	        args = [];
 
-	    this._callIfFunction(props.onSpeedChange, args);
+	    this._callIfFunction(props.onSpeedChange, this._progressToSpeed(p), p);
 	    this.labelButton.setLabelText(this._progressToLabel(props.progress = p));
 	  };
 	  /*
@@ -15149,7 +15247,7 @@
 	  SpeedControl.prototype._onButtonStateChange = function _onButtonStateChange(isOn) {
 	    var method = isOn ? 'add' : 'remove';
 	    this.el.classList[method](CLASSES['is-on']);
-	    this._callIfFunction(this._props.onIsSpeed, [isOn]);
+	    this._callIfFunction(this._props.onIsSpeed, isOn);
 	  };
 	  /*
 	    Method to recalc progress to label string.
@@ -15261,19 +15359,6 @@
 
 
 	  LabelButton.prototype.setLabelText = function setLabelText(text) {
-	    // progress += .5;
-	    // let text = progress.toFixed(2);
-	    // // if text is 0/1 set the plain value with no toFixed
-	    // switch ( progress ) {
-	    //   case 0:
-	    //   case 1:
-	    //     text = `${ progress }`;
-	    // }
-
-	    // // remove the last zero
-	    // let lastZero = /0$/;
-	    // if ( text.match( lastZero ) ) { text = text.replace( lastZero, '' ); }
-
 	    this.label.innerText = text;
 	  };
 
@@ -15439,7 +15524,7 @@
 	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
 
 	    if (isCallback) {
-	      this._callIfFunction(this._props.onStateChange, [this._props.isOn]);
+	      this._callIfFunction(this._props.onStateChange, this._props.isOn);
 	    }
 	    this._setState();
 	  };
@@ -16435,7 +16520,7 @@
 
 
 	// module
-	exports.push([module.id, "._mojs-player_640z0_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 )\n  /*transition:     all .15s ease-out;*/\n}\n._mojs-player__left_640z0_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_640z0_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_640z0_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_640z0_1 {\n  position:       absolute;\n  right:       7px;\n  right:       7px;\n  right:       0.4375rem;\n  bottom:       100%\n}\n._mojs-player_640z0_4._is-hidden_640z0_41 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n\n", ""]);
+	exports.push([module.id, "._mojs-player_bs6kn_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 )\n}\n._mojs-player__left_bs6kn_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_bs6kn_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_bs6kn_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_bs6kn_1 {\n  position:       absolute;\n  right:       7px;\n  right:       7px;\n  right:       0.4375rem;\n  bottom:       100%\n}\n._mojs-player_bs6kn_4._is-hidden_bs6kn_40 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n._mojs-player_bs6kn_4._is-transition_bs6kn_43 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out\n}\n\n", ""]);
 
 	// exports
 
@@ -16445,12 +16530,13 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"mojs-player": "_mojs-player_640z0_4",
-		"mojs-player__left": "_mojs-player__left_640z0_1",
-		"mojs-player__mid": "_mojs-player__mid_640z0_1",
-		"mojs-player__right": "_mojs-player__right_640z0_1",
-		"mojs-player__hide-button": "_mojs-player__hide-button_640z0_1",
-		"is-hidden": "_is-hidden_640z0_41"
+		"mojs-player": "_mojs-player_bs6kn_4",
+		"mojs-player__left": "_mojs-player__left_bs6kn_1",
+		"mojs-player__mid": "_mojs-player__mid_bs6kn_1",
+		"mojs-player__right": "_mojs-player__right_bs6kn_1",
+		"mojs-player__hide-button": "_mojs-player__hide-button_bs6kn_1",
+		"is-hidden": "_is-hidden_bs6kn_40",
+		"is-transition": "_is-transition_bs6kn_43"
 	};
 
 /***/ }

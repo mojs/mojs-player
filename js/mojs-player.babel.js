@@ -16,14 +16,15 @@ let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
 /*
   TODO:
-    - add hide button
-    - fix window resize issue
-    - add shortcuts
     - optimize arrays in args calls
-    - add logo ripple
 */
 
 class MojsPlayer extends Module {
+  /*
+    Method to declare defaults.
+    @private
+    @overrides @ Module
+  */
   _declareDefaults () {
     super._declareDefaults();
     let m = JSON.parse( localStorage.getItem('mojs-player-model') ) || {};
@@ -38,6 +39,51 @@ class MojsPlayer extends Module {
     this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
     this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
     this._defaults.isHidden   = this._fallbackTo( m.isHidden,    false );
+  }
+  /*
+    Callback for keyup on document.
+    @private
+    @param {Object} Original event object.
+  */
+  _keyUp ( e ) {
+    if ( e.altKey ) {
+      switch ( e.keyCode ) {
+        case 80: // alt + P => PLAY/PAUSE TOGGLE
+          this._props.isPlaying = !this._props.isPlaying;
+          this._onPlayStateChange( this._props.isPlaying );
+          break;
+        case 83: // alt + S => STOP
+          this._onStop();
+          break;
+        case 82: // alt + R => REPEAT TOGGLE
+          this._props.isRepeat = !this._props.isRepeat;
+          var method = ( this._props.isRepeat ) ? 'on' : 'off';
+          this.repeatButton[ method ]();
+          break;
+        case 66: // alt + B => BOUNDS TOGGLE
+          this._props.isBounds = !this._props.isBounds;
+          var method = ( this._props.isBounds ) ? 'on' : 'off';
+          this.boundsButton[ method ]();
+          break;
+        case 72: // alt + H => HIDE PLAYER TOGGLE
+          this._props.isHidden = !this._props.isHidden;
+          this._onHideStateChange( this._props.isHidden );
+          var method = ( this._props.isHidden ) ? 'on' : 'off';
+          this.hideButton[ method ]();
+          break;
+        case 49: // alt + 1 => RESET SPEED TO 1x
+          this.speedControl.reset();
+          break;
+      }
+    }
+  }
+  /*
+    Method to declare properties.
+    @private
+    @overrides @ Module
+  */
+  _vars () {
+    this._hideCount = 0;
   }
   /*
     Method to render the module.
@@ -110,7 +156,6 @@ class MojsPlayer extends Module {
       title:    'mo • js'
     });
 
-    console.log(CLASSES[ `${ className }__hide-button` ])
     this.hideButton   = new HideButton({
       parent:         this.el,
       className:      CLASSES[ `${ className }__hide-button` ],
@@ -118,7 +163,15 @@ class MojsPlayer extends Module {
       onStateChange:  this._onHideStateChange.bind( this )
     });
 
-    window.addEventListener('beforeunload', this._onUnload.bind(this));
+    this._listen();
+  }
+  /*
+    Method to initialize event listeners.
+    @private
+  */
+  _listen () {
+    window.addEventListener( 'beforeunload', this._onUnload.bind(this) );
+    document.addEventListener( 'keyup' , this._keyUp.bind(this) );
   }
   /*
     Method that is invoked when user touches the track.
@@ -217,6 +270,10 @@ class MojsPlayer extends Module {
     this._props.isHidden = isHidden;
     let method = ( isHidden ) ? 'add' : 'remove';
     this.el.classList[ method ]( CLASSES[ 'is-hidden' ] );
+    // enable CSS transition on subsequent calls
+    if ( this._hideCount++ === 1 ) {
+      this.el.classList.add( CLASSES[ 'is-transition' ] );
+    }
   }
   /*
     Method to play system tween from progress.
@@ -238,6 +295,7 @@ class MojsPlayer extends Module {
     @private
   */
   _onStop ( ) {
+    this._props.isPlaying = false;
     // this.playButton.off();
     this._sysTween.stop();
   }

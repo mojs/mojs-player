@@ -19,19 +19,6 @@ class LabelButton extends ButtonSwitch {
     @param {String} Text to set.
   */
   setLabelText ( text ) {
-    // progress += .5;
-    // let text = progress.toFixed(2);
-    // // if text is 0/1 set the plain value with no toFixed
-    // switch ( progress ) {
-    //   case 0:
-    //   case 1:
-    //     text = `${ progress }`;
-    // }
-
-    // // remove the last zero
-    // let lastZero = /0$/;
-    // if ( text.match( lastZero ) ) { text = text.replace( lastZero, '' ); }
-
     this.label.innerText = text;
   }
 

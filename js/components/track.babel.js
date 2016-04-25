@@ -94,7 +94,7 @@ class Track extends Handle {
     this.setProgress( this._shiftToProgress( x ) );
 
     p.isRipple && this.ripple._hold( e );
-    this._callIfFunction( p.onSeekStart, [ e ] );
+    this._callIfFunction( p.onSeekStart, e );
   }
 }
 

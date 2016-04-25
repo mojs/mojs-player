@@ -74,7 +74,7 @@ class ButtonSwitch extends Button {
   */
   _reactOnStateChange ( isCallback = true ) {
     if ( isCallback ) {
-      this._callIfFunction( this._props.onStateChange, [ this._props.isOn ] );
+      this._callIfFunction( this._props.onStateChange, this._props.isOn );
     }
     this._setState();
   }
