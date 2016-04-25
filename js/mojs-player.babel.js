@@ -27,21 +27,45 @@ class MojsPlayer extends Module {
   */
   _declareDefaults () {
     super._declareDefaults();
-    let m = JSON.parse( localStorage.getItem('mojs-player-model') ) || {};
 
-    this._defaults.isBounds   = this._fallbackTo( m.isBounds,   false );
-    this._defaults.leftBound  = this._fallbackTo( m.leftBound,  0 );
-    this._defaults.rightBound = this._fallbackTo( m.rightBound, 1 );
-    this._defaults.progress   = this._fallbackTo( m.progress,   0 );
-    this._defaults.isPlaying  = this._fallbackTo( m.isPlaying,  false );
-    this._defaults.isRepeat   = this._fallbackTo( m.isRepeat,   false );
-    this._defaults.speed      = this._fallbackTo( m.speed,      .5 );
-    this._defaults.speedValue = this._fallbackTo( m.speedValue, 1 );
-    this._defaults.isSpeed    = this._fallbackTo( m.isSpeed,    false );
-    this._defaults.isHidden   = this._fallbackTo( m.isHidden,    false );
+    this._defaults.isSaveState  = true;
+    this._defaults.isPlaying    = false;
+    this._defaults.progress     = 0;
+    this._defaults.isRepeat     = false;
+    this._defaults.isBounds     = false;
+    this._defaults.leftBound    = 0;
+    this._defaults.rightBound   = 1;
+    this._defaults.isSpeed      = false;
+    this._defaults.speedValue   = 1;
+    this._defaults.isHidden     = false;
 
     let str = 'mojs-player';
-    this._defaults.prefix     = `${str}-${ this._hashCode( str ) }-`;
+    this._prefix       = `${str}-${ this._hashCode( str ) }-`;
+    this._localStorage = `${ this._prefix }model`;
+  }
+  /*
+    Method to copy `_o` options to `_props` object
+    with fallback to `localStorage` and `_defaults`.
+    @private
+  */
+  _extendDefaults () {
+    this._props  = {};
+    let p           = this._props,
+        o           = this._o,
+        defs        = this._defaults;
+        
+    // get localstorage regarding isSaveState option
+    p.isSaveState = this._fallbackTo( o.isSaveState, defs.isSaveState );
+    let m = ( p.isSaveState )
+          ? JSON.parse( localStorage.getItem(this._localStorage) ) || {}
+          : {};
+
+    for (let key in defs) {
+        let value = this._fallbackTo( m[ key ], o[ key ] );
+      this._assignProp( key, this._fallbackTo( value, defs[ key ] ) );
+    }
+    // get raw-speed option
+    this._props[ 'raw-speed' ] = this._fallbackTo( m[ 'raw-speed' ], .5 );
   }
   /*
     Callback for keyup on document.
@@ -51,7 +75,8 @@ class MojsPlayer extends Module {
   _keyUp ( e ) {
     if ( e.altKey ) {
       switch ( e.keyCode ) {
-        case 80: // alt + P => PLAY/PAUSE TOGGLE
+        case 90: // alt + Z => PLAY/PAUSE TOGGLE
+        // case 32: // alt + P => PLAY/PAUSE TOGGLE
           this._props.isPlaying = !this._props.isPlaying;
           this._onPlayStateChange( this._props.isPlaying );
           break;
@@ -135,7 +160,7 @@ class MojsPlayer extends Module {
 
     this.speedControl = new SpeedControl({
       parent:         left,
-      progress:       p.speed,
+      progress:       p[ 'raw-speed' ],
       isOn:           p.isSpeed,
       onSpeedChange:  this._onSpeedChange.bind( this ),
       onIsSpeed:      this._onIsSpeed.bind( this ),
@@ -332,7 +357,7 @@ class MojsPlayer extends Module {
     @param {Number} Slider progress.
   */
   _onSpeedChange ( speed, progress ) {
-    this._props.speed = progress;
+    this._props[ 'raw-speed' ] = progress;
     this._props.speedValue = speed;
     this._sysTween.setSpeed( speed );
   }
@@ -372,7 +397,13 @@ class MojsPlayer extends Module {
     @param {Object} Original even object.
   */
   _onUnload ( e ) {
-    localStorage.setItem('mojs-player-model', JSON.stringify( this._props ) );
+    if ( !this._props.isSaveState ) {
+      return localStorage.removeItem( this._localStorage );
+    }
+
+    delete this._props.parent;
+    delete this._props.isSaveState;
+    localStorage.setItem(this._localStorage, JSON.stringify( this._props ) );
   }
   /*
     Method that returns the second argument if the first one isn't set.
@@ -425,7 +456,10 @@ let tw = new mojs.Tween({
 });
 
 let mojsPlayer = new MojsPlayer({
-  add: tw
+  add:       tw,
+  isPlaying: true,
+  progress:  .5,
+  // isSaveState: false
 });
 
 export default MojsPlayer;

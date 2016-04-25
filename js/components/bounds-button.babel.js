@@ -12,7 +12,7 @@ class BoundsButton extends RepeatButton {
   _declareDefaults () {
     super._declareDefaults();
     this._defaults.icon  = 'bounds';
-    this._defaults.title = 'progress bounds';
+    this._defaults.title = 'progress bounds (alt + b)';
   }
 }
 

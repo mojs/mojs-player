@@ -11,7 +11,7 @@ class LabelButton extends ButtonSwitch {
   */
   _declareDefaults () {
     super._declareDefaults();
-    this._defaults.title    = 'speed';
+    this._defaults.title    = 'speed (reset: alt + 1)';
   }
   /*
     Method to populate the label with progress text.

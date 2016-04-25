@@ -7,6 +7,10 @@ let CLASSES   = require('css/blocks/hide-button.postcss.css.json'),
     className = 'hide-button';
 
 class HideButton extends ButtonSwitch {
+  _declareDefaults () {
+    super._declareDefaults();
+    this._defaults.title = 'hide (alt + h)'
+  }
   /*
     Initial render method.
     @private
