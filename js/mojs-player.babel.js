@@ -1,4 +1,3 @@
-
 import Polyfill       from 'classlist-polyfill';
 import Icons          from './components/icons';
 import Module         from './components/module';
@@ -13,11 +12,6 @@ import HideButton     from './components/hide-button';
 
 require('css/blocks/mojs-player.postcss.css');
 let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
-
-/*
-  TODO:
-    - snap point for track slider
-*/
 
 class MojsPlayer extends Module {
   /*
@@ -39,7 +33,8 @@ class MojsPlayer extends Module {
     this._defaults.speed        = 1;
     this._defaults.isHidden     = false;
 
-    let str = 'mojs-player';
+    let str            = 'mojs-player';
+    this.revision      = '0.40.0';
     this._prefix       = `${str}-${ this._hashCode( str ) }-`;
     this._localStorage = `${ this._prefix }model`;
   }
@@ -75,7 +70,6 @@ class MojsPlayer extends Module {
   _keyUp ( e ) {
     if ( e.altKey ) {
       switch ( e.keyCode ) {
-        // case 90: // alt + Z => PLAY/PAUSE TOGGLE || 32 - space
         case 80: // alt + P => PLAY/PAUSE TOGGLE
           this._props.isPlaying = !this._props.isPlaying;
           this._onPlayStateChange( this._props.isPlaying );
@@ -107,14 +101,15 @@ class MojsPlayer extends Module {
           var method = ( this._props.isHidden ) ? 'on' : 'off';
           this.hideButton[ method ]();
           break;
-        case 49: // alt + 1 => RESET SPEED TO 1x
+        // case 49: // alt + 1 => RESET SPEED TO 1x
+        case 81: // alt + q => RESET SPEED TO 1x
           this.speedControl.reset();
           break;
         case 50: // alt + 2 => DECREASE SPEEED by .05
-          this.speedControl.decreaseSpeed();
+          this.speedControl.decreaseSpeed( ( e.shiftKey ) ? .05 : .01 );
           break;
         case 51: // alt + 3 => INCREASE SPEED by .05
-          this.speedControl.increaseSpeed();
+          this.speedControl.increaseSpeed( ( e.shiftKey ) ? .05 : .01 );
           break;
       }
     }
@@ -133,7 +128,6 @@ class MojsPlayer extends Module {
     @overrides @ Module
   */
   _render () {
-    this.isIt = 1;
     this._initTimeline();
     let p         = this._props,
         className = 'mojs-player',
@@ -444,7 +438,7 @@ class MojsPlayer extends Module {
   _getBound ( boundName ) {
     let p        = this._props,
         fallback = ( boundName === 'left' ) ? 0 : 1;
-   
+
     return ( p.isBounds ) ? p[ `${ boundName }Bound` ] : fallback;
   }
   /*
@@ -470,21 +464,14 @@ class MojsPlayer extends Module {
   }
 }
 
-let el = document.querySelector( '#js-el' );
-let tw = new mojs.Tween({
-  duration:  4000,
-  onUpdate (p) {
-    el.style.transform = `translateX(${ 1000 * p }px)`;
-  }
-});
+if ( (typeof define === "function") && define.amd ) {
+  define(function () { return MojsPlayer; });
+}
+if ( (typeof module === "object") && (typeof module.exports === "object") ) {
+  module.exports = MojsPlayer;
+}
 
-let mojsPlayer = new MojsPlayer({
-  add:       tw,
-  isPlaying: true,
-  progress:  .5,
-  speed:     5,
-  // className: 'lalal'
-  // isSaveState: false
-});
+let _global = ( typeof global !== 'undefined' ) ? global : window;
+_global.MojsPlayer = MojsPlayer;
 
 export default MojsPlayer;

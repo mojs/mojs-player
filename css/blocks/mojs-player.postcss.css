@@ -33,7 +33,7 @@
 
   &__hide-button {
     position:     absolute;
-    right:        calc( 7 * $PX );
+    right:        calc( 6 * $PX );
     bottom:       100%;
   }
 

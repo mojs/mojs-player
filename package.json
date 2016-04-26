@@ -1,14 +1,11 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.36.3",
+  "version": "0.40.0",
   "license": "MIT",
   "private": false,
-  "scripts": {
-    "build": "",
-    "test": "karma start --single-run"
-  },
-  "main": "lib/mojs.js",
+  "scripts": { },
+  "main": "lib/mojs-player.js",
   "keywords": [
     "motion",
     "effects",
@@ -43,11 +40,23 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-runtime": "^6.6.1",
     "css-loader": "^0.23.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-changed": "^1.3.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-insert": "^0.5.0",
+    "gulp-json-editor": "^2.2.1",
+    "gulp-livereload": "^3.8.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-shell": "^0.5.2",
+    "gulp-uglify": "^1.5.3",
     "json-loader": "^0.5.4",
     "postcss-cssnext": "^2.5.1",
     "postcss-loader": "^0.8.2",
     "postcss-modules": "^0.4.1",
     "precss": "^1.4.0",
+    "run-sequence": "^1.1.5",
     "style-loader": "^0.13.1"
   }
 }

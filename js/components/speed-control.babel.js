@@ -29,11 +29,12 @@ class SpeedControl extends Module {
   /*
     Method to decrease speed value.
     @public
+    @param {Number} Value that the slider should be decreased by.
     @returns this.
   */
-  decreaseSpeed () {
+  decreaseSpeed ( amount = 0.01 ) {
     let p = this._props;
-    p.progress -= .01;
+    p.progress -= amount;
     p.progress = ( p.progress < 0 ) ? 0 : p.progress;
     this.slider.setProgress( p.progress );
     return this;
@@ -41,11 +42,12 @@ class SpeedControl extends Module {
   /*
     Method to inclease speed value.
     @public
+    @param {Number} Value that the slider should be increased by.
     @returns this.
   */
-  increaseSpeed () {
+  increaseSpeed ( amount = 0.01 ) {
     let p = this._props;
-    p.progress += .01;
+    p.progress += amount;
     p.progress = ( p.progress > 1 ) ? 1 : p.progress;
     this.slider.setProgress( p.progress );
     return this;
