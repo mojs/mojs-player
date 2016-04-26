@@ -91,7 +91,12 @@ class Track extends Handle {
 
     if ( p.direction === 'y' ) { x = this._maxWidth - e.layerY; }
     x = ( this._props.isInversed && x < 0 ) ? this._maxWidth + x : x;
-    this.setProgress( this._shiftToProgress( x ) );
+
+    // if near the snap point - set it to the snap point
+    let progress = this._shiftToProgress( x );
+    progress = ( Math.abs( p.snapPoint - progress ) < p.snapStrength )
+      ? p.snapPoint : progress;
+    this.setProgress( progress );
 
     p.isRipple && this.ripple._hold( e );
     this._callIfFunction( p.onSeekStart, e );

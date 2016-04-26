@@ -124,7 +124,9 @@ class Slider extends Module {
       isRipple:       p.isRipple,
       isProgress:     p.isProgress,
       parent:         rootEl,
-      direction:      p.direction
+      direction:      p.direction,
+      snapPoint:      p.snapPoint,
+      snapStrength:   p.snapStrength
     });
     rootEl.appendChild( this.track.el );
 
