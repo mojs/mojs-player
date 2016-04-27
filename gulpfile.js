@@ -15,7 +15,7 @@ var shell         = require("gulp-shell");
 var babel         = require("gulp-babel");
 
 var devFolder   = '', distFolder  = '', currentVersion = 0;
-var distMoFile = devFolder + 'build/mojs-player.js';
+var distMoFile  = devFolder + 'build/mojs-player.js';
 var libMainFile = devFolder + 'lib/mojs-player.js';
 
 var paths = {
@@ -48,6 +48,7 @@ gulp.task('babel-lib', function(e){
 gulp.task('minify', function() {
   return gulp.src(distMoFile)
           .pipe(plumber())
+          .pipe(livereload())
           .pipe(insert.transform(function(contents) {
             return credits + contents;
           }))
@@ -105,7 +106,7 @@ gulp.task('update-main-file-version', function(e){
   });
 
 gulp.task('default', function(){
-  var server = livereload();
+  livereload.listen();
   gulp.run('get-current-version');
   gulp.watch(paths.src.babel, [ 'babel-lib' ]);
   gulp.watch(distMoFile,      [ 'minify' ]);

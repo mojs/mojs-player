@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  watch: true,
+  watch:   true,
   context: __dirname + "/",
   entry: [
     __dirname + '/js/mojs-player.babel.js'
