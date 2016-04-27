@@ -34,16 +34,13 @@
     <script src="build/mojs-player.js"></script>
 
     <script>
-
       let el = document.querySelector( '#js-el' );
-      
       let tw = new mojs.Tween({
         duration:  4000,
         onUpdate (p) {
           el.style.transform = `translateX(${ 1000 * p }px)`;
         }
       });
-
       let mojsPlayer = new MojsPlayer({
         add:       tw,
         isPlaying: true,
@@ -52,7 +49,7 @@
         // className: 'lalal'
         // isSaveState: false
       });
-
     </script>
+    
   </body>
 </html>

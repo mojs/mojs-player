@@ -8,6 +8,7 @@
   width:          100%;
   height:         calc( 40 * $PX );
   background:     rgba( 58, 8, 57, .85 );
+  z-index:        100;
   
   $btnWidth: 35;
   $btnCount: 5;

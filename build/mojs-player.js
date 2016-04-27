@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.40.0 
+	0.40.1 
 */
 
 /******/ (function(modules) { // webpackBootstrap
@@ -159,7 +159,7 @@
 	    this._defaults.isHidden = false;
 
 	    var str = 'mojs-player';
-	    this.revision = '0.40.0';
+	    this.revision = '0.40.1';
 	    this._prefix = str + '-' + this._hashCode(str) + '-';
 	    this._localStorage = this._prefix + 'model';
 	  };
@@ -8928,7 +8928,7 @@
 
 
 	// module
-	exports.push([module.id, "._mojs-player_1uepo_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 )\n}\n._mojs-player__left_1uepo_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_1uepo_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_1uepo_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_1uepo_1 {\n  position:       absolute;\n  right:       6px;\n  right:       6px;\n  right:       0.375rem;\n  bottom:       100%\n}\n._mojs-player_1uepo_4._is-hidden_1uepo_40 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n._mojs-player_1uepo_4._is-transition_1uepo_43 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out\n}\n\n", ""]);
+	exports.push([module.id, "._mojs-player_tes6w_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 );\n  z-index:        100\n}\n._mojs-player__left_tes6w_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_tes6w_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_tes6w_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_tes6w_1 {\n  position:       absolute;\n  right:       6px;\n  right:       6px;\n  right:       0.375rem;\n  bottom:       100%\n}\n._mojs-player_tes6w_4._is-hidden_tes6w_41 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n._mojs-player_tes6w_4._is-transition_tes6w_44 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out\n}\n\n", ""]);
 
 	// exports
 
@@ -8938,13 +8938,13 @@
 /***/ function(module, exports) {
 
 	module.exports = {
-		"mojs-player": "_mojs-player_1uepo_4",
-		"mojs-player__left": "_mojs-player__left_1uepo_1",
-		"mojs-player__mid": "_mojs-player__mid_1uepo_1",
-		"mojs-player__right": "_mojs-player__right_1uepo_1",
-		"mojs-player__hide-button": "_mojs-player__hide-button_1uepo_1",
-		"is-hidden": "_is-hidden_1uepo_40",
-		"is-transition": "_is-transition_1uepo_43"
+		"mojs-player": "_mojs-player_tes6w_4",
+		"mojs-player__left": "_mojs-player__left_tes6w_1",
+		"mojs-player__mid": "_mojs-player__mid_tes6w_1",
+		"mojs-player__right": "_mojs-player__right_tes6w_1",
+		"mojs-player__hide-button": "_mojs-player__hide-button_tes6w_1",
+		"is-hidden": "_is-hidden_tes6w_41",
+		"is-transition": "_is-transition_tes6w_44"
 	};
 
 /***/ }
