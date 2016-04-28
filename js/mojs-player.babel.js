@@ -255,7 +255,7 @@ class MojsPlayer extends Module {
       onComplete:      this._onSysTweenComplete.bind( this ),
       onPlaybackStop:  () => { this._setPlayState( 'off' ); },
       onPlaybackPause: () => { this._setPlayState( 'off' ); },
-      onPlaybackStart: () => { this._setPlayState( 'on' ) }
+      onPlaybackStart: () => { this._setPlayState( 'on' ); }
     });
   }
   /*
@@ -265,20 +265,41 @@ class MojsPlayer extends Module {
   */
   _onSysProgress ( p ) {
     this.playerSlider.setTrackProgress( p );
+
     let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1,
         leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
 
-    if ( p < leftBound && p !== 0 ) {
-      this._sysTween.pause();
-      this._defer( this._play );
+    // since js is really bed in numbers precision,
+    // if we set a progress in the `_play` method it returns slighly
+    // different when piped thru tween, so add `0.01` gap to soften that
+    if ( p < leftBound - 0.01 && p !== 0 ) {
+      this._sysTween.reset();
+      requestAnimationFrame(this._play.bind(this));
     }
+
     if ( p >= rightBound ) {
-      this._sysTween.pause();
+      this._sysTween.reset();
       if ( this._props.isRepeat ) {
-        this._defer( this._play );
+        requestAnimationFrame(this._play.bind(this));
       } else { this._props.isPlaying = false; }
     }
   }
+  /*
+    Method to play system tween from progress.
+    @private
+  */
+  _play () {
+    let p         = this._props,
+        leftBound = ( p.isBounds ) ? p.leftBound : p.progress,
+        progress  = ( p.progress >= this._getBound( 'right' ) )
+          ? leftBound : p.progress;
+    
+    if (progress === 1) { progress = ( p.isBounds ) ? p.leftBound : 0 };
+    if ( progress !== 0 ) { this._sysTween.setProgress( progress ); };
+
+    this._sysTween.play();
+  }
+
   /*
     Method to set play button state.
     @private
@@ -288,7 +309,7 @@ class MojsPlayer extends Module {
     clearTimeout( this._playTimeout );
     this._playTimeout = setTimeout( () => {
       this.playButton && this.playButton[ method ]( false );
-    }, 2);
+    }, 20);
   }
   /*
     Method that is invoked on system tween completion.
@@ -296,12 +317,14 @@ class MojsPlayer extends Module {
     @param {Boolean} If forward direction.
   */
   _onSysTweenComplete ( isForward ) {
-    if ( this._props.isPlaying && isForward ) {
-      if ( this._props.isRepeat ) {
-        this._sysTween.stop();
-        this._play();
-      }
-    }
+    // console.log(' complete ', this._props.isPlaying, isForward, this._props.isRepeat);
+    // if ( this._props.isPlaying && isForward ) {
+    //   if ( this._props.isRepeat ) {
+    //     console.log('reset 2')
+    //     // this._sysTween.reset();
+    //     // this._play();
+    //   }
+    // }
   }
   /*
     Method that is invoked play button state change.
@@ -327,28 +350,12 @@ class MojsPlayer extends Module {
     }
   }
   /*
-    Method to play system tween from progress.
-    @private
-  */
-  _play () {
-    let p         = this._props,
-        leftBound = ( p.isBounds ) ? p.leftBound : p.progress,
-        progress  = ( p.progress >= this._getBound( 'right' ) )
-          ? leftBound : p.progress;
-
-    this._sysTween
-      .setProgress( progress )
-      .setSpeed( p.speed )
-      .play();
-  }
-  /*
     Method that is invoked on stop button tap.
     @private
   */
   _onStop ( ) {
     this._props.isPlaying = false;
-    // this.playButton.off();
-    this._sysTween.stop();
+    this._sysTween.reset();
   }
   /*
     Method that is invoked on repeat switch state change.

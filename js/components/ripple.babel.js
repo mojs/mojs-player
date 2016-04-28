@@ -78,7 +78,7 @@ class Ripple extends Module {
         y = ( e.offsetY != null ) ? e.offsetY : e.layerY;
 
     this.isRelease = false;
-    this.transit.tune({ x: x, y: y }).replay();
+    this.transit.tune({ x: x, y: y }).stop().replay();
   }
   /*
     Method that should be run on touch serface cancel.

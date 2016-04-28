@@ -101,7 +101,9 @@ class PlayerSlider extends Module {
       isBound:        true,
       parent:         this.el,
       isRipple:       false,
-      onProgress:     this._onLeftBoundProgress.bind(this)
+      onProgress:     this._onLeftBoundProgress.bind(this),
+      onSeekStart:    p.onSeekStart,
+      onSeekEnd:      p.onSeekEnd
     });
 
     this.track = new Slider({
@@ -116,7 +118,9 @@ class PlayerSlider extends Module {
       parent:         this.el,
       isRipple:       false,
       isInversed:     true,
-      onProgress:     this._onRightBoundProgress.bind(this)
+      onProgress:     this._onRightBoundProgress.bind(this),
+      onSeekStart:    p.onSeekStart,
+      onSeekEnd:      p.onSeekEnd
     });
 
     this.rightBound.setProgress( p.rightProgress );
@@ -141,6 +145,7 @@ class PlayerSlider extends Module {
   */
   _onLeftBoundProgress ( p ) {
     if ( !this._props.isBounds ) { return; }
+    this._props.leftProgress = p;
     this.track.setMinBound( p );
     this.rightBound.setMinBound( p );
     this._callIfFunction( this._props.onLeftProgress, p );
@@ -152,6 +157,7 @@ class PlayerSlider extends Module {
   */
   _onRightBoundProgress ( p ) {
     if ( !this._props.isBounds ) { return; }
+    this._props.rightProgress = p;
     this.track.setMaxBound( p );
     this.leftBound.setMaxBound( p );
     this._callIfFunction( this._props.onRightProgress, p );
