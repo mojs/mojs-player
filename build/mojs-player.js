@@ -1,9 +1,3 @@
-/*! 
-	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
-	Oleg Solomka @LegoMushroom 2016 MIT
-	0.40.1 
-*/
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -428,22 +422,48 @@
 
 	  MojsPlayer.prototype._onSysProgress = function _onSysProgress(p) {
 	    this.playerSlider.setTrackProgress(p);
+
 	    var rightBound = this._props.isBounds ? this._props.rightBound : 1,
 	        leftBound = this._props.isBounds ? this._props.leftBound : -1;
 
-	    if (p < leftBound && p !== 0) {
-	      this._sysTween.pause();
-	      this._defer(this._play);
+	    // since js is really bed in numbers precision,
+	    // if we set a progress in the `_play` method it returns slighly
+	    // different when piped thru tween, so add `0.01` gap to soften that
+	    if (p < leftBound - 0.01 && p !== 0) {
+	      this._sysTween.reset();
+	      requestAnimationFrame(this._play.bind(this));
 	    }
+
 	    if (p >= rightBound) {
-	      this._sysTween.pause();
+	      this._sysTween.reset();
 	      if (this._props.isRepeat) {
-	        this._defer(this._play);
+	        requestAnimationFrame(this._play.bind(this));
 	      } else {
 	        this._props.isPlaying = false;
 	      }
 	    }
 	  };
+	  /*
+	    Method to play system tween from progress.
+	    @private
+	  */
+
+
+	  MojsPlayer.prototype._play = function _play() {
+	    var p = this._props,
+	        leftBound = p.isBounds ? p.leftBound : p.progress,
+	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
+
+	    if (progress === 1) {
+	      progress = p.isBounds ? p.leftBound : 0;
+	    };
+	    if (progress !== 0) {
+	      this._sysTween.setProgress(progress);
+	    };
+
+	    this._sysTween.play();
+	  };
+
 	  /*
 	    Method to set play button state.
 	    @private
@@ -457,7 +477,7 @@
 	    clearTimeout(this._playTimeout);
 	    this._playTimeout = setTimeout(function () {
 	      _this4.playButton && _this4.playButton[method](false);
-	    }, 2);
+	    }, 20);
 	  };
 	  /*
 	    Method that is invoked on system tween completion.
@@ -466,20 +486,22 @@
 	  */
 
 
-	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {
-	    if (this._props.isPlaying && isForward) {
-	      if (this._props.isRepeat) {
-	        this._sysTween.stop();
-	        this._play();
-	      }
-	    }
-	  };
+	  MojsPlayer.prototype._onSysTweenComplete = function _onSysTweenComplete(isForward) {}
+	  // console.log(' complete ', this._props.isPlaying, isForward, this._props.isRepeat);
+	  // if ( this._props.isPlaying && isForward ) {
+	  //   if ( this._props.isRepeat ) {
+	  //     console.log('reset 2')
+	  //     // this._sysTween.reset();
+	  //     // this._play();
+	  //   }
+	  // }
+
 	  /*
 	    Method that is invoked play button state change.
 	    @private
 	    @param {Boolean} Repeat button state.
 	  */
-
+	  ;
 
 	  MojsPlayer.prototype._onPlayStateChange = function _onPlayStateChange(isPlay) {
 	    this._props.isPlaying = isPlay;
@@ -506,19 +528,6 @@
 	    }
 	  };
 	  /*
-	    Method to play system tween from progress.
-	    @private
-	  */
-
-
-	  MojsPlayer.prototype._play = function _play() {
-	    var p = this._props,
-	        leftBound = p.isBounds ? p.leftBound : p.progress,
-	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
-
-	    this._sysTween.setProgress(progress).setSpeed(p.speed).play();
-	  };
-	  /*
 	    Method that is invoked on stop button tap.
 	    @private
 	  */
@@ -526,8 +535,7 @@
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
 	    this._props.isPlaying = false;
-	    // this.playButton.off();
-	    this._sysTween.stop();
+	    this._sysTween.reset();
 	  };
 	  /*
 	    Method that is invoked on repeat switch state change.
@@ -2856,7 +2864,9 @@
 	      isBound: true,
 	      parent: this.el,
 	      isRipple: false,
-	      onProgress: this._onLeftBoundProgress.bind(this)
+	      onProgress: this._onLeftBoundProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd
 	    });
 
 	    this.track = new _slider2.default({
@@ -2871,7 +2881,9 @@
 	      parent: this.el,
 	      isRipple: false,
 	      isInversed: true,
-	      onProgress: this._onRightBoundProgress.bind(this)
+	      onProgress: this._onRightBoundProgress.bind(this),
+	      onSeekStart: p.onSeekStart,
+	      onSeekEnd: p.onSeekEnd
 	    });
 
 	    this.rightBound.setProgress(p.rightProgress);
@@ -2901,6 +2913,7 @@
 	    if (!this._props.isBounds) {
 	      return;
 	    }
+	    this._props.leftProgress = p;
 	    this.track.setMinBound(p);
 	    this.rightBound.setMinBound(p);
 	    this._callIfFunction(this._props.onLeftProgress, p);
@@ -2916,6 +2929,7 @@
 	    if (!this._props.isBounds) {
 	      return;
 	    }
+	    this._props.rightProgress = p;
 	    this.track.setMaxBound(p);
 	    this.leftBound.setMaxBound(p);
 	    this._callIfFunction(this._props.onRightProgress, p);
@@ -6788,7 +6802,7 @@
 	        y = e.offsetY != null ? e.offsetY : e.layerY;
 
 	    this.isRelease = false;
-	    this.transit.tune({ x: x, y: y }).replay();
+	    this.transit.tune({ x: x, y: y }).stop().replay();
 	  };
 	  /*
 	    Method that should be run on touch serface cancel.
