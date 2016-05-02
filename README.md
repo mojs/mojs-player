@@ -7,7 +7,7 @@ Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animat
 
 The `MojsPlayer` depends on `mojs^0.225.2` so make sure you link it first.
 
-[CDN]():
+[CDN]() (nor approved yet):
 
 ```
 <script src="//cdn.jsdelivr.net/mojs-player/latest/mojs-player.min.js"></script>
