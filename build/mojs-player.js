@@ -1,3 +1,9 @@
+/*! 
+	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
+	Oleg Solomka @LegoMushroom 2016 MIT
+	0.40.3 
+*/
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -153,7 +159,7 @@
 	    this._defaults.isHidden = false;
 
 	    var str = 'mojs-player';
-	    this.revision = '0.40.1';
+	    this.revision = '0.40.3';
 	    this._prefix = str + '-' + this._hashCode(str) + '-';
 	    this._localStorage = this._prefix + 'model';
 	  };
@@ -430,12 +436,12 @@
 	    // if we set a progress in the `_play` method it returns slighly
 	    // different when piped thru tween, so add `0.01` gap to soften that
 	    if (p < leftBound - 0.01 && p !== 0) {
-	      this._sysTween.reset();
+	      this._reset();
 	      requestAnimationFrame(this._play.bind(this));
 	    }
 
 	    if (p >= rightBound) {
-	      this._sysTween.reset();
+	      this._reset();
 	      if (this._props.isRepeat) {
 	        requestAnimationFrame(this._play.bind(this));
 	      } else {
@@ -463,7 +469,16 @@
 
 	    this._sysTween.play();
 	  };
+	  /*
+	    Method to reset sysTween and timeline.
+	    @private
+	  */
 
+
+	  MojsPlayer.prototype._reset = function _reset() {
+	    this._sysTween.reset();
+	    this.timeline.reset();
+	  };
 	  /*
 	    Method to set play button state.
 	    @private
@@ -535,7 +550,7 @@
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
 	    this._props.isPlaying = false;
-	    this._sysTween.reset();
+	    this._reset();
 	  };
 	  /*
 	    Method that is invoked on repeat switch state change.
@@ -601,8 +616,15 @@
 
 	  MojsPlayer.prototype._onProgress = function _onProgress(progress) {
 	    this._props.progress = progress;
-	    if (!this.timeline._prevTime) {
-	      this.timeline.setProgress(0);
+	    // if timeline was reset - refresh it's state
+	    // by incremental updates until progress (0 always)
+	    if (!this.timeline._prevTime && progress > 0) {
+	      var start = 0,
+	          step = 0.1;
+	      do {
+	        this.timeline.setProgress(start);
+	        start += step;
+	      } while (start + step < progress);
 	    }
 	    this.timeline.setProgress(progress);
 	  };
@@ -6742,24 +6764,19 @@
 
 
 	  Ripple.prototype._addRipple = function _addRipple() {
-	    var _ref;
+	    var _this2 = this,
+	        _ref;
 
 	    this.transit = new mojs.Transit((_ref = {
 	      parent: this.el,
 	      strokeWidth: { 10: 0 },
 	      fill: 'none',
-	      // stroke:       'white',
 	      stroke: 'hotpink'
-	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .85: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = this._onStart.bind(this), _ref.onUpdate = this._onUpdate.bind(this), _ref));
-	  };
-	  /*
-	    Method that is invoked on ripple start.
-	    @private
-	  */
-
-
-	  Ripple.prototype._onStart = function _onStart() {
-	    this.isStart = true;
+	    }, _ref['fill'] = 'hotpink', _ref.fillOpacity = .75, _ref.opacity = { .85: 0 }, _ref.radius = { 0: 40 }, _ref.isShowEnd = false, _ref.onStart = function onStart() {
+	      _this2.isStart = true;
+	    }, _ref.onUpdate = this._onUpdate.bind(this), _ref.onComplete = function onComplete() {
+	      _this2.isStart = false;
+	    }, _ref));
 	  };
 	  /*
 	    Method that is invoked on ripple update.
@@ -6784,6 +6801,7 @@
 
 
 	  Ripple.prototype._release = function _release() {
+	    // console.log('release');
 	    if (!this._props.withHold) {
 	      return;
 	    }
@@ -6802,7 +6820,7 @@
 	        y = e.offsetY != null ? e.offsetY : e.layerY;
 
 	    this.isRelease = false;
-	    this.transit.tune({ x: x, y: y }).stop().replay();
+	    this.transit.tune({ x: x, y: y }).replay();
 	  };
 	  /*
 	    Method that should be run on touch serface cancel.

@@ -34,7 +34,7 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
 
     let str            = 'mojs-player';
-    this.revision      = '0.40.1';
+    this.revision      = '0.40.3';
     this._prefix       = `${str}-${ this._hashCode( str ) }-`;
     this._localStorage = `${ this._prefix }model`;
   }
@@ -273,12 +273,12 @@ class MojsPlayer extends Module {
     // if we set a progress in the `_play` method it returns slighly
     // different when piped thru tween, so add `0.01` gap to soften that
     if ( p < leftBound - 0.01 && p !== 0 ) {
-      this._sysTween.reset();
+      this._reset();
       requestAnimationFrame(this._play.bind(this));
     }
 
     if ( p >= rightBound ) {
-      this._sysTween.reset();
+      this._reset();
       if ( this._props.isRepeat ) {
         requestAnimationFrame(this._play.bind(this));
       } else { this._props.isPlaying = false; }
@@ -299,7 +299,14 @@ class MojsPlayer extends Module {
 
     this._sysTween.play();
   }
-
+  /*
+    Method to reset sysTween and timeline.
+    @private
+  */
+  _reset () {
+    this._sysTween.reset();
+    this.timeline.reset();
+  }
   /*
     Method to set play button state.
     @private
@@ -355,7 +362,7 @@ class MojsPlayer extends Module {
   */
   _onStop ( ) {
     this._props.isPlaying = false;
-    this._sysTween.reset();
+    this._reset();
   }
   /*
     Method that is invoked on repeat switch state change.
@@ -403,8 +410,15 @@ class MojsPlayer extends Module {
   */
   _onProgress ( progress ) {
     this._props.progress = progress;
-    if ( !this.timeline._prevTime ) {
-      this.timeline.setProgress( 0 );
+    // if timeline was reset - refresh it's state
+    // by incremental updates until progress (0 always)
+    if ( !this.timeline._prevTime && progress > 0 ) {
+      let start = 0,
+          step  = 0.1;
+      do {
+        this.timeline.setProgress( start );
+        start += step;
+      } while ( start + step < progress );
     }
     this.timeline.setProgress( progress );
   }
