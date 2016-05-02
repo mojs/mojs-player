@@ -31,22 +31,17 @@ class Ripple extends Module {
       parent:       this.el,
       strokeWidth:  { 10 : 0 },
       fill:         'none',
-      // stroke:       'white',
       stroke:       'hotpink',
       fill:         'hotpink',
       fillOpacity:  .75,
       opacity:      { .85: 0 },
       radius:       { 0: 40 },
       isShowEnd:    false,
-      onStart:      this._onStart.bind( this ),
-      onUpdate:     this._onUpdate.bind( this )
+      onStart:      () => { this.isStart = true; },
+      onUpdate:     this._onUpdate.bind( this ),
+      onComplete:   () => { this.isStart = false; }
     });
   }
-  /*
-    Method that is invoked on ripple start.
-    @private
-  */
-  _onStart () { this.isStart = true; }
   /*
     Method that is invoked on ripple update.
     @private
@@ -64,6 +59,7 @@ class Ripple extends Module {
     @private
   */
   _release () {
+    // console.log('release');
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
     this.transit.setSpeed( 1 ).play();
@@ -78,7 +74,7 @@ class Ripple extends Module {
         y = ( e.offsetY != null ) ? e.offsetY : e.layerY;
 
     this.isRelease = false;
-    this.transit.tune({ x: x, y: y }).stop().replay();
+    this.transit.tune({ x: x, y: y }).replay();
   }
   /*
     Method that should be run on touch serface cancel.
