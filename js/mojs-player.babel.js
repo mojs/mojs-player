@@ -34,7 +34,7 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
 
     let str            = 'mojs-player';
-    this.revision      = '0.40.4';
+    this.revision      = '0.40.5';
     this._prefix       = `${str}-${ this._hashCode( str ) }-`;
     this._localStorage = `${ this._prefix }model`;
   }
@@ -250,6 +250,7 @@ class MojsPlayer extends Module {
     this.timeline.add( this._o.add );
 
     this._sysTween = new mojs.Tween({
+      easing:          'linear.none',
       duration:        this.timeline._props.repeatTime,
       onProgress:      this._onSysProgress.bind( this ),
       onComplete:      this._onSysTweenComplete.bind( this ),
