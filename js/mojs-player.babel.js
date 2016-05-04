@@ -34,7 +34,7 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
 
     let str            = 'mojs-player';
-    this.revision      = '0.40.3';
+    this.revision      = '0.40.4';
     this._prefix       = `${str}-${ this._hashCode( str ) }-`;
     this._localStorage = `${ this._prefix }model`;
   }

@@ -56,6 +56,11 @@ class ButtonSwitch extends Button {
     @param {Object} Original event object.
   */
   _pointerUp ( e ) {
+    if ( !this.wasTouched ) {
+      this.wasTouched = false;
+      e.stopPropagation();
+      return;
+    }
     this._changeState();
     super._pointerUp( e );
   }
