@@ -36,16 +36,17 @@
     <script>
       let el = document.querySelector( '#js-el' );
       let tw = new mojs.Tween({
-        onComplete (isFwd) {
-          console.log(isFwd);
-        },
         duration:  4000,
         onUpdate (p) {
           el.style.transform = `translateX(${ 1000 * p }px)`;
         }
       });
+
+      let tm = new mojs.Timeline;
+      tm.add( tw, new mojs.Shape({ delay: 1000, 'left': '50%', top: '50%' }) );
+      
       let mojsPlayer = new MojsPlayer({
-        add:          tw,
+        add:          tm,
         isPlaying:    true,
         progress:     .5,
         speed:        5,
