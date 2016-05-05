@@ -1,6 +1,6 @@
 {
   "name": "mojs-player",
-  "version": "0.41.0",
+  "version": "0.43.2",
   "description": "Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.",
   "main": "build/mojs-player.min.js",
   "authors": [

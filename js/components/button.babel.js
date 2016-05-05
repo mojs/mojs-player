@@ -72,11 +72,9 @@ class Button extends Module {
     @param {Object} Original event object.
   */
   _pointerUp ( e ) {
-    if ( !this.wasTouched ) {
-      this.wasTouched = false;
-      e.stopPropagation();
-      return;
-    }
+    if ( !this.wasTouched ) { e.stopPropagation(); return; }
+
+    this.wasTouched = false;
     this._callIfFunction( this._props.onPointerUp );
     this.ripple._release();
   }

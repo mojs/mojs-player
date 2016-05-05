@@ -98,7 +98,7 @@ gulp.task('update-main-file-version', function(e){
   return gulp.src('js/mojs-player.babel.js')
           .pipe(plumber())
           .pipe(insert.transform(function(contents) {
-            var newString =  'revision      = \''+currentVersion+'\'';
+            var newString =  'revision = \''+currentVersion+'\'';
             return contents
               .replace(/revision\s+?\=\s+?(\'|\")\d+\.\d+\.+\d+(\'|\")/i, newString);
           }))
