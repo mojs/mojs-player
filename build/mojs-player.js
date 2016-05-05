@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.40.5 
+	0.41.0 
 */
 
 /******/ (function(modules) { // webpackBootstrap
@@ -157,9 +157,10 @@
 	    this._defaults.isSpeed = false;
 	    this._defaults.speed = 1;
 	    this._defaults.isHidden = false;
+	    this._defaults.precision = 0.1;
 
 	    var str = 'mojs-player';
-	    this.revision = '0.40.5';
+	    this.revision = '0.41.0';
 	    this._prefix = str + '-' + this._hashCode(str) + '-';
 	    this._localStorage = this._prefix + 'model';
 	  };
@@ -620,12 +621,11 @@
 	    // if timeline was reset - refresh it's state
 	    // by incremental updates until progress (0 always)
 	    if (!this.timeline._prevTime && progress > 0) {
-	      var start = 0,
-	          step = 0.1;
+	      var start = 0;
 	      do {
 	        this.timeline.setProgress(start);
-	        start += step;
-	      } while (start + step < progress);
+	        start += this._props.precision;
+	      } while (start + this._props.precision < progress);
 	    }
 	    this.timeline.setProgress(progress);
 	  };
@@ -654,6 +654,7 @@
 	    delete this._props.parent;
 	    delete this._props.className;
 	    delete this._props.isSaveState;
+	    delete this._props.precision;
 	    localStorage.setItem(this._localStorage, (0, _stringify2.default)(this._props));
 	  };
 	  /*
