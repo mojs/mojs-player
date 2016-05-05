@@ -33,11 +33,13 @@ class MojsPlayer extends Module {
     this._defaults.speed        = 1;
     this._defaults.isHidden     = false;
     this._defaults.precision    = 0.1;
+    this._defaults.name         = 'mojs-player';
 
-    let str            = 'mojs-player';
-    this.revision      = '0.41.0';
-    this._prefix       = `${str}-${ this._hashCode( str ) }-`;
-    this._localStorage = `${ this._prefix }model`;
+    this.revision = '0.43.2';
+
+    let str = this._fallbackTo( this._o.name, this._defaults.name );
+    str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
+    this._localStorage = `${str}__${ this._hashCode( str ) }`;
   }
   /*
     Method to copy `_o` options to `_props` object
@@ -364,6 +366,15 @@ class MojsPlayer extends Module {
   */
   _onStop ( ) {
     this._props.isPlaying = false;
+
+    // go to start of the timeline with icremental precision step
+    let start = this._props.progress;
+    while ( start - this._props.precision > 0 ) {
+      start -= this._props.precision;
+      this._sysTween.setProgress( start );
+    }
+    this._sysTween.setProgress( 0 );
+
     this._reset();
   }
   /*
@@ -483,7 +494,7 @@ class MojsPlayer extends Module {
       hash  = ((hash << 5) - hash) + chr;
       hash |= 0; // Convert to 32bit integer
     }
-    return hash;
+    return Math.abs( hash );
   }
 }
 

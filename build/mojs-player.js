@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.41.0 
+	0.43.2 
 */
 
 /******/ (function(modules) { // webpackBootstrap
@@ -158,11 +158,13 @@
 	    this._defaults.speed = 1;
 	    this._defaults.isHidden = false;
 	    this._defaults.precision = 0.1;
+	    this._defaults.name = 'mojs-player';
 
-	    var str = 'mojs-player';
-	    this.revision = '0.41.0';
-	    this._prefix = str + '-' + this._hashCode(str) + '-';
-	    this._localStorage = this._prefix + 'model';
+	    this.revision = '0.43.2';
+
+	    var str = this._fallbackTo(this._o.name, this._defaults.name);
+	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
+	    this._localStorage = str + '__' + this._hashCode(str);
 	  };
 	  /*
 	    Method to copy `_o` options to `_props` object
@@ -552,6 +554,15 @@
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
 	    this._props.isPlaying = false;
+
+	    // go to start of the timeline with icremental precision step
+	    var start = this._props.progress;
+	    while (start - this._props.precision > 0) {
+	      start -= this._props.precision;
+	      this._sysTween.setProgress(start);
+	    }
+	    this._sysTween.setProgress(0);
+
 	    this._reset();
 	  };
 	  /*
@@ -710,7 +721,7 @@
 	      hash = (hash << 5) - hash + chr;
 	      hash |= 0; // Convert to 32bit integer
 	    }
-	    return hash;
+	    return Math.abs(hash);
 	  };
 
 	  return MojsPlayer;
@@ -7354,10 +7365,10 @@
 
 	  Button.prototype._pointerUp = function _pointerUp(e) {
 	    if (!this.wasTouched) {
-	      this.wasTouched = false;
-	      e.stopPropagation();
-	      return;
+	      e.stopPropagation();return;
 	    }
+
+	    this.wasTouched = false;
 	    this._callIfFunction(this._props.onPointerUp);
 	    this.ripple._release();
 	  };
