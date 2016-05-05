@@ -36,16 +36,20 @@
     <script>
       let el = document.querySelector( '#js-el' );
       let tw = new mojs.Tween({
+        onComplete (isFwd) {
+          console.log(isFwd);
+        },
         duration:  4000,
         onUpdate (p) {
           el.style.transform = `translateX(${ 1000 * p }px)`;
         }
       });
       let mojsPlayer = new MojsPlayer({
-        add:       tw,
-        isPlaying: true,
-        progress:  .5,
-        speed:     5,
+        add:          tw,
+        isPlaying:    true,
+        progress:     .5,
+        speed:        5,
+        step:         .5
         // className: 'lalal'
         // isSaveState: false
       });
