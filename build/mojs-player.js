@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.2 
+	0.43.3 
 */
 
 /******/ (function(modules) { // webpackBootstrap
@@ -133,16 +133,20 @@
 	var MojsPlayer = function (_Module) {
 	  (0, _inherits3.default)(MojsPlayer, _Module);
 
-	  function MojsPlayer() {
+	  function MojsPlayer(o) {
 	    (0, _classCallCheck3.default)(this, MojsPlayer);
-	    return (0, _possibleConstructorReturn3.default)(this, _Module.apply(this, arguments));
-	  }
 
+	    if (typeof mojs === 'undefined') {
+	      throw new Error('MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/legomushroom/mojs ] ');
+	    }
+	    return (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
+	  }
 	  /*
 	    Method to declare defaults.
 	    @private
 	    @overrides @ Module
 	  */
+
 
 	  MojsPlayer.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
@@ -160,7 +164,7 @@
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 
-	    this.revision = '0.43.2';
+	    this.revision = '0.43.3';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -405,6 +409,23 @@
 	    var _this3 = this;
 
 	    this.timeline = new mojs.Timeline({});
+
+	    var add = this._o.add;
+	    // check whether the `add` option meets the next criterias:
+	    var isUndefined = typeof add === 'undefined';
+
+	    if (!isUndefined) {
+	      add = add.timeline || add;
+	    }
+
+	    var isTween = add instanceof mojs.Tween;
+	    var isTimeline = add instanceof mojs.Timeline;
+
+	    if (isUndefined || !(isTween || isTimeline)) {
+	      throw new Error('MojsPlayer expects Tween/Timeline/Module as `add` option in constructor call. [ new MojsPlayer({ add: new mojs.Tween }); ]');
+	      return;
+	    }
+
 	    this.timeline.add(this._o.add);
 
 	    this._sysTween = new mojs.Tween({

@@ -14,6 +14,12 @@ require('css/blocks/mojs-player.postcss.css');
 let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
 
 class MojsPlayer extends Module {
+  constructor ( o ) {
+    if ( typeof mojs === 'undefined' ) {
+      throw new Error(`MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/legomushroom/mojs ] `);
+    }
+    super( o );
+  }
   /*
     Method to declare defaults.
     @private
@@ -35,7 +41,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.2';
+    this.revision = '0.43.3';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -250,6 +256,21 @@ class MojsPlayer extends Module {
   */
   _initTimeline () {
     this.timeline = new mojs.Timeline({});
+
+    let add = this._o.add;
+    // check whether the `add` option meets the next criterias:
+    let isUndefined = typeof add === 'undefined';
+
+    if ( !isUndefined ) { add = add.timeline || add; }
+
+    let isTween     = add instanceof mojs.Tween;
+    let isTimeline  = add instanceof mojs.Timeline;
+
+    if ( isUndefined || !( isTween || isTimeline ) ) {
+      throw new Error('MojsPlayer expects Tween/Timeline/Module as `add` option in constructor call. [ new MojsPlayer({ add: new mojs.Tween }); ]');
+      return;
+    }
+
     this.timeline.add( this._o.add );
 
     this._sysTween = new mojs.Tween({

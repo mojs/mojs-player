@@ -55,20 +55,21 @@ You can also set other player initial state:
 const mojsPlayer = new MojsPlayer({
   add:      mainTimeline,
   // options
-  className:    '',     // class name to add to main HTMLElement
-  isSaveState:  true,   // determines if should preserve state on page reload
-  isPlaying:    false,  // playback state
-  progress:     0,      // initial progress
-  isRepeat:     false,  // determines if it should repeat after completion
-  isBounds:     false,  // determines if it should have bounds
-  leftBound:    0,      // left bound position  [0...1]
-  rightBound:   1,      // right bound position [0...1]
-  isSpeed:      false,  // determines if speed control should be open
-  speed:        1,      // `speed` value
-  isHidden:     false   // determines if the player should be hidden
+  className:    '',         // class name to add to main HTMLElement
+  isSaveState:  true,       // determines if should preserve state on page reload
+  isPlaying:    false,      // playback state
+  progress:     0,          // initial progress
+  isRepeat:     false,      // determines if it should repeat after completion
+  isBounds:     false,      // determines if it should have bounds
+  leftBound:    0,          // left bound position  [0...1]
+  rightBound:   1,          // right bound position [0...1]
+  isSpeed:      false,      // determines if speed control should be open
+  speed:        1,          // `speed` value
+  isHidden:     false,      // determines if the player should be hidden
+  precision:    0.1,        // step size for player handle - for instance, after page reload - player should restore timeline progress - the whole timeline will be updated incrementally with the `precision` step size until the progress will be met.
+  name:         'mojs-player' // name for the player - mainly used for localstorage identifier, use to distuguish between multiple local players
 });
 ```
-
 
 ## Shortcuts
 
