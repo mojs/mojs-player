@@ -1,8 +1,8 @@
 import Icon     from './icon';
 import Button   from './button';
 
-require('css/blocks/icon-button.postcss.css');
-let CLASSES = require('css/blocks/icon-button.postcss.css.json');
+require('../../css/blocks/icon-button.postcss.css');
+let CLASSES = require('../../css/blocks/icon-button.postcss.css.json');
 
 class IconButton extends Button {
   /*

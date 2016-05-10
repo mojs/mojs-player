@@ -3,8 +3,8 @@ import Module       from './module'
 import LabelButton  from './label-button';
 import Slider       from './slider';
 
-require('css/blocks/speed-control.postcss.css');
-let CLASSES = require('css/blocks/speed-control.postcss.css.json');
+require('../../css/blocks/speed-control.postcss.css');
+let CLASSES = require('../../css/blocks/speed-control.postcss.css.json');
 
 class SpeedControl extends Module {
   /*

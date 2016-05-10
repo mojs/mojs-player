@@ -1,8 +1,8 @@
 import Icon         from './icon';
 import ButtonSwitch from './button-switch';
 
-require('css/blocks/opacity-switch.postcss.css');
-let CLASSES = require('css/blocks/opacity-switch.postcss.css.json');
+require('../../css/blocks/opacity-switch.postcss.css');
+let CLASSES = require('../../css/blocks/opacity-switch.postcss.css.json');
 
 class OpacitySwitch extends ButtonSwitch {
   /*

@@ -1,7 +1,7 @@
 import IconButton from './icon-button';
 
-require('css/blocks/stop-button.postcss.css');
-let CLASSES = require('css/blocks/stop-button.postcss.css.json');
+require('../../css/blocks/stop-button.postcss.css');
+let CLASSES = require('../../css/blocks/stop-button.postcss.css.json');
 
 class StopButton extends IconButton {
   _declareDefaults () {

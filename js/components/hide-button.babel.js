@@ -2,8 +2,8 @@
 import ButtonSwitch from './button-switch';
 import Icon         from './icon';
 
-require('css/blocks/hide-button.postcss.css');
-let CLASSES   = require('css/blocks/hide-button.postcss.css.json'),
+require('../../css/blocks/hide-button.postcss.css');
+let CLASSES   = require('../../css/blocks/hide-button.postcss.css.json'),
     className = 'hide-button';
 
 class HideButton extends ButtonSwitch {

@@ -1,8 +1,8 @@
 
 import IconFork from './icon-fork';
 
-require('css/blocks/play-button.postcss.css');
-let CLASSES = require('css/blocks/play-button.postcss.css.json');
+require('../../css/blocks/play-button.postcss.css');
+let CLASSES = require('../../css/blocks/play-button.postcss.css.json');
     // PLAYER_BTN_CLASSES = require('css/blocks/player-button.postcss.css.json');
 
 class PlayButton extends IconFork {
