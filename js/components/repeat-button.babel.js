@@ -1,7 +1,7 @@
 import OpacitySwitch from './opacity-switch';
 
-require('css/blocks/repeat-button.postcss.css');
-let CLASSES = require('css/blocks/repeat-button.postcss.css.json');
+require('../../css/blocks/repeat-button.postcss.css');
+let CLASSES = require('../../css/blocks/repeat-button.postcss.css.json');
 
 class RepeatButton extends OpacitySwitch {
   /*

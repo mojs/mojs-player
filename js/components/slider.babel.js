@@ -2,8 +2,8 @@ import Module from './module';
 import Handle from './handle';
 import Track  from './track';
 
-require('css/blocks/slider.postcss.css');
-let CLASSES = require('css/blocks/slider.postcss.css.json');
+require('../../css/blocks/slider.postcss.css');
+let CLASSES = require('../../css/blocks/slider.postcss.css.json');
 
 class Slider extends Module {
   /*

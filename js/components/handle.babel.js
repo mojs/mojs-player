@@ -1,8 +1,8 @@
 import Module  from './module';
 import HammerJS from 'hammerjs';
 
-require('css/blocks/handle.postcss.css');
-let CLASSES = require('css/blocks/handle.postcss.css.json');
+require('../../css/blocks/handle.postcss.css');
+let CLASSES = require('../../css/blocks/handle.postcss.css.json');
 
 class Handle extends Module {
   /*

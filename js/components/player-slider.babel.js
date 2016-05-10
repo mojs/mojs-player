@@ -1,9 +1,9 @@
 import Slider from './slider';
 import Module from './module';
 
-require('css/blocks/player-slider.postcss.css');
-let CLASSES = require('css/blocks/player-slider.postcss.css.json');
-let SLIDER_CLASSES = require('css/blocks/slider.postcss.css.json');
+require('../../css/blocks/player-slider.postcss.css');
+let CLASSES = require('../../css/blocks/player-slider.postcss.css.json');
+let SLIDER_CLASSES = require('../../css/blocks/slider.postcss.css.json');
 
 class PlayerSlider extends Module {
   /*

@@ -30,7 +30,7 @@ module.exports = {
   },
   plugins: [],
   resolve: {
-    root: [ path.resolve('./'), path.resolve('./css/') ],
+    root: [ path.resolve('./') ],
     moduleDirectories: ['node_modules'],
     target: 'node',
     extensions: [

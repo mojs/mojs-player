@@ -1,7 +1,7 @@
 import ButtonSwitch from './button-switch';
 
-require('css/blocks/label-button.postcss.css');
-let CLASSES = require('css/blocks/label-button.postcss.css.json');
+require('../../css/blocks/label-button.postcss.css');
+let CLASSES = require('../../css/blocks/label-button.postcss.css.json');
 
 class LabelButton extends ButtonSwitch {
   /*

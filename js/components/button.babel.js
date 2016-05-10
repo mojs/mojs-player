@@ -2,8 +2,8 @@ import Module   from './module';
 import HammerJS from 'hammerjs';
 import Ripple   from './ripple';
 
-require('css/blocks/button.postcss.css');
-let CLASSES = require('css/blocks/button.postcss.css.json');
+require('../../css/blocks/button.postcss.css');
+let CLASSES = require('../../css/blocks/button.postcss.css.json');
 
 class Button extends Module {
   /*

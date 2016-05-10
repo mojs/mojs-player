@@ -10,8 +10,8 @@ import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
 import HideButton     from './components/hide-button';
 
-require('css/blocks/mojs-player.postcss.css');
-let CLASSES = require('css/blocks/mojs-player.postcss.css.json');
+require('../css/blocks/mojs-player.postcss.css');
+let CLASSES = require('../css/blocks/mojs-player.postcss.css.json');
 
 class MojsPlayer extends Module {
   constructor ( o ) {
@@ -303,7 +303,11 @@ class MojsPlayer extends Module {
     }
 
     if ( p >= rightBound ) {
-      this._reset();
+      
+      // this._reset();
+      if ( rightBound === 1 ) { this._reset(); }
+      else { this._sysTween.pause(); }
+
       if ( this._props.isRepeat ) {
         requestAnimationFrame(this._play.bind(this));
       } else { this._props.isPlaying = false; }

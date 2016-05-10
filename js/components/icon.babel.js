@@ -1,8 +1,8 @@
 import Module   from './module';
 import HammerJS from 'hammerjs'
 
-require('css/blocks/icon.postcss.css');
-let CLASSES = require('css/blocks/icon.postcss.css.json');
+require('../../css/blocks/icon.postcss.css');
+let CLASSES = require('../../css/blocks/icon.postcss.css.json');
 
 class Icon extends Module {
   /*

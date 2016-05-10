@@ -2,8 +2,8 @@ import Handle  from './handle';
 import HamerJS from 'hammerjs';
 import Ripple  from './ripple';
 
-require('css/blocks/track.postcss.css');
-let CLASSES = require('css/blocks/track.postcss.css.json');
+require('../../css/blocks/track.postcss.css');
+let CLASSES = require('../../css/blocks/track.postcss.css.json');
 
 class Track extends Handle {
   /*

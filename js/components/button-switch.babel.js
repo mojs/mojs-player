@@ -1,7 +1,7 @@
 import Button from './button';
 
-require('css/blocks/button-switch.postcss.css');
-let CLASSES = require('css/blocks/button-switch.postcss.css.json');
+require('../../css/blocks/button-switch.postcss.css');
+let CLASSES = require('../../css/blocks/button-switch.postcss.css.json');
 
 class ButtonSwitch extends Button {
   /*
