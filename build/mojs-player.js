@@ -1,3 +1,9 @@
+/*! 
+	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
+	Oleg Solomka @LegoMushroom 2016 MIT
+	0.43.6 
+*/
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
