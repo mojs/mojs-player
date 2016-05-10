@@ -304,9 +304,9 @@ class MojsPlayer extends Module {
 
     if ( p >= rightBound ) {
       
-      // this._reset();
-      if ( rightBound === 1 ) { this._reset(); }
-      else { this._sysTween.pause(); }
+      this._reset();
+      // if ( rightBound === 1 ) { this._reset(); }
+      // else { this._sysTween.pause(); }
 
       if ( this._props.isRepeat ) {
         requestAnimationFrame(this._play.bind(this));
