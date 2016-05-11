@@ -24,9 +24,12 @@ module.exports = {
     return [ require('precss'), require('postcss-cssnext'), require('postcss-modules') ];
   },
   output: {
-    path:         __dirname + '/build',
-    filename:     'mojs-player.js',
-    publicPath:   'build/'
+    path:           __dirname + '/build',
+    filename:       'mojs-player.js',
+    publicPath:     'build/',
+    library:        'mojs-player',
+    libraryTarget:  'umd',
+    umdNamedDefine: true
   },
   plugins: [],
   resolve: {
