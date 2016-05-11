@@ -38,7 +38,7 @@ var credits = ''
 gulp.task('babel-lib', function(e){
   return gulp.src(paths.src.babel)
     .pipe(plumber())
-    .pipe(babel({ presets: ['es2015-loose'] }))
+    .pipe(babel({ presets: ['es2015-loose'], plugins: [ 'transform-runtime' ] }))
     .pipe(rename(function (path) {
         return path.basename = path.basename.replace('.babel', '');
       })

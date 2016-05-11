@@ -1,11 +1,11 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.43.7",
+  "version": "0.43.8",
   "license": "MIT",
   "private": false,
   "scripts": { },
-  "main": "lib/mojs-player.js",
+  "main": "build/mojs-player.js",
   "keywords": [
     "motion",
     "effects",
