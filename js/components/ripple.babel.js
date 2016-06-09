@@ -29,14 +29,17 @@ class Ripple extends Module {
   _addRipple () {
     this.transit = new mojs.Transit({
       parent:       this.el,
+      // strokeWidth:  10,
       strokeWidth:  { 10 : 0 },
       fill:         'none',
       stroke:       'hotpink',
       fill:         'hotpink',
       fillOpacity:  .75,
       opacity:      { .85: 0 },
-      radius:       { 0: 40 },
+      radius:       40,
+      scale:        { 0: 1 },
       isShowEnd:    false,
+      // isForce3d:    true,
       onStart:      () => { this.isStart = true; },
       onUpdate:     this._onUpdate.bind( this ),
       onComplete:   () => { this.isStart = false; }
@@ -59,7 +62,6 @@ class Ripple extends Module {
     @private
   */
   _release () {
-    // console.log('release');
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
     this.transit.setSpeed( 1 ).play();

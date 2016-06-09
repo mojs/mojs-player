@@ -44,7 +44,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.10';
+    this.revision = '0.43.11';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -233,8 +233,8 @@ class MojsPlayer extends Module {
     @private
   */
   _listen () {
-    window.addEventListener( 'beforeunload', this._onUnload.bind(this) );
-    window.addEventListener( 'pagehide', this._onUnload.bind(this) );
+    const unloadEvent = ('onpagehide' in window) ? 'pagehide' : 'beforeunload';
+    window.addEventListener( unloadEvent, this._onUnload.bind(this) );
     document.addEventListener( 'keyup' , this._keyUp.bind(this) );
   }
   /*
@@ -493,11 +493,13 @@ class MojsPlayer extends Module {
       return localStorage.removeItem( this._localStorage );
     }
 
-    delete this._props.parent;
-    delete this._props.className;
-    delete this._props.isSaveState;
-    delete this._props.precision;
-    localStorage.setItem(this._localStorage, JSON.stringify( this._props ) );
+    const props = { ...this._props };
+    delete props.parent;
+    delete props.className;
+    delete props.isSaveState;
+    delete props.precision;
+
+    localStorage.setItem(this._localStorage, JSON.stringify( props ) );
   }
   /*
     Method that returns the second argument if the first one isn't set.
