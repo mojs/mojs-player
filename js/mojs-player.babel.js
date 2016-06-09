@@ -308,7 +308,7 @@ class MojsPlayer extends Module {
 
     if ( p >= rightBound ) {
       
-      this._reset();
+      this._reset( rightBound === 1 );
       // if ( rightBound === 1 ) { this._reset(); }
       // else { this._sysTween.pause(); }
 
@@ -334,11 +334,27 @@ class MojsPlayer extends Module {
   }
   /*
     Method to reset sysTween and timeline.
+    @param {Boolean} If should not set progress to 0.
     @private
   */
-  _reset () {
+  _reset (isPause) {
     this._sysTween.reset();
-    this.timeline.stop();
+
+    if ( !isPause ) {
+      // this.timeline.pause();
+      const p        = this._props,
+            progress = p.progress;
+      
+      let   start = progress,
+            leftBound = ( p.isBounds ) ? p.leftBound : 0;
+
+      while ( (start - p.precision) >= leftBound ) {
+        start -= p.precision;
+        this.timeline.setProgress( start );
+      }
+    }
+
+    this.timeline.reset();
   }
   /*
     Method to set play button state.
@@ -394,15 +410,13 @@ class MojsPlayer extends Module {
     @private
   */
   _onStop ( ) {
-    this._props.isPlaying = false;
+    const p = this._props;
+    p.isPlaying = false;
 
-    // go to start of the timeline with icremental precision step
-    let start = this._props.progress;
-    while ( start - this._props.precision > 0 ) {
-      start -= this._props.precision;
-      this._sysTween.setProgress( start );
-    }
-    this._sysTween.setProgress( 0 );
+    const leftBound = ( p.isBounds ) ? p.leftBound : 0;
+    // set sysTween progress twice because it could be _reset already
+    this._sysTween.setProgress( leftBound + 0.01 );
+    this._sysTween.setProgress( leftBound );
 
     this._reset();
   }

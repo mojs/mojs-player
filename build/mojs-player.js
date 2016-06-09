@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.9 
+	0.43.10 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -177,7 +177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 
-	    this.revision = '0.43.9';
+	    this.revision = '0.43.10';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -481,7 +481,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    if (p >= rightBound) {
 
-	      this._reset();
+	      this._reset(rightBound === 1);
 	      // if ( rightBound === 1 ) { this._reset(); }
 	      // else { this._sysTween.pause(); }
 
@@ -514,13 +514,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	  /*
 	    Method to reset sysTween and timeline.
+	    @param {Boolean} If should not set progress to 0.
 	    @private
 	  */
 
 
-	  MojsPlayer.prototype._reset = function _reset() {
+	  MojsPlayer.prototype._reset = function _reset(isPause) {
 	    this._sysTween.reset();
-	    this.timeline.stop();
+
+	    if (!isPause) {
+	      // this.timeline.pause();
+	      var p = this._props,
+	          progress = p.progress;
+
+	      var start = progress,
+	          leftBound = p.isBounds ? p.leftBound : 0;
+
+	      while (start - p.precision >= leftBound) {
+	        start -= p.precision;
+	        this.timeline.setProgress(start);
+	      }
+	    }
+
+	    this.timeline.reset();
 	  };
 	  /*
 	    Method to set play button state.
@@ -592,15 +608,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  MojsPlayer.prototype._onStop = function _onStop() {
-	    this._props.isPlaying = false;
+	    var p = this._props;
+	    p.isPlaying = false;
 
-	    // go to start of the timeline with icremental precision step
-	    var start = this._props.progress;
-	    while (start - this._props.precision > 0) {
-	      start -= this._props.precision;
-	      this._sysTween.setProgress(start);
-	    }
-	    this._sysTween.setProgress(0);
+	    var leftBound = p.isBounds ? p.leftBound : 0;
+	    // set sysTween progress twice because it could be _reset already
+	    this._sysTween.setProgress(leftBound + 0.01);
+	    this._sysTween.setProgress(leftBound);
 
 	    this._reset();
 	  };
