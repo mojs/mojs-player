@@ -77,6 +77,8 @@ class Button extends Module {
     this.wasTouched = false;
     this._callIfFunction( this._props.onPointerUp );
     this.ripple._release();
+    e.preventDefault();
+    return false;
   }
   /*
     Method to invoke onPointerCancel callback if exist.
