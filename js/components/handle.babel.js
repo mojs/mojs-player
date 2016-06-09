@@ -229,7 +229,11 @@ class Handle extends Module {
     @private
     @param {Object} Original event object.
   */
-  _pointerUp ( e ) { this._callIfFunction( this._props.onSeekEnd, e ); }
+  _pointerUp ( e ) {
+    this._callIfFunction( this._props.onSeekEnd, e );
+    e.preventDefault();
+    return false;
+  }
   /*
     Callback for pointer up on document.
     @private

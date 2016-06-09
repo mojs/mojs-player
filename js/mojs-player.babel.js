@@ -10,6 +10,9 @@ import RepeatButton   from './components/repeat-button';
 import BoundsButton   from './components/bounds-button';
 import HideButton     from './components/hide-button';
 
+// TODO
+// buttons click happens 2 times on ios devices
+
 require('../css/blocks/mojs-player.postcss.css');
 let CLASSES = require('../css/blocks/mojs-player.postcss.css.json');
 
@@ -334,7 +337,7 @@ class MojsPlayer extends Module {
   */
   _reset () {
     this._sysTween.reset();
-    this.timeline.reset();
+    this.timeline.stop();
   }
   /*
     Method to set play button state.

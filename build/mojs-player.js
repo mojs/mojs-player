@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.7 
+	0.43.8 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -136,6 +136,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _hideButton2 = _interopRequireDefault(_hideButton);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// TODO
+	// buttons click happens 2 times on ios devices
 
 	__webpack_require__(151);
 	var CLASSES = __webpack_require__(153);
@@ -516,7 +519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MojsPlayer.prototype._reset = function _reset() {
 	    this._sysTween.reset();
-	    this.timeline.reset();
+	    this.timeline.stop();
 	  };
 	  /*
 	    Method to set play button state.
@@ -3563,6 +3566,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Handle.prototype._pointerUp = function _pointerUp(e) {
 	    this._callIfFunction(this._props.onSeekEnd, e);
+	    e.preventDefault();
+	    return false;
 	  };
 	  /*
 	    Callback for pointer up on document.
@@ -7406,6 +7411,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.wasTouched = false;
 	    this._callIfFunction(this._props.onPointerUp);
 	    this.ripple._release();
+	    e.preventDefault();
+	    return false;
 	  };
 	  /*
 	    Method to invoke onPointerCancel callback if exist.
