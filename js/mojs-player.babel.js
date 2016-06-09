@@ -44,7 +44,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.3';
+    this.revision = '0.43.9';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -234,6 +234,7 @@ class MojsPlayer extends Module {
   */
   _listen () {
     window.addEventListener( 'beforeunload', this._onUnload.bind(this) );
+    window.addEventListener( 'pagehide', this._onUnload.bind(this) );
     document.addEventListener( 'keyup' , this._keyUp.bind(this) );
   }
   /*
