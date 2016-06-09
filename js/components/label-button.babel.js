@@ -19,7 +19,7 @@ class LabelButton extends ButtonSwitch {
     @param {String} Text to set.
   */
   setLabelText ( text ) {
-    this.label.innerText = text;
+    this.label.innerHTML = text;
   }
 
   /*
