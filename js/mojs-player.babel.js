@@ -11,7 +11,8 @@ import BoundsButton   from './components/bounds-button';
 import HideButton     from './components/hide-button';
 
 // TODO
-// buttons click happens 2 times on ios devices
+// add readme notes
+// fix timeline reset if progress === 1
 
 require('../css/blocks/mojs-player.postcss.css');
 let CLASSES = require('../css/blocks/mojs-player.postcss.css.json');

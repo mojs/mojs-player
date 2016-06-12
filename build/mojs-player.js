@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.11 
+	0.43.12 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -142,7 +142,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// TODO
-	// buttons click happens 2 times on ios devices
+	// add readme notes
+	// fix timeline reset if progress === 1
 
 	__webpack_require__(160);
 	var CLASSES = __webpack_require__(162);
@@ -7045,6 +7046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.transit = new mojs.Transit((_ref = {
 	      parent: this.el,
+	      left: 0, top: 0,
 	      // strokeWidth:  10,
 	      strokeWidth: { 10: 0 },
 	      fill: 'none',
@@ -7078,7 +7080,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Ripple.prototype._release = function _release() {
-	    // console.log('release');
 	    if (!this._props.withHold) {
 	      return;
 	    }
