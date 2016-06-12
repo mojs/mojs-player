@@ -29,6 +29,7 @@ class Ripple extends Module {
   _addRipple () {
     this.transit = new mojs.Transit({
       parent:       this.el,
+      left: 0,  top: 0,
       // strokeWidth:  10,
       strokeWidth:  { 10 : 0 },
       fill:         'none',
