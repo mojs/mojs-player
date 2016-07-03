@@ -1,7 +1,14 @@
 # mojs-player
 
-Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
+Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations.  
 
+It is just a helper tool that gives you the ability to:
+ - control your sequences with `GUI` while working on them
+ - it saves the current progress of your animation thus you don't loose the `focus`
+ - it gives you `bounds` to constrain `focus point` of your animation
+ - it gives you the control over the speed of animation
+ - it gives you the ability to seek animations freely
+ - it saves player's state and settings thus they not get lost when page reloaded
 
 ## Installation
 
@@ -109,7 +116,7 @@ Run [webpack](https://webpack.github.io/):
 webpack
 ```
 
-Please make sure yuo are on the `dev` branch before making changes.
+Please make sure you are on the `dev` branch before making changes.
 
 ## License
 
