@@ -11,7 +11,6 @@ import BoundsButton   from './components/bounds-button';
 import HideButton     from './components/hide-button';
 
 // TODO
-// add readme notes
 // fix timeline reset if progress === 1
 
 require('../css/blocks/mojs-player.postcss.css');
@@ -45,7 +44,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.11';
+    this.revision = '0.43.13';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -308,10 +307,10 @@ class MojsPlayer extends Module {
     }
 
     if ( p >= rightBound ) {
-      
-      this._reset( rightBound === 1 );
-      // if ( rightBound === 1 ) { this._reset(); }
-      // else { this._sysTween.pause(); }
+      this._reset();
+
+      // if ( rightBound === 1 ) { this._sysTween.stop( ); }
+      // else { this._reset() }
 
       if ( this._props.isRepeat ) {
         requestAnimationFrame(this._play.bind(this));
