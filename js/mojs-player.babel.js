@@ -44,7 +44,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.13';
+    this.revision = '0.43.14';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -307,7 +307,8 @@ class MojsPlayer extends Module {
     }
 
     if ( p >= rightBound ) {
-      this._reset();
+      
+      this._reset( rightBound === 1 );
 
       // if ( rightBound === 1 ) { this._sysTween.stop( ); }
       // else { this._reset() }
