@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.13 
+	0.43.14 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -181,7 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 
-	    this.revision = '0.43.13';
+	    this.revision = '0.43.14';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -484,7 +484,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    if (p >= rightBound) {
-	      this._reset();
+
+	      this._reset(rightBound === 1);
 
 	      // if ( rightBound === 1 ) { this._sysTween.stop( ); }
 	      // else { this._reset() }
