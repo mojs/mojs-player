@@ -1,7 +1,7 @@
 /*! 
 	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
 	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.14 
+	0.43.15 
 */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -181,7 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 
-	    this.revision = '0.43.14';
+	    this.revision = '0.43.15';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -366,6 +366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.mojsButton = new _iconButton2.default({
 	      parent: right,
 	      icon: 'mojs',
+	      target: '_blank',
 	      link: 'https://github.com/legomushroom/mojs-player',
 	      title: 'mo • js',
 	      prefix: this._props.prefix
@@ -7562,6 +7563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.link = null;
 	    this._defaults.title = '';
+	    this._defaults.target = null;
 	    this._defaults.onPointerDown = null;
 	    this._defaults.onPointerUp = null;
 	    this._defaults.onDoubleTap = null;
@@ -7577,10 +7579,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var p = this._props,
 	        className = 'button',
 	        tagName = p.link != null ? 'a' : 'div';
+
 	    this._addMainElement(tagName);
 	    this.el.classList.add(CLASSES[className]);
 	    this.el.setAttribute('title', p.title);
 	    p.link && this.el.setAttribute('href', p.link);
+	    p.link && p.target && this.el.setAttribute('target', p.target);
 	    this._addListeners();
 
 	    this._createRipple();
