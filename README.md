@@ -12,9 +12,9 @@ It is just a helper tool that gives you the ability to:
 
 ## Installation
 
-The `MojsPlayer` depends on `mojs^0.225.2` so make sure you link it first.
+The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 
-[CDN]() (nor approved yet):
+[CDN](https://www.jsdelivr.com/):
 
 ```
 <script src="//cdn.jsdelivr.net/mojs-player/latest/mojs-player.min.js"></script>
