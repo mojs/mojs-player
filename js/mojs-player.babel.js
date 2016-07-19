@@ -44,7 +44,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.14';
+    this.revision = '0.43.15';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -213,6 +213,7 @@ class MojsPlayer extends Module {
     this.mojsButton   = new IconButton({
       parent:   right,
       icon:     'mojs',
+      target:   '_blank',
       link:     'https://github.com/legomushroom/mojs-player',
       title:    'mo • js',
       prefix:   this._props.prefix

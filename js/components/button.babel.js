@@ -15,6 +15,7 @@ class Button extends Module {
     super._declareDefaults()
     this._defaults.link          = null;
     this._defaults.title         = '';
+    this._defaults.target        = null;
     this._defaults.onPointerDown = null;
     this._defaults.onPointerUp   = null;
     this._defaults.onDoubleTap   = null;
@@ -28,10 +29,12 @@ class Button extends Module {
     let p         = this._props,
         className = 'button',
         tagName   = ( p.link != null ) ? 'a' : 'div';
+
     this._addMainElement( tagName );
     this.el.classList.add( CLASSES[ className ] );
     this.el.setAttribute( 'title', p.title );
     p.link && this.el.setAttribute( 'href', p.link );
+    p.link && p.target && this.el.setAttribute( 'target', p.target );
     this._addListeners();
 
     this._createRipple();
