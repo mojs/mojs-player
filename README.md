@@ -1,5 +1,7 @@
 # mojs-player
 
+<img src="https://github.com/legomushroom/mojs-player/blob/master/i/mojs-player.png?raw=true" alt="mojs-player" />
+
 Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations.  
 
 It is just a helper tool that gives you the ability to:
