@@ -1,15 +1,17 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.43.15",
+  "version": "0.43.16",
   "license": "MIT",
   "private": false,
   "scripts": {},
   "main": "build/mojs-player.js",
   "keywords": [
+    "mojs",
     "motion",
     "effects",
     "animation",
+    "motion",
     "motion graphics",
     "player"
   ],
@@ -17,7 +19,7 @@
     "name": "LegoMushroom",
     "email": "legomushroom@gmail.com",
     "twitter": "@legomushroom",
-    "url": "http://legomushroom.com"
+    "url": "https://github.com/legomushroom/"
   },
   "repository": {
     "type": "git",

@@ -144,7 +144,7 @@ class Handle extends Module {
   */
   _addMainClasses () {
     super._addMainClasses();
-    
+
     let p         = this._props,
         classList = this.el.classList;
 

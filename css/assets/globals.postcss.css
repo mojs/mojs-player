@@ -1,6 +1,7 @@
 
 @import './colors.postcss.css';
 
-$PX:      1/16rem;
+/*$PX:      1/16rem;*/
+$PX:      1px;
 $GS:      calc( 10 * $PX );
 $BRADIUS: calc( 3 * $PX );

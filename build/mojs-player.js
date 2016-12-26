@@ -1,9 +1,3 @@
-/*! 
-	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
-	Oleg Solomka @LegoMushroom 2016 MIT
-	0.43.15 
-*/
-
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -142,7 +136,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// TODO
-	// fix timeline reset if progress === 1
 
 	__webpack_require__(160);
 	var CLASSES = __webpack_require__(162);
@@ -181,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 
-	    this.revision = '0.43.15';
+	    this.revision = '0.43.16';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -365,6 +358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.mojsButton = new _iconButton2.default({
 	      parent: right,
+	      className: CLASSES[className + '__mojs-logo'],
 	      icon: 'mojs',
 	      target: '_blank',
 	      link: 'https://github.com/legomushroom/mojs-player',
@@ -646,7 +640,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.playerSlider[(isOn ? 'enable' : 'disable') + 'Bounds']();
 	    this._props.isBounds = isOn;
 	  };
-	  /* 
+	  /*
 	    Method that is invoked on speed value change.
 	    @private
 	    @param {Number} Speed value.
@@ -6483,7 +6477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._handle_q1som_5 {\n  width:          13px;\n  width:          13px;\n  width:          0.8125rem;\n  height:          13px;\n  height:          13px;\n  height:         0.8125rem;\n  \n  cursor:         pointer;\n  -webkit-transform:      translateX(0);\n          transform:      translateX(0)\n  /*backface-visibility: hidden;*/\n}\n._handle__inner_q1som_1, ._handle__shadow_q1som_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer;\n  /*transform:      translateZ(0);*/\n  -webkit-backface-visibility:          hidden;\n          backface-visibility:          hidden\n}\n._handle__inner_q1som_1 {\n  background:          #FFF\n}\n._handle__shadow_q1som_1 {\n  box-shadow:          0.0625rem 0.0625rem 0.125rem black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_q1som_5:hover ._handle__inner_q1som_1, ._handle_q1som_5:hover ._handle__shadow_q1som_1 {\n  -webkit-transform:          scale(1.1);\n          transform:          scale(1.1)\n}\n._handle_q1som_5:active ._handle__inner_q1som_1 {\n  -webkit-transform:          scale(1.2);\n          transform:          scale(1.2)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_q1som_5:active ._handle__shadow_q1som_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1);\n          transform:          scale(1)\n}\n._handle_q1som_5._is-bound_q1som_54 {\n  width:          9px;\n  width:          9px;\n  width:          0.5625rem;\n  height:          20px;\n  height:          20px;\n  height:          1.25rem;\n  margin-left:          -9px;\n  margin-left:          -9px;\n  margin-left:          -0.5625rem;\n  margin-top:          -10px;\n  margin-top:          -10px;\n  margin-top:          -0.625rem\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1 {\n  background:          #FF512F\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  margin-top:          -20px;\n  margin-top:          -1.25rem;\n  width:          1px;\n  width:          1px;\n  width:          0.0625rem;\n  height:          40px;\n  height:          40px;\n  height:          2.5rem;\n  background:          #FF512F\n}\n._handle_q1som_5._is-bound_q1som_54 ._handle__inner_q1som_1, ._handle_q1som_5._is-bound_q1som_54 ._handle__shadow_q1som_1 {\n  border-top-left-radius:          3px;\n  border-top-left-radius:          3px;\n  border-top-left-radius:          0.1875rem;\n  border-bottom-left-radius:          3px;\n  border-bottom-left-radius:          3px;\n  border-bottom-left-radius:          0.1875rem;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_q1som_5._is-inversed_q1som_82 {\n  margin-left:          0\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__shadow_q1som_1 {\n  box-shadow:          -0.0625rem 0.0625rem 0.125rem black\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__inner_q1som_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          3px;\n  border-top-right-radius:          0.1875rem;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          3px;\n  border-bottom-right-radius:          0.1875rem\n}\n._handle_q1som_5._is-inversed_q1som_82 ._handle__inner_q1som_1:after {\n  right:          auto;\n  left:          0\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n._handle_8vrrs_5 {\n  width:          13px;\n  height:         13px;\n\n  cursor:         pointer;\n  -webkit-transform:      translateX(0);\n          transform:      translateX(0);\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden\n}\n._handle__inner_8vrrs_1, ._handle__shadow_8vrrs_1 {\n  position:          absolute;\n  left:          0;\n  top:          0;\n  z-index:          1;\n  width:          100%;\n  height:          100%;\n  border-radius:          50%;\n  cursor:          pointer\n  /*transform:      translateZ(0);*/\n  /*backface-visibility: hidden;*/\n}\n._handle__inner_8vrrs_1 {\n  background:          #FFF\n}\n._handle__shadow_8vrrs_1 {\n  box-shadow:          1px 1px 2px black;\n  opacity:          .35;\n  z-index:          0\n}\n._handle_8vrrs_5:hover ._handle__inner_8vrrs_1, ._handle_8vrrs_5:hover ._handle__shadow_8vrrs_1 {\n  -webkit-transform:          scale(1.1);\n          transform:          scale(1.1)\n}\n._handle_8vrrs_5:active ._handle__inner_8vrrs_1 {\n  -webkit-transform:          scale(1.2);\n          transform:          scale(1.2)\n  /*box-shadow:     calc( $PX ) calc( $PX ) calc( 1*$PX ) rgba(0,0,0,.35);*/\n}\n._handle_8vrrs_5:active ._handle__shadow_8vrrs_1 {\n  opacity:          .85;\n  -webkit-transform:          scale(1);\n          transform:          scale(1)\n}\n._handle_8vrrs_5._is-bound_8vrrs_54 {\n  width:          9px;\n  height:          20px;\n  margin-left:          -9px;\n  margin-top:          -10px\n}\n._handle_8vrrs_5._is-bound_8vrrs_54 ._handle__inner_8vrrs_1 {\n  background:          #FF512F\n}\n._handle_8vrrs_5._is-bound_8vrrs_54 ._handle__inner_8vrrs_1:after {\n  content:          '';\n  position:          absolute;\n  right:          0;\n  top:          50%;\n  margin-top:          -20px;\n  width:          1px;\n  height:          40px;\n  background:          #FF512F\n}\n._handle_8vrrs_5._is-bound_8vrrs_54 ._handle__inner_8vrrs_1, ._handle_8vrrs_5._is-bound_8vrrs_54 ._handle__shadow_8vrrs_1 {\n  border-top-left-radius:          3px;\n  border-bottom-left-radius:          3px;\n  border-top-right-radius:          0;\n  border-bottom-right-radius:          0\n}\n._handle_8vrrs_5._is-inversed_8vrrs_82 {\n  margin-left:          0\n}\n._handle_8vrrs_5._is-inversed_8vrrs_82 ._handle__shadow_8vrrs_1 {\n  box-shadow:          -1px 1px 2px black\n}\n._handle_8vrrs_5._is-inversed_8vrrs_82 ._handle__inner_8vrrs_1 {\n  border-top-left-radius:          0;\n  border-bottom-left-radius:          0;\n  border-top-right-radius:          3px;\n  border-bottom-right-radius:          3px\n}\n._handle_8vrrs_5._is-inversed_8vrrs_82 ._handle__inner_8vrrs_1:after {\n  right:          auto;\n  left:          0\n}\n", ""]);
 
 	// exports
 
@@ -6801,11 +6795,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"handle": "_handle_q1som_5",
-		"handle__inner": "_handle__inner_q1som_1",
-		"handle__shadow": "_handle__shadow_q1som_1",
-		"is-bound": "_is-bound_q1som_54",
-		"is-inversed": "_is-inversed_q1som_82"
+		"handle": "_handle_8vrrs_5",
+		"handle__inner": "_handle__inner_8vrrs_1",
+		"handle__shadow": "_handle__shadow_8vrrs_1",
+		"is-bound": "_is-bound_8vrrs_54",
+		"is-inversed": "_is-inversed_8vrrs_82"
 	};
 
 /***/ },
@@ -6879,6 +6873,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.ripple = new _ripple2.default({
 	      withHold: false,
 	      className: CLASSES['track__ripple'],
+	      // top:        '50%',
 	      parent: this.el
 	    });
 	  };
@@ -6886,7 +6881,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    Method to apply shift to the DOMElement.
 	    @private
 	    @overrides @ Handle.
-	    @param {Number} Shift in pixels.
+	    @param {Number} Shift in pixels.x
 	  */
 
 
@@ -6897,8 +6892,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (this._props.isInversed) {
 	      shift = this._maxWidth - shift;
 	    }
-	    var transform = 'scaleX( ' + shift + ' )';
+	    var transform = 'scaleX( ' + shift + ' ) translateZ(0)';
 	    this.trackProgressEl.style.transform = transform;
+	    // this.trackProgressEl.style.width = `${shift}px`;
 	  };
 	  /*
 	    Method to add classes on `this.el`.
@@ -7033,6 +7029,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  Ripple.prototype._render = function _render() {
 	    _Module.prototype._render.call(this);
+	    this.curtain = document.createElement('div');
+	    // this.curtain.style.background = 'rgba(255,255,255,.15)';
+	    // this.curtain.style.background = 'yellow';
+	    this.curtain.style.position = 'absolute';
+	    this.curtain.style.width = '100%';
+	    this.curtain.style.height = '100%';
+	    this.curtain.style.left = 0;
+	    this.curtain.style.top = 0;
+	    this.curtain.style.zIndex = 1;
+
+	    this.el.appendChild(this.curtain);
+
 	    this._addRipple();
 	  };
 	  /*
@@ -7045,9 +7053,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this2 = this,
 	        _ref;
 
-	    this.transit = new mojs.Transit((_ref = {
+	    this.shape = new mojs.Shape((_ref = {
 	      parent: this.el,
-	      left: 0, top: 0,
+	      left: 0, top: this._o.top || 0,
 	      // strokeWidth:  10,
 	      strokeWidth: { 10: 0 },
 	      fill: 'none',
@@ -7071,7 +7079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (p >= .15 && this.isStart && !this.isRelease) {
 	      this.isStart = false;
-	      this.transit.setSpeed(.02);
+	      this.shape.setSpeed(.02);
 	    }
 	  };
 	  /*
@@ -7085,7 +7093,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    this.isRelease = true;
-	    this.transit.setSpeed(1).play();
+	    this.shape.setSpeed(1).play();
 	  };
 	  /*
 	    Method that should be run on touch serface hold.
@@ -7099,7 +7107,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        y = e.offsetY != null ? e.offsetY : e.layerY;
 
 	    this.isRelease = false;
-	    this.transit.tune({ x: x, y: y }).replay();
+	    this.shape.tune({ x: x, y: y }).replay();
 	  };
 	  /*
 	    Method that should be run on touch serface cancel.
@@ -7112,7 +7120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    this.isRelease = true;
-	    this.transit.pause().setSpeed(1).playBackward();
+	    this.shape.pause().setSpeed(1).playBackward();
 	  };
 
 	  return Ripple;
@@ -7155,7 +7163,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._track_1inlw_5 {\n  position:           relative;\n  height:             100%\n\n\n}\n._track__track_1inlw_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  height:           1px;\n  height:           0.0625rem;\n  background:           #FFF;\n  box-shadow:           0.0625rem 0.0625rem 0.0625rem rgba(0,0,0,.5)\n\n\n}\n._track__track_1inlw_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__track-progress_1inlw_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  margin-top:           -1px;\n  margin-top:           -0.0625rem;\n  height:           3px;\n  height:           3px;\n  height:           0.1875rem;\n  width:           1px;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n\n}\n._track__track-progress_1inlw_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  top:           -20px;\n  top:           -1.25rem;\n  width:           100%;\n  height:           40px;\n  height:           40px;\n  height:           2.5rem;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__ripple_1inlw_1 {\n  position:           absolute;\n  left:           0;\n  top:           0;\n  right:           0;\n  bottom:           0;\n  overflow:           hidden;\n  z-index:           1\n\n\n}\n._track_1inlw_5._is-inversed_1inlw_65 {\n  left:           auto;\n  right:           0\n\n\n}\n._track_1inlw_5._is-inversed_1inlw_65 ._track__track-progress_1inlw_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n\n}\n._track_1inlw_5._is-bound_1inlw_74 ._track__track-progress_1inlw_1 {\n  background:           #FF512F\n\n\n}\n._track_1inlw_5._is-y_1inlw_78 ._track__track_1inlw_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px;\n  width:           1px;\n  width:           0.0625rem\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n._track_1dpwb_5 {\n  position:           relative;\n  height:             100%\n\n\n}\n._track__track_1dpwb_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  background:           #FFF;\n  box-shadow:           1px 1px 1px rgba(0,0,0,.5)\n\n\n}\n._track__track_1dpwb_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__track-progress_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  height:           3px;\n  width:           0.0625em;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n\n}\n._track__track-progress_1dpwb_1:after {\n  /*content:        '';*/\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer;\n  -webkit-backface-visibility:           hidden;\n          backface-visibility:           hidden\n\n\n}\n._track__ripple_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           0;\n  right:           0;\n  bottom:           0;\n  overflow:           hidden\n  /*background:       black;*/\n  /*z-index:          1;*/\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 {\n  left:           auto;\n  right:           0\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 ._track__track-progress_1dpwb_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n\n}\n._track_1dpwb_5._is-bound_1dpwb_75 ._track__track-progress_1dpwb_1 {\n  background:           #FF512F\n\n\n}\n._track_1dpwb_5._is-y_1dpwb_79 ._track__track_1dpwb_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n\n}\n", ""]);
 
 	// exports
 
@@ -7165,13 +7173,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"track": "_track_1inlw_5",
-		"track__track": "_track__track_1inlw_1",
-		"track__track-progress": "_track__track-progress_1inlw_1",
-		"track__ripple": "_track__ripple_1inlw_1",
-		"is-inversed": "_is-inversed_1inlw_65",
-		"is-bound": "_is-bound_1inlw_74",
-		"is-y": "_is-y_1inlw_78"
+		"track": "_track_1dpwb_5",
+		"track__track": "_track__track_1dpwb_1",
+		"track__track-progress": "_track__track-progress_1dpwb_1",
+		"track__ripple": "_track__ripple_1dpwb_1",
+		"is-inversed": "_is-inversed_1dpwb_66",
+		"is-bound": "_is-bound_1dpwb_75",
+		"is-y": "_is-y_1dpwb_79"
 	};
 
 /***/ },
@@ -7209,7 +7217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._slider_14t9x_6 {\n  position:           relative;\n  width:              100%;\n  height:           30px;\n  height:           30px;\n  height:             1.875rem\n}\n._slider__inner_14t9x_1 {\n  width:           100%;\n  height:           100%;\n  position:           relative\n}\n._slider_14t9x_6 ._handle_14t9x_17, ._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  z-index:           3;\n  position:           absolute;\n  top:           50%\n}\n._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  left:           0;\n  margin-left:           -6.5px;\n  margin-left:           -6.5px;\n  margin-left:           -0.40625rem;\n  margin-top:           -6.5px;\n  margin-top:           -6.5px;\n  margin-top:           -0.40625rem\n}\n._slider_14t9x_6 ._track_14t9x_30 {\n  z-index:           2\n}\n._slider_14t9x_6._is-y_14t9x_34 {\n  width:           30px;\n  width:           30px;\n  width:           1.875rem;\n  height:           100%;\n}\n._slider_14t9x_6._is-y_14t9x_34 ._handle_14t9x_17 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -6.5px;\n  margin-bottom:           -0.40625rem\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n/*@import './handle.postcss.css';*/\n._slider_14t9x_6 {\n  position:           relative;\n  width:              100%;\n  height:             30px\n}\n._slider__inner_14t9x_1 {\n  width:           100%;\n  height:           100%;\n  position:           relative\n}\n._slider_14t9x_6 ._handle_14t9x_17, ._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  z-index:           3;\n  position:           absolute;\n  top:           50%\n}\n._slider_14t9x_6 ._progress-handle_14t9x_18 {\n  left:           0;\n  margin-left:           -6.5px;\n  margin-top:           -6.5px\n}\n._slider_14t9x_6 ._track_14t9x_30 {\n  z-index:           2\n}\n._slider_14t9x_6._is-y_14t9x_34 {\n  width:           30px;\n  height:           100%;\n}\n._slider_14t9x_6._is-y_14t9x_34 ._handle_14t9x_17 {\n  left:           50%;\n  top:           auto;\n  bottom:           0;\n  margin-top:           0;\n  margin-bottom:           -6.5px\n}\n\n", ""]);
 
 	// exports
 
@@ -7262,7 +7270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*@import './handle.postcss.css';*/\n._player-slider_1t00q_6 {\n  /*overflow:     hidden;*/\n  height:       40px;\n  height:       40px;\n  height:       2.5rem\n\n}\n._player-slider_1t00q_6 > div {\n  position:       absolute;\n  left:       0;\n  top:       0;\n  z-index:       2\n\n}\n._player-slider_1t00q_6 ._slider_1t00q_15 {\n  z-index:       1;\n  height:       100%\n\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n/*@import './handle.postcss.css';*/\n._player-slider_1t00q_6 {\n  /*overflow:     hidden;*/\n  height:       40px\n\n}\n._player-slider_1t00q_6 > div {\n  position:       absolute;\n  left:       0;\n  top:       0;\n  z-index:       2\n\n}\n._player-slider_1t00q_6 ._slider_1t00q_15 {\n  z-index:       1;\n  height:       100%\n\n}\n\n", ""]);
 
 	// exports
 
@@ -7420,6 +7428,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._addMainElement();
 	    this.el.classList.add(CLASSES.icon);
 	    this.el.classList.add(CLASSES['is-' + this._props.size]);
+	    this.el.setAttribute('data-component', 'icon');
 	    this._renderIcon();
 	  };
 	  /*
@@ -7494,7 +7503,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._icon_y498a_5 {\n  position:     relative;\n  width:     12px;\n  width:     12px;\n  width:        0.75rem;\n  height:     12px;\n  height:     12px;\n  height:       0.75rem;\n  cursor:       pointer\n}\n._icon_y498a_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  fill:     inherit\n}\n._icon_y498a_5 > svg > use {\n  fill:     inherit\n}\n._icon_y498a_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_y498a_5._is-x2_y498a_33 {\n  width:     16px;\n  width:     16px;\n  width:     1rem;\n  height:     16px;\n  height:     16px;\n  height:     1rem\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n._icon_y498a_5 {\n  position:     relative;\n  width:        12px;\n  height:       12px;\n  cursor:       pointer\n}\n._icon_y498a_5 > svg {\n  position:     absolute;\n  left:     0;\n  top:     0;\n  width:     100%;\n  height:     100%;\n  fill:     inherit\n}\n._icon_y498a_5 > svg > use {\n  fill:     inherit\n}\n._icon_y498a_5:after {\n  content:     '';\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n._icon_y498a_5._is-x2_y498a_33 {\n  width:     16px;\n  height:     16px\n}\n\n", ""]);
 
 	// exports
 
@@ -7708,7 +7717,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._button_r3ni6_4 {\n  position:   relative;\n  width:   35px;\n  width:   35px;\n  width:      2.1875rem;\n  height:   40px;\n  height:   40px;\n  height:     2.5rem;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block\n}\n._button__ripple_r3ni6_1 {\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   5;\n  overflow:   hidden\n}\n._button__ripple_r3ni6_1:after {\n  content:   \"\";\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   1;\n  cursor:   pointer\n}\n._button_r3ni6_4:hover {\n  opacity:   .85\n}\n._button_r3ni6_4:active {\n  opacity:   1\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._button_r3ni6_4 {\n  position:   relative;\n  width:      35px;\n  height:     40px;\n  cursor:     pointer;\n  fill:       #FFF;\n  display:    inline-block\n}\n\n._button__ripple_r3ni6_1 {\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   5;\n  overflow:   hidden\n}\n\n._button__ripple_r3ni6_1:after {\n  content:   \"\";\n  position:   absolute;\n  left:   0;\n  right:   0;\n  top:   0;\n  bottom:   0;\n  z-index:   1;\n  cursor:   pointer\n}\n\n._button_r3ni6_4:hover {\n  opacity:   .85\n}\n\n._button_r3ni6_4:active {\n  opacity:   1\n}\n\n", ""]);
 
 	// exports
 
@@ -7757,7 +7766,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._icon-button_1yshr_4 {\n  /* styles */\n}\n._icon-button_1yshr_4 ._icon_1yshr_4 {\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  -webkit-transform: translate( -50%, -50% );\n          transform: translate( -50%, -50% )\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._icon-button_1yshr_4 {\n  /* styles */\n}\n\n._icon-button_1yshr_4 ._icon_1yshr_4 {\n\n  position: absolute;\n\n  left: 50%;\n\n  top: 50%;\n\n  -webkit-transform: translate( -50%, -50% );\n\n          transform: translate( -50%, -50% )\n}\n\n", ""]);
 
 	// exports
 
@@ -8301,7 +8310,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._button-switch_1g5lg_4 {\n  position:     relative;\n  display:      inline-block\n}\n._button-switch_1g5lg_4 > ._icon_1g5lg_8 {\n  position:     absolute\n}\n._button-switch_1g5lg_4:after {\n  content:     \"\";\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._button-switch_1g5lg_4 {\n  position:     relative;\n  display:      inline-block\n}\n\n._button-switch_1g5lg_4 > ._icon_1g5lg_8 {\n  position:     absolute\n}\n\n._button-switch_1g5lg_4:after {\n  content:     \"\";\n  position:     absolute;\n  left:     0;\n  top:     0;\n  right:     0;\n  bottom:     0;\n  z-index:     1\n}\n\n", ""]);
 
 	// exports
 
@@ -8350,7 +8359,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._label-button_1cxps_4 {\n  font-family:        Arial, sans-serif;\n  font-size:        9px;\n  font-size:        9px;\n  font-size:          0.5625rem;\n  letter-spacing:        0.5px;\n  letter-spacing:        0.5px;\n  letter-spacing:     0.03125rem;\n  color:              white\n}\n._label-button__label_1cxps_1 {\n  position:        absolute;\n  left:        50%;\n  top:        50%;\n  -webkit-transform:        translate( -50%, -50% );\n          transform:        translate( -50%, -50% )\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._label-button_1cxps_4 {\n  font-family:        Arial, sans-serif;\n  font-size:          9px;\n  letter-spacing:     0.5px;\n  color:              white\n}\n\n._label-button__label_1cxps_1 {\n  position:        absolute;\n  left:        50%;\n  top:        50%;\n  -webkit-transform:        translate( -50%, -50% );\n          transform:        translate( -50%, -50% )\n}\n", ""]);
 
 	// exports
 
@@ -8399,7 +8408,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._speed-control_1svrw_4 {\n  position:       relative;\n  display:        inline-block;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem\n}\n._speed-control__slider_1svrw_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  left:       3px;\n  left:       0.1875rem;\n  width:       30px;\n  width:       30px;\n  width:       1.875rem;\n  height:       80px;\n  height:       80px;\n  height:       5rem;\n  padding-top:       20px;\n  padding-top:       20px;\n  padding-top:       1.25rem;\n  padding-bottom:       20px;\n  padding-bottom:       20px;\n  padding-bottom:       1.25rem;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       3px;\n  border-top-right-radius:       0.1875rem;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       3px;\n  border-top-left-radius:       0.1875rem;\n  background:       #3A0839;\n  -webkit-transform:       translate(-6249999.9375rem, -6249999.9375rem);\n          transform:       translate(-6249999.9375rem, -6249999.9375rem);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n._speed-control__slider_1svrw_1:before, ._speed-control__slider_1svrw_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  width:       3px;\n  width:       0.1875rem;\n  height:       1px;\n  height:       1px;\n  height:       0.0625rem;\n  background:       #FFF\n}\n._speed-control__slider_1svrw_1:before {\n  left:       5px;\n  left:       5px;\n  left:       0.3125rem\n}\n._speed-control__slider_1svrw_1:after {\n  right:       5px;\n  right:       5px;\n  right:       0.3125rem\n}\n._speed-control__button_1svrw_1 {\n  border:       1px solid cyan\n}\n._speed-control_1svrw_4._is-on_1svrw_48 ._speed-control__slider_1svrw_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._speed-control_1mxm4_4 {\n  position:       relative;\n  display:        inline-block;\n  height:         40px\n}\n\n._speed-control__slider_1mxm4_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  width:       30px;\n  height:       120px;\n  padding-top:       20px;\n  padding-bottom:       20px;\n  border-top-right-radius:       3px;\n  border-top-left-radius:       3px;\n  background:       #3A0839;\n  -webkit-transform:       translate(-99999999px, -99999999px);\n          transform:       translate(-99999999px, -99999999px);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n\n._speed-control__slider_1mxm4_1:before, ._speed-control__slider_1mxm4_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  height:       1px;\n  background:       #FFF\n}\n\n._speed-control__slider_1mxm4_1:before {\n  left:       5px\n}\n\n._speed-control__slider_1mxm4_1:after {\n  right:       5px\n}\n\n._speed-control__button_1mxm4_1 {\n  border:       1px solid cyan\n}\n\n._speed-control_1mxm4_4._is-on_1mxm4_49 ._speed-control__slider_1mxm4_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n", ""]);
 
 	// exports
 
@@ -8409,10 +8418,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"speed-control": "_speed-control_1svrw_4",
-		"speed-control__slider": "_speed-control__slider_1svrw_1",
-		"speed-control__button": "_speed-control__button_1svrw_1",
-		"is-on": "_is-on_1svrw_48"
+		"speed-control": "_speed-control_1mxm4_4",
+		"speed-control__slider": "_speed-control__slider_1mxm4_1",
+		"speed-control__button": "_speed-control__button_1mxm4_1",
+		"is-on": "_is-on_1mxm4_49"
 	};
 
 /***/ },
@@ -8597,7 +8606,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._icon-fork_csg7t_4 {\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4 {\n    /*position:   absolute;*/\n    opacity: 0;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    -webkit-transform: translate( -50%, -50% );\n            transform: translate( -50%, -50% )\n}\n._icon-fork_csg7t_4 > ._icon_csg7t_4:nth-of-type(3) {\n    position: absolute;\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(2) {\n    opacity: 1\n}\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(3) {\n    opacity: 0\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._icon-fork_csg7t_4 {\n}\n\n._icon-fork_csg7t_4 > ._icon_csg7t_4 {\n\n    /*position:   absolute;*/\n\n    opacity: 0;\n\n    position: absolute;\n\n    top: 50%;\n\n    left: 50%;\n\n    -webkit-transform: translate( -50%, -50% );\n\n            transform: translate( -50%, -50% )\n}\n\n._icon-fork_csg7t_4 > ._icon_csg7t_4:nth-of-type(3) {\n\n    position: absolute;\n\n    opacity: 1\n}\n\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(2) {\n\n    opacity: 1\n}\n\n._icon-fork_csg7t_4._is-on_csg7t_18 > ._icon_csg7t_4:nth-of-type(3) {\n\n    opacity: 0\n}\n\n", ""]);
 
 	// exports
 
@@ -8647,7 +8656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._play-button_16uj5_4 {\n  /* styles */\n}\n", ""]);
 
 	// exports
 
@@ -8755,7 +8764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._stop-button_lpa7l_4 {\n  /* styles */\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._stop-button_lpa7l_4 {\n  /* styles */\n}\n", ""]);
 
 	// exports
 
@@ -8960,7 +8969,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._opacity-switch_17z5s_4 {\n  opacity:      .5;\n\n\n\n\n}\n._opacity-switch_17z5s_4 ._icon_17z5s_6 {\n  position:   absolute;\n  left:       50%;\n  top:        50%;\n  -webkit-transform:  translate(-50%, -50%);\n          transform:  translate(-50%, -50%);\n\n\n\n\n}\n._opacity-switch_17z5s_4:hover {\n  opacity:      .4;\n\n\n\n\n}\n._opacity-switch_17z5s_4._is-on_17z5s_15 {\n  opacity:      1;\n\n\n\n\n}\n._opacity-switch_17z5s_4._is-on_17z5s_15:hover {\n  opacity:      .85;\n\n\n\n\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._opacity-switch_17z5s_4 {\n  opacity:      .5;\n\n\n\n\n}\n\n._opacity-switch_17z5s_4 ._icon_17z5s_6 {\n  position:   absolute;\n  left:       50%;\n  top:        50%;\n  -webkit-transform:  translate(-50%, -50%);\n          transform:  translate(-50%, -50%);\n\n\n\n\n}\n\n._opacity-switch_17z5s_4:hover {\n  opacity:      .4;\n\n\n\n\n}\n\n._opacity-switch_17z5s_4._is-on_17z5s_15 {\n  opacity:      1;\n\n\n\n\n}\n\n._opacity-switch_17z5s_4._is-on_17z5s_15:hover {\n  opacity:      .85;\n\n\n\n\n}\n", ""]);
 
 	// exports
 
@@ -9010,7 +9019,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._repeat-button_1ce74_4 {\n  /* styles */\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._repeat-button_1ce74_4 {\n  /* styles */\n}\n\n", ""]);
 
 	// exports
 
@@ -9202,7 +9211,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._hide-button_1hqr2_4 {\n  \n  width:        22px;\n  \n  width:        22px;\n  \n  width:        1.375rem;\n  height:        16px;\n  height:        16px;\n  height:       1rem;\n  \n  background:   #3A0839;\n\n  border-top-left-radius:        3px;\n  border-top-left-radius:        3px;\n  border-top-left-radius:  0.1875rem;\n  border-top-right-radius:        3px;\n  border-top-right-radius:        3px;\n  border-top-right-radius: 0.1875rem\n}\n._hide-button__icon_1hqr2_1 {\n  \n  position:        absolute;\n  \n  left:        50%;\n  \n  top:        50%;\n  \n  width:        8px;\n  \n  width:        8px;\n  \n  width:        0.5rem;\n  \n  height:        8px;\n  \n  height:        8px;\n  \n  height:        0.5rem;\n  \n  margin-top:        1px;\n  \n  margin-top:        1px;\n  \n  margin-top:        0.0625rem;\n  \n  -webkit-transform:        translate( -50%, -50% );\n  \n          transform:        translate( -50%, -50% )\n}\n._hide-button_1hqr2_4._is-hidden_1hqr2_24 ._hide-button__icon_1hqr2_1 {\n  \n  -webkit-transform:        translate( -50%, -65% ) rotate( 180deg );\n  \n          transform:        translate( -50%, -65% ) rotate( 180deg )\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._hide-button_1hqr2_4 {\n  \n  width:        22px;\n  height:       16px;\n  \n  background:   #3A0839;\n\n  border-top-left-radius:  3px;\n  border-top-right-radius: 3px\n}\n\n._hide-button__icon_1hqr2_1 {\n  \n  position:        absolute;\n  \n  left:        50%;\n  \n  top:        50%;\n  \n  width:        8px;\n  \n  height:        8px;\n  \n  margin-top:        1px;\n  \n  -webkit-transform:        translate( -50%, -50% );\n  \n          transform:        translate( -50%, -50% )\n}\n\n._hide-button_1hqr2_4._is-hidden_1hqr2_24 ._hide-button__icon_1hqr2_1 {\n  \n  -webkit-transform:        translate( -50%, -65% ) rotate( 180deg );\n  \n          transform:        translate( -50%, -65% ) rotate( 180deg )\n}\n\n", ""]);
 
 	// exports
 
@@ -9252,7 +9261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "._mojs-player_tes6w_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:       40px;\n  height:       40px;\n  height:         2.5rem;\n  background:     rgba( 58, 8, 57, .85 );\n  z-index:        100\n}\n._mojs-player__left_tes6w_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n  width:       175px;\n  width:       10.9375rem\n}\n._mojs-player__mid_tes6w_1 {\n  position:       absolute;\n  left:       175px;\n  left:       175px;\n  left:       10.9375rem;\n  right:       35px;\n  right:       35px;\n  right:       2.1875rem;\n  overflow:       hidden;\n  padding:       0 20px;\n  padding:       0 20px;\n  padding:       0 1.25rem\n}\n._mojs-player__right_tes6w_1 {\n  position:       absolute;\n  right:       0\n}\n._mojs-player__hide-button_tes6w_1 {\n  position:       absolute;\n  right:       6px;\n  right:       6px;\n  right:       0.375rem;\n  bottom:       100%\n}\n._mojs-player_tes6w_4._is-hidden_tes6w_41 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%)\n}\n._mojs-player_tes6w_4._is-transition_tes6w_44 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out\n}\n\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._mojs-player_12g93_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:         40px;\n  background:     rgba( 58, 8, 57, .85 );\n  z-index:        100;\n}\n\n._mojs-player_12g93_4 * {\n  box-sizing: border-box;\n}\n\n._mojs-player__left_12g93_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n}\n\n._mojs-player__mid_12g93_1 {\n  position:       absolute;\n  left:       175px;\n  right:       17.5px;\n  overflow:       hidden;\n  padding:       0 20px;\n}\n\n._mojs-player__right_12g93_1 {\n  position:       absolute;\n  right:       0;\n}\n\n._mojs-player__hide-button_12g93_1 {\n  position:       absolute;\n  right:       6px;\n  bottom:       100%;\n}\n\n._mojs-player__mojs-logo_12g93_1 [data-component=\"icon\"] {\n  fill:       #FF512F;\n}\n\n._mojs-player_12g93_4._is-hidden_12g93_51 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%);\n}\n\n._mojs-player_12g93_4._is-transition_12g93_54 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out;\n}\n", ""]);
 
 	// exports
 
@@ -9262,13 +9271,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"mojs-player": "_mojs-player_tes6w_4",
-		"mojs-player__left": "_mojs-player__left_tes6w_1",
-		"mojs-player__mid": "_mojs-player__mid_tes6w_1",
-		"mojs-player__right": "_mojs-player__right_tes6w_1",
-		"mojs-player__hide-button": "_mojs-player__hide-button_tes6w_1",
-		"is-hidden": "_is-hidden_tes6w_41",
-		"is-transition": "_is-transition_tes6w_44"
+		"mojs-player": "_mojs-player_12g93_4",
+		"mojs-player__left": "_mojs-player__left_12g93_1",
+		"mojs-player__mid": "_mojs-player__mid_12g93_1",
+		"mojs-player__right": "_mojs-player__right_12g93_1",
+		"mojs-player__hide-button": "_mojs-player__hide-button_12g93_1",
+		"mojs-player__mojs-logo": "_mojs-player__mojs-logo_12g93_1",
+		"is-hidden": "_is-hidden_12g93_51",
+		"is-transition": "_is-transition_12g93_54"
 	};
 
 /***/ }

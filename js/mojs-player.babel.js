@@ -11,7 +11,6 @@ import BoundsButton   from './components/bounds-button';
 import HideButton     from './components/hide-button';
 
 // TODO
-// fix timeline reset if progress === 1
 
 require('../css/blocks/mojs-player.postcss.css');
 let CLASSES = require('../css/blocks/mojs-player.postcss.css.json');
@@ -44,7 +43,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
 
-    this.revision = '0.43.15';
+    this.revision = '0.43.16';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -60,7 +59,7 @@ class MojsPlayer extends Module {
     let p           = this._props,
         o           = this._o,
         defs        = this._defaults;
-        
+
     // get localstorage regarding isSaveState option
     p.isSaveState = this._fallbackTo( o.isSaveState, defs.isSaveState );
     let m = ( p.isSaveState )
@@ -172,7 +171,7 @@ class MojsPlayer extends Module {
       onSeekStart:        this._onSeekStart.bind( this ),
       onSeekEnd:          this._onSeekEnd.bind( this )
     });
-    
+
     this.boundsButton = new BoundsButton({
       isOn:           p.isBounds,
       parent:         left,
@@ -209,14 +208,15 @@ class MojsPlayer extends Module {
       onStateChange:  this._onPlayStateChange.bind( this ),
       prefix:         this._props.prefix
     });
-    
+
     this.mojsButton   = new IconButton({
-      parent:   right,
-      icon:     'mojs',
-      target:   '_blank',
-      link:     'https://github.com/legomushroom/mojs-player',
-      title:    'mo • js',
-      prefix:   this._props.prefix
+      parent:     right,
+      className:  CLASSES[ `${ className }__mojs-logo` ],
+      icon:       'mojs',
+      target:     '_blank',
+      link:       'https://github.com/legomushroom/mojs-player',
+      title:      'mo • js',
+      prefix:     this._props.prefix
     });
 
     this.hideButton   = new HideButton({
@@ -308,7 +308,7 @@ class MojsPlayer extends Module {
     }
 
     if ( p >= rightBound ) {
-      
+
       this._reset( rightBound === 1 );
 
       // if ( rightBound === 1 ) { this._sysTween.stop( ); }
@@ -328,7 +328,7 @@ class MojsPlayer extends Module {
         leftBound = ( p.isBounds ) ? p.leftBound : p.progress,
         progress  = ( p.progress >= this._getBound( 'right' ) )
           ? leftBound : p.progress;
-    
+
     if (progress === 1) { progress = ( p.isBounds ) ? p.leftBound : 0 };
     if ( progress !== 0 ) { this._sysTween.setProgress( progress ); };
 
@@ -346,7 +346,7 @@ class MojsPlayer extends Module {
       // this.timeline.pause();
       const p        = this._props,
             progress = p.progress;
-      
+
       let   start = progress,
             leftBound = ( p.isBounds ) ? p.leftBound : 0;
 
@@ -438,7 +438,7 @@ class MojsPlayer extends Module {
     this.playerSlider[ `${ ( isOn ) ? 'enable' : 'disable' }Bounds` ]();
     this._props.isBounds = isOn;
   }
-  /* 
+  /*
     Method that is invoked on speed value change.
     @private
     @param {Number} Speed value.

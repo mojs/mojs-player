@@ -27,6 +27,7 @@ class Track extends Handle {
     this.ripple = new Ripple({
       withHold:   false,
       className:  CLASSES[ `track__ripple` ],
+      // top:        '50%',
       parent:     this.el
     });
   }
@@ -34,13 +35,14 @@ class Track extends Handle {
     Method to apply shift to the DOMElement.
     @private
     @overrides @ Handle.
-    @param {Number} Shift in pixels.
+    @param {Number} Shift in pixels.x
   */
   _applyShift ( shift ) {
     if ( !this._props.isProgress ) { return; }
     if ( this._props.isInversed ) { shift = this._maxWidth - shift; }
-    let transform = `scaleX( ${shift} )`;
+    let transform = `scaleX( ${shift} ) translateZ(0)`;
     this.trackProgressEl.style.transform = transform;
+    // this.trackProgressEl.style.width = `${shift}px`;
   }
   /*
     Method to add classes on `this.el`.
@@ -65,7 +67,7 @@ class Track extends Handle {
 
     if ( p.isProgress ) {
       // progress track
-      let trackP = document.createElement('div');
+      const trackP = document.createElement('div');
       trackP.classList.add(`${ CLASSES['track__track-progress'] }`);
       this.trackProgressEl = trackP;
       this.el.appendChild( trackP );
@@ -76,7 +78,7 @@ class Track extends Handle {
       track.classList.add(`${ CLASSES.track__track }`);
       this.el.appendChild( track );
     }
-    
+
   }
   /*
     Callback for pointer down on main el.

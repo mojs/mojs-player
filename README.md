@@ -2,9 +2,7 @@
 
 <img src="https://github.com/legomushroom/mojs-player/blob/master/mockups/mojs-player@x4.png?raw=true" alt="mojs-player" />
 
-Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations.  
-
-It is just a helper tool that gives you the ability to:
+Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations. It is just a helper tool that gives you the ability to:
  - control your sequences with `GUI` while working on them
  - it saves the current progress of your animation thus you don't loose the `focus`
  - it gives you `bounds` to constrain `focus point` of your animation
@@ -44,8 +42,7 @@ import MojsPlayer from 'mojs-player';
 
 If you installed it with script link - you should have `MojsPlayer` global.
 
-
-## API
+## Usage
 
 Construct `MojsPlayer` and pass your main `Tween/Timeline` as the `add` option:
 

@@ -5,18 +5,18 @@ $height: 40;
 .track {
   position:           relative;
   height:             100%;
-  
+
   &__track {
     position:         absolute;
     top:              50%;
     left:             0;
-    
+
     width:            100%;
     height:           calc( $PX );
-    
+
     background:       #FFF;
     box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5);
-    
+
     &:after {
       content:        '';
       position:       absolute;
@@ -35,20 +35,20 @@ $height: 40;
     top:              50%;
     margin-top:       calc( -1 * $PX );
     height:           calc( 3*$PX );
-    width:            1px;
+    width:            0.0625em;
     /*background:       $c-orange;*/
     background:       $c-white;
     z-index:          1;
     transform-origin: left center;
     &:after {
-      content:        '';
+      /*content:        '';*/
       position:       absolute;
       left:           0;
       top:            calc( - $height/2 * $PX );
       width:          100%;
       height:         calc( $height * $PX );
       cursor:         pointer;
-      /*background-color: yellow;*/
+      backface-visibility: hidden;
     }
   }
 
@@ -59,7 +59,8 @@ $height: 40;
     right:            0;
     bottom:           0;
     overflow:         hidden;
-    z-index:          1;
+    /*background:       black;*/
+    /*z-index:          1;*/
   }
 
   &.is-inversed {
@@ -78,13 +79,12 @@ $height: 40;
   &.is-y &__track {
     top:              0;
     left:             50%;
-    
+
     height:           100%;
     width:            calc( $PX );
-    
+
     /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */
   }
 
 
 }
-

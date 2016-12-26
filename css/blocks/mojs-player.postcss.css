@@ -9,7 +9,11 @@
   height:         calc( 40 * $PX );
   background:     rgba( 58, 8, 57, .85 );
   z-index:        100;
-  
+
+  * {
+    box-sizing: border-box;
+  }
+
   $btnWidth: 35;
   $btnCount: 5;
   $leftWidth: calc( $btnCount * $btnWidth * $PX );
@@ -22,7 +26,7 @@
   &__mid {
     position:     absolute;
     left:         $leftWidth;
-    right:        calc( $btnWidth * $PX );
+    right:        calc( $btnWidth/2 * $PX );
     overflow:     hidden;
     padding:      0 calc( 20 * $PX );
   }
@@ -38,6 +42,12 @@
     bottom:       100%;
   }
 
+  &__mojs-logo {
+    [data-component="icon"] {
+      fill: $c-orange;
+    }
+  }
+
   &.is-hidden {
     transform:    translateY(100%);
   }
@@ -45,4 +55,3 @@
     transition:   all .15s ease-out;
   }
 }
-

@@ -20,6 +20,18 @@ class Ripple extends Module {
   */
   _render () {
     super._render();
+    this.curtain = document.createElement('div');
+    // this.curtain.style.background = 'rgba(255,255,255,.15)';
+    // this.curtain.style.background = 'yellow';
+    this.curtain.style.position = 'absolute';
+    this.curtain.style.width = '100%';
+    this.curtain.style.height = '100%';
+    this.curtain.style.left = 0;
+    this.curtain.style.top = 0;
+    this.curtain.style.zIndex = 1;
+
+    this.el.appendChild(this.curtain);
+
     this._addRipple();
   }
   /*
@@ -27,9 +39,9 @@ class Ripple extends Module {
     @private
   */
   _addRipple () {
-    this.transit = new mojs.Transit({
+    this.shape = new mojs.Shape({
       parent:       this.el,
-      left: 0,  top: 0,
+      left: 0,  top: this._o.top || 0,
       // strokeWidth:  10,
       strokeWidth:  { 10 : 0 },
       fill:         'none',
@@ -40,6 +52,7 @@ class Ripple extends Module {
       radius:       40,
       scale:        { 0: 1 },
       isShowEnd:    false,
+      // duration:     15000,
       // isForce3d:    true,
       onStart:      () => { this.isStart = true; },
       onUpdate:     this._onUpdate.bind( this ),
@@ -55,7 +68,7 @@ class Ripple extends Module {
     if ( !this._props.withHold ) { return; }
     if ( p >= .15 && this.isStart && !this.isRelease ) {
       this.isStart = false;
-      this.transit.setSpeed( .02 );
+      this.shape.setSpeed( .02 );
     }
   }
   /*
@@ -65,7 +78,7 @@ class Ripple extends Module {
   _release () {
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
-    this.transit.setSpeed( 1 ).play();
+    this.shape.setSpeed( 1 ).play();
   }
   /*
     Method that should be run on touch serface hold.
@@ -77,7 +90,7 @@ class Ripple extends Module {
         y = ( e.offsetY != null ) ? e.offsetY : e.layerY;
 
     this.isRelease = false;
-    this.transit.tune({ x: x, y: y }).replay();
+    this.shape.tune({ x: x, y: y }).replay();
   }
   /*
     Method that should be run on touch serface cancel.
@@ -86,7 +99,7 @@ class Ripple extends Module {
   _cancel () {
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
-    this.transit
+    this.shape
       .pause()
       .setSpeed( 1 )
       .playBackward();
