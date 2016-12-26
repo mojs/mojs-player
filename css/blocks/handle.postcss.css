@@ -5,26 +5,26 @@ $handleHeight: 13;
 .handle {
   width:          calc( $handleHeight * $PX );
   height:         calc( $handleHeight * $PX );
-  
+
   cursor:         pointer;
   transform:      translateX(0);
-  /*backface-visibility: hidden;*/
-  
+  backface-visibility: hidden;
+
   &__inner,
   &__shadow {
     position:       absolute;
     left:           0;
     top:            0;
     z-index:        1;
-    
+
     width:          100%;
     height:         100%;
     border-radius:  50%;
     cursor:         pointer;
     /*transform:      translateZ(0);*/
-    backface-visibility: hidden;
+    /*backface-visibility: hidden;*/
   }
-  
+
   &__inner {
     background:     #FFF;
   }
@@ -48,7 +48,7 @@ $handleHeight: 13;
     opacity:        .85;
     transform:      scale(1);
   }
-  
+
   $width:  9;
   $height: 20;
   &.is-bound {
@@ -96,4 +96,3 @@ $handleHeight: 13;
     }
   }
 }
-

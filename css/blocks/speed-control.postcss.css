@@ -5,25 +5,26 @@
   position:       relative;
   display:        inline-block;
   height:         calc( 40 * $PX );
-  
-  $pad: 2;
+
+  $pad: 20;
   &__slider {
     position:         absolute;
     bottom:           100%;
     left:             calc( 3 * $PX );
     width:            calc( 30 * $PX );
-    height:           calc( 80 * $PX );
-    padding-top:      calc( $pad * $GS );
-    padding-bottom:   calc( $pad * $GS );
-    
+    height:           calc( (80 + 2*$pad) * $PX );
+    padding-top:      calc( $pad * $PX );
+    padding-bottom:   calc( $pad * $PX );
+
     border-top-right-radius:   $BRADIUS;
     border-top-left-radius:    $BRADIUS;
-    
+
     background:       $c-purple;
-    
+
     $translateSize : calc( -99999999 * $PX );
     transform:        translate($translateSize, $translateSize);
     backface-visibility: hidden;
+
     &:before,
     &:after {
       content:        '';
@@ -50,4 +51,3 @@
 
   }
 }
-

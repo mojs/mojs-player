@@ -8,7 +8,7 @@
   <body>
     <style>
       :root {
-        font-size: 16px;
+        /*font-size: 16px;*/
         line-height: 1.7;
       }
 
@@ -21,7 +21,7 @@
         background: cyan;
       }
     </style>
-    
+
     <div class="el" id="js-el"></div>
 
     <br />
@@ -38,13 +38,13 @@
       var tw = new mojs.Tween({
         duration:  4000,
         onUpdate (p) {
-          el.style.transform = `translateX(${ 1000 * p }px)`;
+          el.style.transform = `translateX(${ 1000 * p }px) translateZ(0)`;
         }
       });
 
       var tm = new mojs.Timeline;
       tm.add( tw, new mojs.Shape({ delay: 1000, 'left': '50%', top: '50%' }) );
-      
+
       var mojsPlayer = new MojsPlayer({
         add:          tm,
         isPlaying:    true,

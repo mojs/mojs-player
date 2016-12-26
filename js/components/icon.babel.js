@@ -26,6 +26,7 @@ class Icon extends Module {
     this._addMainElement();
     this.el.classList.add( CLASSES.icon );
     this.el.classList.add( CLASSES[ `is-${ this._props.size }` ] );
+    this.el.setAttribute('data-component', 'icon');
     this._renderIcon();
   }
   /*
