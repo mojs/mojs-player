@@ -400,6 +400,12 @@ class MojsPlayer extends Module {
   */
   _onHideStateChange ( isHidden ) {
     this._props.isHidden = isHidden;
+    const { onToggleHide } = this._o;
+    // skip running callback on init rendering
+    if ( this._hideCount && onToggleHide) {
+      onToggleHide(isHidden);
+    }
+
     let method = ( isHidden ) ? 'add' : 'remove';
     this.el.classList[ method ]( CLASSES[ 'is-hidden' ] );
     // enable CSS transition on subsequent calls
