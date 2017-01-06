@@ -75,7 +75,7 @@ const mojsPlayer = new MojsPlayer({
   isHidden:     false,      // determines if the player should be hidden
   precision:    0.1,        // step size for player handle - for instance, after page reload - player should restore timeline progress - the whole timeline will be updated incrementally with the `precision` step size until the progress will be met.
   name:         'mojs-player', // name for the player - mainly used for localstorage identifier, use to distinguish between multiple local players
-  onToggleShow(isHidden) {  // should be called after user taps on the hide-button (isHidden is a boolean, indicating the visibility state of the player)
+  onToggleHide(isHidden) {  // should be called after user taps on the hide-button (isHidden is a boolean, indicating the visibility state of the player)
     if (isHidden) {
       // do something when player is invisible
     } else {

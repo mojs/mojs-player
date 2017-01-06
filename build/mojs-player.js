@@ -173,6 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.isHidden = false;
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
+	    this._defaults.onToggleHide = null;
 
 	    this.revision = '0.43.16';
 
@@ -594,10 +595,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MojsPlayer.prototype._onHideStateChange = function _onHideStateChange(isHidden) {
 	    this._props.isHidden = isHidden;
-	    var onToggleHide = this._o.onToggleHide;
-	    // skip running callback on init rendering
+	    var onToggleHide = this._props.onToggleHide;
 
-	    if (this._hideCount && onToggleHide) {
+	    if (onToggleHide) {
 	      onToggleHide(isHidden);
 	    }
 
