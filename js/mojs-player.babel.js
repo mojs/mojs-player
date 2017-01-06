@@ -42,6 +42,7 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
+    this._defaults.onToggleHide = null;
 
     this.revision = '0.43.16';
 
@@ -400,9 +401,8 @@ class MojsPlayer extends Module {
   */
   _onHideStateChange ( isHidden ) {
     this._props.isHidden = isHidden;
-    const { onToggleHide } = this._o;
-    // skip running callback on init rendering
-    if ( this._hideCount && onToggleHide) {
+    const { onToggleHide } = this._props;
+    if (onToggleHide) {
       onToggleHide(isHidden);
     }
 
