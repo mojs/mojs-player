@@ -42,6 +42,7 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
+    this._defaults.onToggleHide = null;
 
     this.revision = '0.43.16';
 
@@ -400,6 +401,11 @@ class MojsPlayer extends Module {
   */
   _onHideStateChange ( isHidden ) {
     this._props.isHidden = isHidden;
+    const { onToggleHide } = this._props;
+    if (onToggleHide) {
+      onToggleHide(isHidden);
+    }
+
     let method = ( isHidden ) ? 'add' : 'remove';
     this.el.classList[ method ]( CLASSES[ 'is-hidden' ] );
     // enable CSS transition on subsequent calls

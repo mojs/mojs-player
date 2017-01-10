@@ -55,6 +55,7 @@
     "gulp-shell": "^0.5.2",
     "gulp-uglify": "^1.5.3",
     "json-loader": "^0.5.4",
+    "mo-js": "^0.288.1",
     "postcss-cssnext": "^2.5.1",
     "postcss-loader": "^0.8.2",
     "postcss-modules": "^0.4.1",

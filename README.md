@@ -40,7 +40,7 @@ const MojsPlayer = require('mojs-player').default;
 import MojsPlayer from 'mojs-player';
 ```
 
-If you installed it with script link - you should have `MojsPlayer` global.
+If you installed it with script link — you should have `MojsPlayer` global.
 
 ## Usage
 
@@ -52,15 +52,16 @@ Construct `MojsPlayer` and pass your main `Tween/Timeline` as the `add` option:
 const mojsPlayer = new MojsPlayer({ add: mainTimeline });
 ```
 
-The `add` option is the only required option to launch. Player's controls should appear at the bottom of the page.
+The `add` option is the **only required option** to launch. Player's controls should appear at the bottom of the page.
 
 You can also set other player initial state:
 
 ```javascript
 // ..
 const mojsPlayer = new MojsPlayer({
+  // required
   add:      mainTimeline,
-  // options
+  // optionally
   className:    '',         // class name to add to main HTMLElement
   isSaveState:  true,       // determines if should preserve state on page reload
   isPlaying:    false,      // playback state
@@ -73,7 +74,14 @@ const mojsPlayer = new MojsPlayer({
   speed:        1,          // `speed` value
   isHidden:     false,      // determines if the player should be hidden
   precision:    0.1,        // step size for player handle - for instance, after page reload - player should restore timeline progress - the whole timeline will be updated incrementally with the `precision` step size until the progress will be met.
-  name:         'mojs-player' // name for the player - mainly used for localstorage identifier, use to distuguish between multiple local players
+  name:         'mojs-player', // name for the player - mainly used for localstorage identifier, use to distinguish between multiple local players
+  onToggleHide(isHidden) {  // should be called after user taps on the hide-button (isHidden is a boolean, indicating the visibility state of the player)
+    if (isHidden) {
+      // do something when player is invisible
+    } else {
+      // do something when player is visible
+    }
+  }
 });
 ```
 

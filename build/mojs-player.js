@@ -173,6 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.isHidden = false;
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
+	    this._defaults.onToggleHide = null;
 
 	    this.revision = '0.43.16';
 
@@ -594,6 +595,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MojsPlayer.prototype._onHideStateChange = function _onHideStateChange(isHidden) {
 	    this._props.isHidden = isHidden;
+	    var onToggleHide = this._props.onToggleHide;
+
+	    if (onToggleHide) {
+	      onToggleHide(isHidden);
+	    }
+
 	    var method = isHidden ? 'add' : 'remove';
 	    this.el.classList[method](CLASSES['is-hidden']);
 	    // enable CSS transition on subsequent calls
@@ -829,14 +836,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	} : function (obj) {
-	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	};
 
 /***/ },
@@ -1294,6 +1301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // Thrash, waste and sodomy: IE GC bug
 	  var iframe = __webpack_require__(24)('iframe')
 	    , i      = enumBugKeys.length
+	    , lt     = '<'
 	    , gt     = '>'
 	    , iframeDocument;
 	  iframe.style.display = 'none';
@@ -1303,7 +1311,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // html.removeChild(iframe);
 	  iframeDocument = iframe.contentWindow.document;
 	  iframeDocument.open();
-	  iframeDocument.write('<script>document.F=Object</script' + gt);
+	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
 	  iframeDocument.close();
 	  createDict = iframeDocument.F;
 	  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
@@ -1321,6 +1329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  } else result = createDict();
 	  return Properties === undefined ? result : dPs(result, Properties);
 	};
+
 
 /***/ },
 /* 32 */
@@ -2633,7 +2642,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  Icons.prototype._render = function _render() {
 	    this.el = this._createElement('div');
 	    this.el.innerHTML = this.getIcons();
@@ -2678,14 +2686,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  Base class for all modules.
 	  Extends _defaults to _props
 	*/
-
 	var Module = function () {
 	  /*
 	    constructor method calls scaffolding methods.
 	  */
-
 	  function Module() {
-	    var o = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	    (0, _classCallCheck3.default)(this, Module);
 
 	    this._o = o;
@@ -2789,7 +2795,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Module.prototype._addMainElement = function _addMainElement() {
-	    var tagName = arguments.length <= 0 || arguments[0] === undefined ? 'div' : arguments[0];
+	    var tagName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'div';
 
 	    var p = this._props;
 
@@ -2974,7 +2980,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  PlayerSlider.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
 	      className: CLASSES['player-slider'],
@@ -3038,7 +3043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  PlayerSlider.prototype.decreaseProgress = function decreaseProgress() {
-	    var amount = arguments.length <= 0 || arguments[0] === undefined ? 0.01 : arguments[0];
+	    var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.01;
 
 	    var progress = this.track._progress;
 	    progress -= amount;
@@ -3055,7 +3060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  PlayerSlider.prototype.increaseProgress = function increaseProgress() {
-	    var amount = arguments.length <= 0 || arguments[0] === undefined ? 0.01 : arguments[0];
+	    var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.01;
 
 	    var progress = this.track._progress;
 	    progress += amount;
@@ -3207,7 +3212,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  Slider.prototype._declareDefaults = function _declareDefaults() {
 	    this._defaults = {
 	      className: '',
@@ -3447,7 +3451,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  Handle.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.minBound = 0;
@@ -3471,7 +3474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Handle.prototype.setProgress = function setProgress(progress) {
-	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	    var isCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
 	    var shift = this._progressToShift(progress);
 	    this._setShift(shift, isCallback);
@@ -3549,7 +3552,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  Handle.prototype._setShift = function _setShift(shift) {
-	    var isCallback = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	    var isCallback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
 	    var p = this._props,
 	        minBound = p.minBound * this._maxWidth,
@@ -6852,7 +6855,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Handle
 	  */
-
 	  Track.prototype._declareDefaults = function _declareDefaults() {
 	    _Handle.prototype._declareDefaults.call(this);
 	    this._defaults.isProgress = true;
@@ -7015,7 +7017,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module.
 	  */
-
 	  Ripple.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.withHold = true;
@@ -7163,7 +7164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*$PX:      1/16rem;*/\n._track_1dpwb_5 {\n  position:           relative;\n  height:             100%\n\n\n}\n._track__track_1dpwb_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  background:           #FFF;\n  box-shadow:           1px 1px 1px rgba(0,0,0,.5)\n\n\n}\n._track__track_1dpwb_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__track-progress_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  height:           3px;\n  width:           0.0625em;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n\n}\n._track__track-progress_1dpwb_1:after {\n  /*content:        '';*/\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer;\n  -webkit-backface-visibility:           hidden;\n          backface-visibility:           hidden\n\n\n}\n._track__ripple_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           0;\n  right:           0;\n  bottom:           0;\n  overflow:           hidden\n  /*background:       black;*/\n  /*z-index:          1;*/\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 {\n  left:           auto;\n  right:           0\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 ._track__track-progress_1dpwb_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n\n}\n._track_1dpwb_5._is-bound_1dpwb_75 ._track__track-progress_1dpwb_1 {\n  background:           #FF512F\n\n\n}\n._track_1dpwb_5._is-y_1dpwb_79 ._track__track_1dpwb_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n._track_1dpwb_5 {\n  position:           relative;\n  height:             100%\n\n\n}\n._track__track_1dpwb_1 {\n  position:           absolute;\n  top:           50%;\n  left:           0;\n  width:           100%;\n  height:           1px;\n  background:           #FFF;\n  box-shadow:           1px 1px 1px rgba(0, 0, 0, .5)\n\n\n}\n._track__track_1dpwb_1:after {\n  content:           '';\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer\n  /*background-color: yellow;*/\n\n\n}\n._track__track-progress_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           50%;\n  margin-top:           -1px;\n  height:           3px;\n  width:           0.0625em;\n  /*background:       $c-orange;*/\n  background:           #FFFFFF;\n  z-index:           1;\n  -webkit-transform-origin:           left center;\n          transform-origin:           left center\n\n\n}\n._track__track-progress_1dpwb_1:after {\n  /*content:        '';*/\n  position:           absolute;\n  left:           0;\n  top:           -20px;\n  width:           100%;\n  height:           40px;\n  cursor:           pointer;\n  -webkit-backface-visibility:           hidden;\n          backface-visibility:           hidden\n\n\n}\n._track__ripple_1dpwb_1 {\n  position:           absolute;\n  left:           0;\n  top:           0;\n  right:           0;\n  bottom:           0;\n  overflow:           hidden\n  /*background:       black;*/\n  /*z-index:          1;*/\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 {\n  left:           auto;\n  right:           0\n\n\n}\n._track_1dpwb_5._is-inversed_1dpwb_66 ._track__track-progress_1dpwb_1 {\n  -webkit-transform-origin:           right center;\n          transform-origin:           right center\n\n\n}\n._track_1dpwb_5._is-bound_1dpwb_75 ._track__track-progress_1dpwb_1 {\n  background:           #FF512F\n\n\n}\n._track_1dpwb_5._is-y_1dpwb_79 ._track__track_1dpwb_1 {\n  top:           0;\n  left:           50%;\n  height:           100%;\n  width:           1px\n  /*box-shadow:       calc( $PX ) calc( $PX ) calc( $PX ) rgba(0,0,0,.5); */\n\n\n}\n", ""]);
 
 	// exports
 
@@ -7330,7 +7331,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Button
 	  */
-
 	  IconButton.prototype._declareDefaults = function _declareDefaults() {
 	    _Button.prototype._declareDefaults.call(this);
 	    this._defaults.icon = '';
@@ -7409,7 +7409,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  Icon.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.shape = '';
@@ -7567,7 +7566,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  Button.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.link = null;
@@ -7830,7 +7828,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Module
 	  */
-
 	  SpeedControl.prototype._declareDefaults = function _declareDefaults() {
 	    _Module.prototype._declareDefaults.call(this);
 	    this._defaults.isOn = false;
@@ -7858,7 +7855,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  SpeedControl.prototype.decreaseSpeed = function decreaseSpeed() {
-	    var amount = arguments.length <= 0 || arguments[0] === undefined ? 0.01 : arguments[0];
+	    var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.01;
 
 	    var p = this._props;
 	    p.progress -= amount;
@@ -7875,7 +7872,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  SpeedControl.prototype.increaseSpeed = function increaseSpeed() {
-	    var amount = arguments.length <= 0 || arguments[0] === undefined ? 0.01 : arguments[0];
+	    var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.01;
 
 	    var p = this._props;
 	    p.progress += amount;
@@ -8073,7 +8070,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ OpacitySwitch
 	  */
-
 	  LabelButton.prototype._declareDefaults = function _declareDefaults() {
 	    _ButtonSwitch.prototype._declareDefaults.call(this);
 	    this._defaults.title = 'speed (reset: alt + 1)';
@@ -8167,7 +8163,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ Button
 	  */
-
 	  ButtonSwitch.prototype._declareDefaults = function _declareDefaults() {
 	    _Button.prototype._declareDefaults.call(this);
 	    this._defaults.isOn = false;
@@ -8181,7 +8176,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  ButtonSwitch.prototype.on = function on() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	    var isCallback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
 	    // set to true because the next step is toggle
 	    this._props.isOn = true;
@@ -8195,7 +8190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  ButtonSwitch.prototype.off = function off() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	    var isCallback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
 	    // set to true because the next step is toggle
 	    this._props.isOn = false;
@@ -8253,7 +8248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  ButtonSwitch.prototype._reactOnStateChange = function _reactOnStateChange() {
-	    var isCallback = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
+	    var isCallback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 
 	    if (isCallback) {
 	      this._callIfFunction(this._props.onStateChange, this._props.isOn);
@@ -8467,7 +8462,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ ButtonSwitch
 	  */
-
 	  PlayButton.prototype._declareDefaults = function _declareDefaults() {
 	    _IconFork.prototype._declareDefaults.call(this);
 	    this._defaults.icon1 = 'pause';
@@ -8539,7 +8533,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @overrides @ Icon
 	    @returns this
 	  */
-
 	  IconFork.prototype._render = function _render() {
 	    _ButtonSwitch.prototype._render.call(this);
 	    this.el.classList.add(CLASSES['icon-fork']);
@@ -8819,7 +8812,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ OpacitySwitch
 	  */
-
 	  RepeatButton.prototype._declareDefaults = function _declareDefaults() {
 	    _OpacitySwitch.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'repeat';
@@ -8890,7 +8882,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ ButtonSwitch
 	  */
-
 	  OpacitySwitch.prototype._declareDefaults = function _declareDefaults() {
 	    _ButtonSwitch.prototype._declareDefaults.call(this);
 	    this._defaults.icon = '';
@@ -9074,7 +9065,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @private
 	    @overrides @ RepeatButton
 	  */
-
 	  BoundsButton.prototype._declareDefaults = function _declareDefaults() {
 	    _RepeatButton.prototype._declareDefaults.call(this);
 	    this._defaults.icon = 'bounds';
@@ -9261,7 +9251,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._mojs-player_12g93_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:         40px;\n  background:     rgba( 58, 8, 57, .85 );\n  z-index:        100;\n}\n\n._mojs-player_12g93_4 * {\n  box-sizing: border-box;\n}\n\n._mojs-player__left_12g93_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n}\n\n._mojs-player__mid_12g93_1 {\n  position:       absolute;\n  left:       175px;\n  right:       17.5px;\n  overflow:       hidden;\n  padding:       0 20px;\n}\n\n._mojs-player__right_12g93_1 {\n  position:       absolute;\n  right:       0;\n}\n\n._mojs-player__hide-button_12g93_1 {\n  position:       absolute;\n  right:       6px;\n  bottom:       100%;\n}\n\n._mojs-player__mojs-logo_12g93_1 [data-component=\"icon\"] {\n  fill:       #FF512F;\n}\n\n._mojs-player_12g93_4._is-hidden_12g93_51 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%);\n}\n\n._mojs-player_12g93_4._is-transition_12g93_54 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out;\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._mojs-player_12g93_4 {\n  position:       fixed;\n  left:           0;\n  bottom:         0;\n  width:          100%;\n  height:         40px;\n  background:     rgba(58, 8, 57, .85);\n  z-index:        100;\n}\n\n._mojs-player_12g93_4 * {\n  box-sizing: border-box;\n}\n\n._mojs-player__left_12g93_1 {\n  position:       absolute;\n  left:       0;\n  width:       175px;\n}\n\n._mojs-player__mid_12g93_1 {\n  position:       absolute;\n  left:       175px;\n  right:       17.5px;\n  overflow:       hidden;\n  padding:       0 20px;\n}\n\n._mojs-player__right_12g93_1 {\n  position:       absolute;\n  right:       0;\n}\n\n._mojs-player__hide-button_12g93_1 {\n  position:       absolute;\n  right:       6px;\n  bottom:       100%;\n}\n\n._mojs-player__mojs-logo_12g93_1 [data-component=\"icon\"] {\n  fill:       #FF512F;\n}\n\n._mojs-player_12g93_4._is-hidden_12g93_51 {\n  -webkit-transform:       translateY(100%);\n          transform:       translateY(100%);\n}\n\n._mojs-player_12g93_4._is-transition_12g93_54 {\n  -webkit-transition:       all .15s ease-out;\n  transition:       all .15s ease-out;\n}\n", ""]);
 
 	// exports
 
