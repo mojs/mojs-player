@@ -46,6 +46,7 @@ class MojsPlayer extends Module {
     this._defaults.onPlayStateChange = null;
     this._defaults.onSeekStart = null;
     this._defaults.onSeekEnd = null;
+    this._defaults.onProgress = null;
 
     this.revision = '0.43.16';
 
@@ -504,6 +505,11 @@ class MojsPlayer extends Module {
       } while ( start + this._props.precision < progress );
     }
     this.timeline.setProgress( progress );
+
+    const { onProgress } = this._props;
+    if (onProgress) {
+      onProgress(progress);
+    }
   }
   /*
     Method that is invoked on timeline's right bound progress.
