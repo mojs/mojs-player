@@ -174,6 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 	    this._defaults.onToggleHide = null;
+	    this._defaults.onPlayStateChange = null;
 
 	    this.revision = '0.43.16';
 
@@ -584,6 +585,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this._play();
 	    } else {
 	      this._sysTween.pause();
+	    }
+
+	    var onPlayStateChange = this._props.onPlayStateChange;
+
+	    if (onPlayStateChange) {
+	      onPlayStateChange(isPlay);
 	    }
 	  };
 	  /*

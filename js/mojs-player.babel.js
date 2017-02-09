@@ -43,6 +43,7 @@ class MojsPlayer extends Module {
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
     this._defaults.onToggleHide = null;
+    this._defaults.onPlayStateChange = null;
 
     this.revision = '0.43.16';
 
@@ -393,6 +394,11 @@ class MojsPlayer extends Module {
   _onPlayStateChange ( isPlay ) {
     this._props.isPlaying = isPlay;
     if ( isPlay ) { this._play(); } else { this._sysTween.pause(); }
+
+    const { onPlayStateChange } = this._props;
+    if (onPlayStateChange) {
+      onPlayStateChange(isPlay);
+    }
   }
   /*
     Callback for hide button change state.
