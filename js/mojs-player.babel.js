@@ -44,6 +44,8 @@ class MojsPlayer extends Module {
     this._defaults.name         = 'mojs-player';
     this._defaults.onToggleHide = null;
     this._defaults.onPlayStateChange = null;
+    this._defaults.onSeekStart = null;
+    this._defaults.onSeekEnd = null;
 
     this.revision = '0.43.16';
 
@@ -245,7 +247,14 @@ class MojsPlayer extends Module {
     @private
     @param {Object} Original event object.
   */
-  _onSeekStart ( e ) { this._sysTween.pause(); }
+  _onSeekStart ( e ) {
+    this._sysTween.pause();
+
+    const { onSeekStart } = this._props;
+    if (onSeekStart) {
+      onSeekStart(e);
+    }
+  }
   /*
     Method that is invoked when user touches the track.
     @private
@@ -255,6 +264,11 @@ class MojsPlayer extends Module {
     clearTimeout( this._endTimer );
     this._endTimer = setTimeout( () => {
       this._props.isPlaying &&this._play();
+
+      const { onSeekEnd } = this._props;
+      if (onSeekEnd) {
+        onSeekEnd(e);
+      }
     }, 20 );
   }
   /*
