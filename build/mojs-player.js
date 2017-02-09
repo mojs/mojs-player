@@ -175,6 +175,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.name = 'mojs-player';
 	    this._defaults.onToggleHide = null;
 	    this._defaults.onPlayStateChange = null;
+	    this._defaults.onSeekStart = null;
+	    this._defaults.onSeekEnd = null;
 
 	    this.revision = '0.43.16';
 
@@ -398,6 +400,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MojsPlayer.prototype._onSeekStart = function _onSeekStart(e) {
 	    this._sysTween.pause();
+
+	    var onSeekStart = this._props.onSeekStart;
+
+	    if (onSeekStart) {
+	      onSeekStart(e);
+	    }
 	  };
 	  /*
 	    Method that is invoked when user touches the track.
@@ -412,6 +420,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    clearTimeout(this._endTimer);
 	    this._endTimer = setTimeout(function () {
 	      _this2._props.isPlaying && _this2._play();
+
+	      var onSeekEnd = _this2._props.onSeekEnd;
+
+	      if (onSeekEnd) {
+	        onSeekEnd(e);
+	      }
 	    }, 20);
 	  };
 	  /*
