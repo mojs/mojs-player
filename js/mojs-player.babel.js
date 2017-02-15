@@ -575,6 +575,14 @@ class MojsPlayer extends Module {
     }
     return Math.abs( hash );
   }
+
+  /*
+    Method to determine if variable is a function
+    @private
+    @param {Function} Function to be guarenteed.
+    @return {Boolean} true/false whether variable reference was a function
+  */
+  _isFunction (fn) { return typeof fn === 'function' }
 }
 
 if ( (typeof define === "function") && define.amd ) {
