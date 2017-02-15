@@ -252,7 +252,7 @@ class MojsPlayer extends Module {
     this._sysTween.pause();
 
     const { onSeekStart } = this._props;
-    if (onSeekStart) {
+    if (this._isFunction(onSeekStart)) {
       onSeekStart(e);
     }
   }
@@ -267,7 +267,7 @@ class MojsPlayer extends Module {
       this._props.isPlaying &&this._play();
 
       const { onSeekEnd } = this._props;
-      if (onSeekEnd) {
+      if (this._isFunction(onSeekEnd)) {
         onSeekEnd(e);
       }
     }, 20 );
@@ -411,7 +411,7 @@ class MojsPlayer extends Module {
     if ( isPlay ) { this._play(); } else { this._sysTween.pause(); }
 
     const { onPlayStateChange } = this._props;
-    if (onPlayStateChange) {
+    if (this._isFunction(onPlayStateChange)) {
       onPlayStateChange(isPlay);
     }
   }
@@ -423,7 +423,7 @@ class MojsPlayer extends Module {
   _onHideStateChange ( isHidden ) {
     this._props.isHidden = isHidden;
     const { onToggleHide } = this._props;
-    if (onToggleHide) {
+    if (this._isFunction(onToggleHide)) {
       onToggleHide(isHidden);
     }
 
@@ -507,7 +507,7 @@ class MojsPlayer extends Module {
     this.timeline.setProgress( progress );
 
     const { onProgress } = this._props;
-    if (onProgress) {
+    if (this._isFunction(onProgress)) {
       onProgress(progress);
     }
   }
@@ -582,7 +582,7 @@ class MojsPlayer extends Module {
     @param {Function} Function to be guarenteed.
     @return {Boolean} true/false whether variable reference was a function
   */
-  _isFunction (fn) { return typeof fn === 'function' }
+  _isFunction (fn) { return typeof fn === 'function'; }
 }
 
 if ( (typeof define === "function") && define.amd ) {
