@@ -404,7 +404,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var onSeekStart = this._props.onSeekStart;
 
-	    if (onSeekStart) {
+	    if (this._isFunction(onSeekStart)) {
 	      onSeekStart(e);
 	    }
 	  };
@@ -424,7 +424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      var onSeekEnd = _this2._props.onSeekEnd;
 
-	      if (onSeekEnd) {
+	      if (_this2._isFunction(onSeekEnd)) {
 	        onSeekEnd(e);
 	      }
 	    }, 20);
@@ -604,7 +604,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var onPlayStateChange = this._props.onPlayStateChange;
 
-	    if (onPlayStateChange) {
+	    if (this._isFunction(onPlayStateChange)) {
 	      onPlayStateChange(isPlay);
 	    }
 	  };
@@ -619,7 +619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._props.isHidden = isHidden;
 	    var onToggleHide = this._props.onToggleHide;
 
-	    if (onToggleHide) {
+	    if (this._isFunction(onToggleHide)) {
 	      onToggleHide(isHidden);
 	    }
 
@@ -724,7 +724,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var onProgress = this._props.onProgress;
 
-	    if (onProgress) {
+	    if (this._isFunction(onProgress)) {
 	      onProgress(progress);
 	    }
 	  };
