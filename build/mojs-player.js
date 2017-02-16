@@ -174,6 +174,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.precision = 0.1;
 	    this._defaults.name = 'mojs-player';
 	    this._defaults.onToggleHide = null;
+	    this._defaults.onPlayStateChange = null;
+	    this._defaults.onSeekStart = null;
+	    this._defaults.onSeekEnd = null;
+	    this._defaults.onProgress = null;
 
 	    this.revision = '0.43.16';
 
@@ -397,6 +401,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  MojsPlayer.prototype._onSeekStart = function _onSeekStart(e) {
 	    this._sysTween.pause();
+
+	    var onSeekStart = this._props.onSeekStart;
+
+	    if (this._isFunction(onSeekStart)) {
+	      onSeekStart(e);
+	    }
 	  };
 	  /*
 	    Method that is invoked when user touches the track.
@@ -411,6 +421,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    clearTimeout(this._endTimer);
 	    this._endTimer = setTimeout(function () {
 	      _this2._props.isPlaying && _this2._play();
+
+	      var onSeekEnd = _this2._props.onSeekEnd;
+
+	      if (_this2._isFunction(onSeekEnd)) {
+	        onSeekEnd(e);
+	      }
 	    }, 20);
 	  };
 	  /*
@@ -585,6 +601,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      this._sysTween.pause();
 	    }
+
+	    var onPlayStateChange = this._props.onPlayStateChange;
+
+	    if (this._isFunction(onPlayStateChange)) {
+	      onPlayStateChange(isPlay);
+	    }
 	  };
 	  /*
 	    Callback for hide button change state.
@@ -597,7 +619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._props.isHidden = isHidden;
 	    var onToggleHide = this._props.onToggleHide;
 
-	    if (onToggleHide) {
+	    if (this._isFunction(onToggleHide)) {
 	      onToggleHide(isHidden);
 	    }
 
@@ -699,6 +721,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      } while (start + this._props.precision < progress);
 	    }
 	    this.timeline.setProgress(progress);
+
+	    var onProgress = this._props.onProgress;
+
+	    if (this._isFunction(onProgress)) {
+	      onProgress(progress);
+	    }
 	  };
 	  /*
 	    Method that is invoked on timeline's right bound progress.
@@ -784,6 +812,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	      hash |= 0; // Convert to 32bit integer
 	    }
 	    return Math.abs(hash);
+	  };
+
+	  /*
+	    Method to determine if variable is a function
+	    @private
+	    @param {Function} Function to be guarenteed.
+	    @return {Boolean} true/false whether variable reference was a function
+	  */
+
+
+	  MojsPlayer.prototype._isFunction = function _isFunction(fn) {
+	    return typeof fn === 'function';
 	  };
 
 	  return MojsPlayer;
