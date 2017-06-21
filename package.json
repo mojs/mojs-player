@@ -1,10 +1,12 @@
 {
   "name": "mojs-player",
   "description": "Player controls for mojs playback",
-  "version": "0.43.16",
+  "version": "0.43.18",
   "license": "MIT",
   "private": false,
-  "scripts": {},
+  "scripts": {
+    "start": "webpack"
+  },
   "main": "build/mojs-player.js",
   "keywords": [
     "mojs",

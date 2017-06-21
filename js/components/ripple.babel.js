@@ -1,8 +1,5 @@
 import Module  from './module';
 
-// require('css/blocks/handle.postcss.css');
-// let CLASSES = require('css/blocks/handle.postcss.css.json');
-
 class Ripple extends Module {
   /*
     Method to declare defaults.
@@ -32,7 +29,9 @@ class Ripple extends Module {
 
     this.el.appendChild(this.curtain);
 
-    this._addRipple();
+    if (mojs.Shape) {
+      this._addRipple();
+    }
   }
   /*
     Method to construct ripple object.
@@ -55,7 +54,7 @@ class Ripple extends Module {
       // duration:     15000,
       // isForce3d:    true,
       onStart:      () => { this.isStart = true; },
-      onUpdate:     this._onUpdate.bind( this ),
+      onUpdate:     this._onUpdate.bind(this),
       onComplete:   () => { this.isStart = false; }
     });
   }
@@ -64,11 +63,14 @@ class Ripple extends Module {
     @private
     @param {Number} Curret progress [0...1].
   */
-  _onUpdate ( p ) {
-    if ( !this._props.withHold ) { return; }
-    if ( p >= .15 && this.isStart && !this.isRelease ) {
+  _onUpdate(p) {
+    if (!this._props.withHold) { return; }
+    if (p >= .15 && this.isStart && !this.isRelease) {
       this.isStart = false;
-      this.shape.setSpeed( .02 );
+
+      if (mojs.Shape) {
+        this.shape.setSpeed(.02);
+      }
     }
   }
   /*
@@ -78,7 +80,10 @@ class Ripple extends Module {
   _release () {
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
-    this.shape.setSpeed( 1 ).play();
+
+    if (mojs.Shape) {
+      this.shape.setSpeed( 1 ).play();
+    }
   }
   /*
     Method that should be run on touch serface hold.
@@ -90,7 +95,9 @@ class Ripple extends Module {
         y = ( e.offsetY != null ) ? e.offsetY : e.layerY;
 
     this.isRelease = false;
-    this.shape.tune({ x: x, y: y }).replay();
+    if (mojs.Shape) {
+      this.shape.tune({ x: x, y: y }).replay();
+    }
   }
   /*
     Method that should be run on touch serface cancel.
@@ -99,10 +106,13 @@ class Ripple extends Module {
   _cancel () {
     if ( !this._props.withHold ) { return; }
     this.isRelease = true;
-    this.shape
-      .pause()
-      .setSpeed( 1 )
-      .playBackward();
+
+    if (mojs.Shape) {
+      this.shape
+        .pause()
+        .setSpeed( 1 )
+        .playBackward();
+    }
   }
 }
 

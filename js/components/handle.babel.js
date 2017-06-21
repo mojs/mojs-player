@@ -92,17 +92,30 @@ class Handle extends Module {
     @param {Boolean} If should invoke onProgress callback.
     @returns {Number}.
   */
-  _setShift ( shift, isCallback = true ) {
+  _setShift(shift, isCallback = true) {
     let p        = this._props,
         minBound = p.minBound*this._maxWidth,
         maxBound = p.maxBound*this._maxWidth;
 
-    shift = mojs.h.clamp( shift, minBound, maxBound );
+    shift = this.clamp(shift, minBound, maxBound );
     this._applyShift( shift );
-    if ( isCallback ) { this._onProgress( shift ); }
+    if (isCallback) { this._onProgress( shift ); }
     else { this._progress = this._shiftToProgress( shift ); }
     return shift;
   }
+
+  /**
+   * clamp - functiboundson to clamp a `value` between `min` and `max`
+   *
+   * @param  {Number} value Value to clamp.
+   * @param  {Number} min Min bound
+   * @param  {Number} max Max bound
+   * @return {Number} Clamped value.
+   */
+  clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
   /*
     Method to apply shift to the DOMElement.
     @private
@@ -145,7 +158,7 @@ class Handle extends Module {
   _addMainClasses () {
     super._addMainClasses();
 
-    let p         = this._props,
+    let p = this._props,
         classList = this.el.classList;
 
     classList.add( CLASSES.handle );
