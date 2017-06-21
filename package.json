@@ -4,7 +4,9 @@
   "version": "0.43.16",
   "license": "MIT",
   "private": false,
-  "scripts": {},
+  "scripts": {
+    "start": "webpack"
+  },
   "main": "build/mojs-player.js",
   "keywords": [
     "motion",

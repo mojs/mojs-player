@@ -1,4 +1,3 @@
-
 @import '../assets/globals.postcss.css';
 
 .speed-control {
@@ -21,8 +20,8 @@
 
     background:       $c-purple;
 
-    $translateSize : calc( -99999999 * $PX );
-    transform:        translate($translateSize, $translateSize);
+    $translateSize: calc( -99999999 * $PX );
+    transform: translate($translateSize, $translateSize);
     backface-visibility: hidden;
 
     &:before,
@@ -48,6 +47,5 @@
 
   &.is-on &__slider {
     transform: translate(0, 0);
-
   }
 }

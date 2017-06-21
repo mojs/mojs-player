@@ -36,17 +36,18 @@
     <script>
       var el = document.querySelector( '#js-el' );
       var tw = new mojs.Tween({
-        duration:  4000,
+        duration: 4000,
         onUpdate (p) {
+          // console.log(p);
           el.style.transform = `translateX(${ 1000 * p }px) translateZ(0)`;
         }
       });
 
-      var tm = new mojs.Timeline;
-      tm.add( tw, new mojs.Shape({ delay: 1000, 'left': '50%', top: '50%' }) );
+      // var tm = new mojs.Timeline;
+      // tm.add(tw);
 
       var mojsPlayer = new MojsPlayer({
-        add:          tm,
+        add:          tw,
         isPlaying:    true,
         // progress:     .5,
         speed:        1,
