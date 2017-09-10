@@ -17,7 +17,7 @@ The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 [CDN](https://www.jsdelivr.com/):
 
 ```
-<script src="//cdn.jsdelivr.net/mojs-player/latest/mojs-player.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/mojs-player@latest/build/mojs-player.min.js"></script>
 ```
 
 [NPM](https://www.npmjs.com/):
