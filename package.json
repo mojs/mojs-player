@@ -1,5 +1,5 @@
 {
-  "name": "mojs-player",
+  "name": "@mojs/player",
   "description": "GUI player to control your animations",
   "version": "0.43.16",
   "license": "MIT",
