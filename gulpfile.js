@@ -37,37 +37,37 @@ var credits = ''
 
 gulp.task('babel-lib', function(e){
   return gulp.src(paths.src.babel)
-    .pipe(plumber())
-    .pipe(babel({ presets: ['es2015-loose'], plugins: [ 'transform-runtime' ] }))
-    .pipe(rename(function (path) {
-        return path.basename = path.basename.replace('.babel', '');
-      })
-    ).pipe(gulp.dest('lib/'))
-  });
+  .pipe(plumber())
+  .pipe(babel({ presets: ['es2015-loose'], plugins: [ 'transform-runtime' ] }))
+  .pipe(rename(function (path) {
+    return path.basename = path.basename.replace('.babel', '');
+  })
+).pipe(gulp.dest('lib/'))
+});
 
 gulp.task('minify', function() {
   return gulp.src(distMoFile)
-          .pipe(plumber())
-          .pipe(livereload())
-          .pipe(insert.transform(function(contents) {
-            return credits + contents;
-          }))
-          .pipe(gulp.dest('./build'))
-          .pipe(uglify())
-          .pipe(insert.transform(function(contents) {
-            return credits + contents;
-          }))
-          .pipe(rename('mojs-player.min.js'))
-          .pipe(gulp.dest('./build'))
+  .pipe(plumber())
+  .pipe(livereload())
+  .pipe(insert.transform(function(contents) {
+    return credits + contents;
+  }))
+  .pipe(gulp.dest('./build'))
+  .pipe(uglify())
+  .pipe(insert.transform(function(contents) {
+    return credits + contents;
+  }))
+  .pipe(rename('mojs-player.min.js'))
+  .pipe(gulp.dest('./build'))
 });
 
 gulp.task('attribute-lib', function() {
   return gulp.src(libMainFile)
-          .pipe(plumber())
-          .pipe(insert.transform(function(contents) {
-            return credits + contents;
-          }))
-          .pipe(gulp.dest('./lib'))
+  .pipe(plumber())
+  .pipe(insert.transform(function(contents) {
+    return credits + contents;
+  }))
+  .pipe(gulp.dest('./lib'))
 });
 
 gulp.task('update-version', function() {
@@ -76,34 +76,34 @@ gulp.task('update-version', function() {
 
 gulp.task('get-current-version', function(e){
   return gulp.src('package.json')
-          .pipe(plumber())
-          .pipe(jeditor(function (json) {
-            currentVersion = json.version;
-            credits = '/*! \n\t:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.\n\tOleg Solomka @LegoMushroom 2016 MIT\n\t' + currentVersion + ' \n*/\n\n'
-            return json;
-          }))
-  });
+  .pipe(plumber())
+  .pipe(jeditor(function (json) {
+    currentVersion = json.version;
+    credits = '/*! \n\t:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.\n\tOleg Solomka @LegoMushroom 2016 MIT\n\t' + currentVersion + ' \n*/\n\n'
+    return json;
+  }))
+});
 
 gulp.task('update-bower-version', function(e){
   return gulp.src('bower.json')
-          .pipe(plumber())
-          .pipe(jeditor(function (json) {
-            json.version = currentVersion;
-            return json;
-          }))
-          .pipe(gulp.dest(''))
-  });
+  .pipe(plumber())
+  .pipe(jeditor(function (json) {
+    json.version = currentVersion;
+    return json;
+  }))
+  .pipe(gulp.dest(''))
+});
 
 gulp.task('update-main-file-version', function(e){
   return gulp.src('js/mojs-player.babel.js')
-          .pipe(plumber())
-          .pipe(insert.transform(function(contents) {
-            var newString =  'revision = \''+currentVersion+'\'';
-            return contents
-              .replace(/revision\s+?\=\s+?(\'|\")\d+\.\d+\.+\d+(\'|\")/i, newString);
-          }))
-          .pipe(gulp.dest('js/'))
-  });
+  .pipe(plumber())
+  .pipe(insert.transform(function(contents) {
+    var newString =  'revision = \''+currentVersion+'\'';
+    return contents
+    .replace(/revision\s+?\=\s+?(\'|\")\d+\.\d+\.+\d+(\'|\")/i, newString);
+  }))
+  .pipe(gulp.dest('js/'))
+});
 
 gulp.task('default', function(){
   livereload.listen();
@@ -113,11 +113,3 @@ gulp.task('default', function(){
   gulp.watch(libMainFile,     [ 'attribute-lib' ]);
   gulp.watch('package.json', ['update-version']);
 });
-
-
-
-
-
-
-
-

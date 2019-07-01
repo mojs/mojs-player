@@ -2,15 +2,15 @@
 @import '../assets/globals.postcss.css';
 
 .hide-button {
-  
+
   width:        calc( 22 * $PX );
   height:       calc( 16 * $PX );
-  
+
   background:   $c-purple;
 
   border-top-left-radius:  $BRADIUS;
   border-top-right-radius: $BRADIUS;
-  
+
   &__icon {
     position:     absolute;
     left:         50%;
@@ -22,7 +22,6 @@
   }
 
   &.is-hidden &__icon {
-    transform:    translate( -50%, -65% ) rotate( 180deg ); 
+    transform:    translate( -50%, -65% ) rotate( 180deg );
   }
 }
-

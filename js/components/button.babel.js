@@ -99,7 +99,7 @@ class Button extends Module {
     @param {Object} Original event object.
   */
   _doubleTap ( e ) {
-    this._callIfFunction( this._props.onDoubleTap ); 
+    this._callIfFunction( this._props.onDoubleTap );
   }
 }
 
