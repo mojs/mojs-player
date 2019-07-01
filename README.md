@@ -1,8 +1,8 @@
-# mojs-player
+# @mojs/player
 
 GUI player to control your animations.
 
-![mojs-player](logo.png "mojs-player")
+![@mojs/player](logo.png "@mojs/player")
 
 Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations. It is just a debug tool that gives you the ability to:
 - control your sequences with `GUI` while working on them
@@ -18,11 +18,10 @@ The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 
 ```console
 # cdn
-<script src="//cdn.jsdelivr.net/mojs-player/latest/mojs-player.min.js"></script>
+<script src="//cdn.jsdelivr.net/@mojs/player/latest/mojs-player.min.js"></script>
 
 # npm
-[sudo] npm install mojs-player
-
+[sudo] npm install @mojs/player
 # bower
 bower install mojs-player
 ```
@@ -33,7 +32,7 @@ Import `MojsPlayer` constructor to your code, depending on your environment:
 const MojsPlayer = require('mojs-player').default;
 
 // or
-import MojsPlayer from 'mojs-player';
+import MojsPlayer from '@mojs/player';
 ```
 
 > If you installed it with script link — you should have `MojsPlayer` global
