@@ -7,12 +7,12 @@
   "scripts": {},
   "main": "build/mojs-player.js",
   "keywords": [
-    "mojs",
     "motion",
+    "graphics",
+    "toolbelt",
     "effects",
     "animation",
-    "motion",
-    "motion graphics",
+    "mojs",
     "player"
   ],
   "author": {
