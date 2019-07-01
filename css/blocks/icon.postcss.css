@@ -7,7 +7,7 @@ $size: 12;
   width:        calc( 12 * $PX );
   height:       calc( 12 * $PX );
   cursor:       pointer;
-  
+
   & > svg {
     position:   absolute;
     left:       0;
@@ -29,10 +29,9 @@ $size: 12;
     bottom:     0;
     z-index:    1;
   }
-  
+
   &.is-x2 {
     width:      calc( 16*$PX );
     height:     calc( 16*$PX );
   }
 }
-

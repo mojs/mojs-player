@@ -90,7 +90,7 @@ class ButtonSwitch extends Button {
   _setState () {
     // console.log('change');
   }
- 
+
 }
 
 export default ButtonSwitch;

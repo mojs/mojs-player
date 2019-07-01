@@ -23,7 +23,7 @@ class OpacitySwitch extends ButtonSwitch {
   _render () {
     super._render();
     this.el.classList.add( CLASSES[ 'opacity-switch' ] );
-    
+
     let p    = this._props,
         icon = new Icon({
           parent:     this.el,
