@@ -1,66 +1,67 @@
 # mojs-player
 
+GUI player to control your animations.
+
 ![mojs-player](logo.png "mojs-player")
 
 Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences. To be clear, this player is not needed to play `mojs` animations. It is just a debug tool that gives you the ability to:
- - control your sequences with `GUI` while working on them
- - it saves the current progress of your animation thus you don't loose the `focus`
- - it gives you `bounds` to constrain `focus point` of your animation
- - it gives you the control over the speed of animation
- - it gives you the ability to seek animations freely
- - it saves player's state and settings thus they not get lost when page reloaded
+- control your sequences with `GUI` while working on them
+- it saves the current progress of your animation thus you don't loose the `focus`
+- it gives you `bounds` to constrain `focus point` of your animation
+- it gives you the control over the speed of animation
+- it gives you the ability to seek animations freely
+- it saves player's state and settings thus they not get lost when page reloaded
 
 ## Installation
 
 The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 
-[CDN](https://www.jsdelivr.com/):
-
-```
+```console
+# cdn
 <script src="//cdn.jsdelivr.net/mojs-player/latest/mojs-player.min.js"></script>
-```
 
-[NPM](https://www.npmjs.com/):
-
-```
+# npm
 [sudo] npm install mojs-player
-```
 
-[Bower](http://bower.io/):
-
-```
+# bower
 bower install mojs-player
 ```
 
-Import `MojsPlayer` constructor to your code (depends on your environment) :
+Import `MojsPlayer` constructor to your code, depending on your environment:
 
 ```javascript
 const MojsPlayer = require('mojs-player').default;
+
 // or
 import MojsPlayer from 'mojs-player';
 ```
 
-If you installed it with script link — you should have `MojsPlayer` global.
+> If you installed it with script link — you should have `MojsPlayer` global
 
 ## Usage
 
-Construct `MojsPlayer` and pass your main `Tween/Timeline` as the `add` option:
+Construct `MojsPlayer` and pass your main `Tween/Timeline` to the `add` option:
 
 ```javascript
-// const mainTimeline = new mojs.Timeline({});
-// .. some code regarding timeline ..
-const mojsPlayer = new MojsPlayer({ add: mainTimeline });
+// create the timeline
+const mainTimeline = new mojs.Timeline({});
+
+// add the timeline to the player
+const mojsPlayer = new MojsPlayer({
+  add: mainTimeline
+});
 ```
 
-The `add` option is the **only required option** to launch. Player's controls should appear at the bottom of the page.
+> The `add` option is the **only required option** to launch: player's controls should appear at the bottom of the page when ready
 
 You can also set other player initial state:
 
 ```javascript
-// ..
 const mojsPlayer = new MojsPlayer({
+
   // required
-  add:      mainTimeline,
+  add:          mainTimeline,
+
   // optionally
   className:    '',         // class name to add to main HTMLElement
   isSaveState:  true,       // determines if should preserve state on page reload
@@ -107,19 +108,19 @@ const mojsPlayer = new MojsPlayer({
 
 Install [webpack](https://webpack.github.io/) globally:
 
-```tiddlywiki
+```console
 [sudo] npm install webpack -g
 ```
 
 Install dependencies with [npm](https://www.npmjs.com/):
 
-```
+```console
 [sudo] npm install
 ```
 
 Run [webpack](https://webpack.github.io/):
 
-```
+```console
 webpack
 ```
 
