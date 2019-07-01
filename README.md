@@ -1,4 +1,4 @@
-# @mojs/player
+# @mojs/player – [![npm](https://img.shields.io/npm/v/@mojs/player.svg)](https://www.npmjs.com/package/@mojs/player)
 
 GUI player to control your animations.
 
