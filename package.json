@@ -1,6 +1,6 @@
 {
   "name": "mojs-player",
-  "description": "Player controls for mojs playback",
+  "description": "GUI player to control your animations",
   "version": "0.43.16",
   "license": "MIT",
   "private": false,
