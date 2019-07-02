@@ -22,6 +22,7 @@ The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 
 # npm
 [sudo] npm install @mojs/player
+
 # bower
 bower install mojs-player
 ```
