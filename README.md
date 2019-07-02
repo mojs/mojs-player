@@ -18,7 +18,7 @@ The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 
 ```console
 # cdn
-<script src="//cdn.jsdelivr.net/@mojs/player/latest/mojs-player.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mojs/player"></script>
 
 # npm
 [sudo] npm install @mojs/player
