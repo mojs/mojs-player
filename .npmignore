@@ -1,0 +1,9 @@
+mockups/
+css/
+lib/
+js/
+.editorconfig
+index.html
+bower.json
+gulpfile.js
+webpack.config.js
