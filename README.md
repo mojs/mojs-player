@@ -21,10 +21,7 @@ The `MojsPlayer` depends on `mojs >= 0.225.2` so make sure you link it first.
 <script src="https://cdn.jsdelivr.net/npm/@mojs/player"></script>
 
 # npm
-[sudo] npm install @mojs/player
-
-# bower
-bower install mojs-player
+npm i @mojs/player
 ```
 
 Import `MojsPlayer` constructor to your code, depending on your environment:
