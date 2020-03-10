@@ -1,6 +1,6 @@
 {
-  "name": "mojs-player",
-  "description": "Player controls for mojs playback",
+  "name": "@mojs/player",
+  "description": "GUI player to control your animations",
   "version": "0.43.19",
   "license": "MIT",
   "private": false,
@@ -9,33 +9,34 @@
   },
   "main": "build/mojs-player.js",
   "keywords": [
-    "mojs",
     "motion",
+    "graphics",
+    "toolbelt",
     "effects",
     "animation",
-    "motion",
-    "motion graphics",
+    "mojs",
     "player"
   ],
   "author": {
-    "name": "LegoMushroom",
+    "name": "Oleg Solomka",
     "email": "legomushroom@gmail.com",
-    "twitter": "@legomushroom",
-    "url": "https://github.com/legomushroom/"
+    "url": "https://twitter.com/legomushroom",
+    "github": "@legomushroom"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/legomushroom/mojs-player.git"
+    "url": "git+https://github.com/mojs/mojs-player.git"
   },
   "bugs": {
-    "url": "https://github.com/legomushroom/mojs-player/issues"
+    "url": "https://github.com/mojs/mojs-player/issues"
   },
-  "homepage": "https://github.com/legomushroom/mojs-player",
+  "homepage": "https://github.com/mojs/mojs-player",
   "dependencies": {
     "classlist-polyfill": "^1.0.2",
     "hammerjs": "^2.0.6"
   },
   "devDependencies": {
+    "@mojs/core": "^0.288.1",
     "autoprefixer": "^6.3.5",
     "babel-core": "^6.7.6",
     "babel-loader": "^6.2.4",

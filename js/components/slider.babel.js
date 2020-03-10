@@ -95,12 +95,12 @@ class Slider extends Module {
   */
   _render () {
     var p = this._props;
-    
+
     if ( !p.isBound ) {
       let el        = this._createElement( 'div' ),
           classList = el.classList;
       this.el = el;
-      
+
       this.inner = this._createElement( 'div' );
       this.inner.classList.add( CLASSES[ 'slider__inner' ] )
       this.el.appendChild( this.inner );

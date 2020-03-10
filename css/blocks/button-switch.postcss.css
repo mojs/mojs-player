@@ -4,7 +4,7 @@
 .button-switch {
   position:     relative;
   display:      inline-block;
-  
+
   & > .icon {
     position: absolute;
   }
@@ -19,4 +19,3 @@
     z-index:    1;
   }
 }
-

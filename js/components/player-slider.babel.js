@@ -126,7 +126,7 @@ class PlayerSlider extends Module {
     this.rightBound.setProgress( p.rightProgress );
     this.track.setProgress( p.progress );
     this.leftBound.setProgress( p.leftProgress );
-    
+
     p.parent.appendChild( this.el );
 
   }

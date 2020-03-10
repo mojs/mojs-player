@@ -42,6 +42,11 @@ class MojsPlayer extends Module {
     this._defaults.isHidden     = false;
     this._defaults.precision    = 0.1;
     this._defaults.name         = 'mojs-player';
+    this._defaults.onToggleHide = null;
+    this._defaults.onPlayStateChange = null;
+    this._defaults.onSeekStart = null;
+    this._defaults.onSeekEnd = null;
+    this._defaults.onProgress = null;
 
     this._play = this._play.bind(this);
 
@@ -245,7 +250,14 @@ class MojsPlayer extends Module {
     @private
     @param {Object} Original event object.
   */
-  _onSeekStart ( e ) { this._sysTween.pause(); }
+  _onSeekStart ( e ) {
+    this._sysTween.pause();
+
+    const { onSeekStart } = this._props;
+    if (this._isFunction(onSeekStart)) {
+      onSeekStart(e);
+    }
+  }
   /*
     Method that is invoked when user touches the track.
     @private
@@ -391,6 +403,11 @@ class MojsPlayer extends Module {
   _onPlayStateChange ( isPlay ) {
     this._props.isPlaying = isPlay;
     if ( isPlay ) { this._play(); } else { this._sysTween.pause(); }
+
+    const { onPlayStateChange } = this._props;
+    if (this._isFunction(onPlayStateChange)) {
+      onPlayStateChange(isPlay);
+    }
   }
   /*
     Callback for hide button change state.
@@ -399,6 +416,11 @@ class MojsPlayer extends Module {
   */
   _onHideStateChange ( isHidden ) {
     this._props.isHidden = isHidden;
+    const { onToggleHide } = this._props;
+    if (this._isFunction(onToggleHide)) {
+      onToggleHide(isHidden);
+    }
+
     let method = ( isHidden ) ? 'add' : 'remove';
     this.el.classList[ method ]( CLASSES[ 'is-hidden' ] );
     // enable CSS transition on subsequent calls
@@ -543,6 +565,14 @@ class MojsPlayer extends Module {
     }
     return Math.abs( hash );
   }
+
+  /*
+    Method to determine if variable is a function
+    @private
+    @param {Function} Function to be guarenteed.
+    @return {Boolean} true/false whether variable reference was a function
+  */
+  _isFunction (fn) { return typeof fn === 'function'; }
 }
 
 if ( (typeof define === "function") && define.amd ) {
