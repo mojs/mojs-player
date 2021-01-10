@@ -48,7 +48,9 @@ class MojsPlayer extends Module {
     this._defaults.onSeekEnd = null;
     this._defaults.onProgress = null;
 
-    this.revision = '0.43.16';
+    this._play = this._play.bind(this);
+
+    this.revision = '0.44.00';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
@@ -264,12 +266,7 @@ class MojsPlayer extends Module {
   _onSeekEnd ( e ) {
     clearTimeout( this._endTimer );
     this._endTimer = setTimeout( () => {
-      this._props.isPlaying &&this._play();
-
-      const { onSeekEnd } = this._props;
-      if (this._isFunction(onSeekEnd)) {
-        onSeekEnd(e);
-      }
+      this._props.isPlaying && this._play();
     }, 20 );
   }
   /*
@@ -283,24 +280,26 @@ class MojsPlayer extends Module {
     // check whether the `add` option meets the next criterias:
     let isUndefined = typeof add === 'undefined';
 
-    if ( !isUndefined ) { add = add.timeline || add; }
+    if ( !isUndefined ) { add = add.timeline || add.tween || add; }
 
-    let isTween     = add instanceof mojs.Tween;
-    let isTimeline  = add instanceof mojs.Timeline;
+    let isAdd = !!add.setProgress;
 
-    if ( isUndefined || !( isTween || isTimeline ) ) {
+    if ( isUndefined || !isAdd ) {
       throw new Error('MojsPlayer expects Tween/Timeline/Module as `add` option in constructor call. [ new MojsPlayer({ add: new mojs.Tween }); ]');
       return;
     }
 
-    this.timeline.add( this._o.add );
+    this.timeline.add(this._o.add);
+
+    const { _props } = this.timeline;
+    const duration = (_props.repeatTime !== void 0) ? _props : _props.delay + _props.duration;
 
     this._sysTween = new mojs.Tween({
-      easing:          'linear.none',
-      duration:        this.timeline._props.repeatTime,
-      onProgress:      this._onSysProgress.bind( this ),
-      onComplete:      this._onSysTweenComplete.bind( this ),
-      onPlaybackStop:  () => { this._setPlayState( 'off' ); },
+      easing: 'linear.none',
+      duration,
+      onUpdate: this._onSysProgress.bind( this ),
+      onComplete: this._onSysTweenComplete.bind( this ),
+      onPlaybackStop: () => { this._setPlayState( 'off' ); },
       onPlaybackPause: () => { this._setPlayState( 'off' ); },
       onPlaybackStart: () => { this._setPlayState( 'on' ); }
     });
@@ -310,8 +309,8 @@ class MojsPlayer extends Module {
     @private
     @param {Number} Progress value [0...1].
   */
-  _onSysProgress ( p ) {
-    this.playerSlider.setTrackProgress( p );
+  _onSysProgress(p) {
+    this.playerSlider.setTrackProgress(p);
 
     let rightBound = ( this._props.isBounds ) ? this._props.rightBound : 1,
         leftBound  = ( this._props.isBounds ) ? this._props.leftBound : -1;
@@ -321,18 +320,14 @@ class MojsPlayer extends Module {
     // different when piped thru tween, so add `0.01` gap to soften that
     if ( p < leftBound - 0.01 && p !== 0 ) {
       this._reset();
-      requestAnimationFrame(this._play.bind(this));
+      requestAnimationFrame(this._play);
     }
 
     if ( p >= rightBound ) {
-
       this._reset( rightBound === 1 );
 
-      // if ( rightBound === 1 ) { this._sysTween.stop( ); }
-      // else { this._reset() }
-
-      if ( this._props.isRepeat ) {
-        requestAnimationFrame(this._play.bind(this));
+      if (this._props.isRepeat) {
+        requestAnimationFrame(this._play);
       } else { this._props.isPlaying = false; }
     }
   }
@@ -340,14 +335,14 @@ class MojsPlayer extends Module {
     Method to play system tween from progress.
     @private
   */
-  _play () {
-    let p         = this._props,
-        leftBound = ( p.isBounds ) ? p.leftBound : p.progress,
-        progress  = ( p.progress >= this._getBound( 'right' ) )
+  _play() {
+    const p = this._props;
+    let leftBound = (p.isBounds) ? p.leftBound : p.progress;
+    let progress = (p.progress >= this._getBound('right'))
           ? leftBound : p.progress;
 
-    if (progress === 1) { progress = ( p.isBounds ) ? p.leftBound : 0 };
-    if ( progress !== 0 ) { this._sysTween.setProgress( progress ); };
+    if (progress === 1) { progress = (p.isBounds) ? p.leftBound : 0 };
+    if (progress !== 0) { this._sysTween.setProgress(progress); };
 
     this._sysTween.play();
   }
@@ -356,22 +351,21 @@ class MojsPlayer extends Module {
     @param {Boolean} If should not set progress to 0.
     @private
   */
-  _reset (isPause) {
+  _reset(isPause) {
     this._sysTween.reset();
 
-    if ( !isPause ) {
-      // this.timeline.pause();
-      const p        = this._props,
-            progress = p.progress;
-
-      let   start = progress,
-            leftBound = ( p.isBounds ) ? p.leftBound : 0;
-
-      while ( (start - p.precision) >= leftBound ) {
-        start -= p.precision;
-        this.timeline.setProgress( start );
-      }
-    }
+    // if ( !isPause ) {
+    //   const p        = this._props,
+    //         progress = p.progress;
+    //
+    //   let   start = progress,
+    //         leftBound = (p.isBounds) ? p.leftBound : 0;
+    //
+    //   // while ( (start - p.precision) >= leftBound ) {
+    //   //   start -= p.precision;
+    //   //   this.timeline.setProgress( start );
+    //   // }
+    // }
 
     this.timeline.reset();
   }
@@ -438,14 +432,14 @@ class MojsPlayer extends Module {
     Method that is invoked on stop button tap.
     @private
   */
-  _onStop ( ) {
+  _onStop() {
     const p = this._props;
     p.isPlaying = false;
 
     const leftBound = ( p.isBounds ) ? p.leftBound : 0;
     // set sysTween progress twice because it could be _reset already
-    this._sysTween.setProgress( leftBound + 0.01 );
-    this._sysTween.setProgress( leftBound );
+    this._sysTween.setProgress(leftBound + 0.01);
+    this._sysTween.setProgress(leftBound);
 
     this._reset();
   }
@@ -471,45 +465,41 @@ class MojsPlayer extends Module {
     @param {Number} Speed value.
     @param {Number} Slider progress.
   */
-  _onSpeedChange ( speed, progress ) {
+  _onSpeedChange(speed, progress) {
     this._props[ 'raw-speed' ] = progress;
     this._props.speed = speed;
-    this._sysTween.setSpeed( speed );
+    this._sysTween.setSpeed(speed);
   }
   /*
     Method that is invoked on speed state change.
     @private
     @param {Boolean} Speed control state.
   */
-  _onIsSpeed ( isOn ) { this._props.isSpeed = isOn; }
+  _onIsSpeed(isOn) { this._props.isSpeed = isOn; }
   /*
     Method that is invoked on timeline's left bound progress.
     @private
     @param {Number} Progress value [0...1].
   */
-  _onLeftProgress ( progress ) { this._props.leftBound = progress; }
+  _onLeftProgress(progress) { this._props.leftBound = progress; }
   /*
     Method that is invoked on timeline progress.
     @private
     @param {Number} Progress value [0...1].
   */
-  _onProgress ( progress ) {
+  _onProgress(progress) {
     this._props.progress = progress;
     // if timeline was reset - refresh it's state
     // by incremental updates until progress (0 always)
-    if ( !this.timeline._prevTime && progress > 0 ) {
-      let start = 0;
-      do {
-        this.timeline.setProgress( start );
-        start += this._props.precision;
-      } while ( start + this._props.precision < progress );
-    }
-    this.timeline.setProgress( progress );
-
-    const { onProgress } = this._props;
-    if (this._isFunction(onProgress)) {
-      onProgress(progress);
-    }
+    // if ( !this.timeline._prevTime && progress > 0 ) {
+    //   let start = 0;
+    //   do {
+    //     this.timeline.setProgress( start );
+    //     start += this._props.precision;
+    //   } while ( start + this._props.precision < progress );
+    // }
+    // console.log(`timeline.setProgress: ${progress}`);
+    this.timeline.setProgress(progress);
   }
   /*
     Method that is invoked on timeline's right bound progress.

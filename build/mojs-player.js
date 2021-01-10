@@ -1,3 +1,9 @@
+/*! 
+	:: MojsPlayer :: Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.
+	Oleg Solomka @LegoMushroom 2016 MIT
+	0.44.0 
+*/
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -179,7 +185,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._defaults.onSeekEnd = null;
 	    this._defaults.onProgress = null;
 
-	    this.revision = '0.43.16';
+	    this._play = this._play.bind(this);
+
+	    this.revision = '0.44.0';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
@@ -445,23 +453,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var isUndefined = typeof add === 'undefined';
 
 	    if (!isUndefined) {
-	      add = add.timeline || add;
+	      add = add.timeline || add.tween || add;
 	    }
 
-	    var isTween = add instanceof mojs.Tween;
-	    var isTimeline = add instanceof mojs.Timeline;
+	    var isAdd = !!add.setProgress;
 
-	    if (isUndefined || !(isTween || isTimeline)) {
+	    if (isUndefined || !isAdd) {
 	      throw new Error('MojsPlayer expects Tween/Timeline/Module as `add` option in constructor call. [ new MojsPlayer({ add: new mojs.Tween }); ]');
 	      return;
 	    }
 
 	    this.timeline.add(this._o.add);
 
+	    var _props = this.timeline._props;
+
+	    var duration = _props.repeatTime !== void 0 ? _props : _props.delay + _props.duration;
+
 	    this._sysTween = new mojs.Tween({
 	      easing: 'linear.none',
-	      duration: this.timeline._props.repeatTime,
-	      onProgress: this._onSysProgress.bind(this),
+	      duration: duration,
+	      onUpdate: this._onSysProgress.bind(this),
 	      onComplete: this._onSysTweenComplete.bind(this),
 	      onPlaybackStop: function onPlaybackStop() {
 	        _this3._setPlayState('off');
@@ -492,18 +503,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // different when piped thru tween, so add `0.01` gap to soften that
 	    if (p < leftBound - 0.01 && p !== 0) {
 	      this._reset();
-	      requestAnimationFrame(this._play.bind(this));
+	      requestAnimationFrame(this._play);
 	    }
 
 	    if (p >= rightBound) {
-
 	      this._reset(rightBound === 1);
 
-	      // if ( rightBound === 1 ) { this._sysTween.stop( ); }
-	      // else { this._reset() }
-
 	      if (this._props.isRepeat) {
-	        requestAnimationFrame(this._play.bind(this));
+	        requestAnimationFrame(this._play);
 	      } else {
 	        this._props.isPlaying = false;
 	      }
@@ -516,9 +523,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	  MojsPlayer.prototype._play = function _play() {
-	    var p = this._props,
-	        leftBound = p.isBounds ? p.leftBound : p.progress,
-	        progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
+	    var p = this._props;
+	    var leftBound = p.isBounds ? p.leftBound : p.progress;
+	    var progress = p.progress >= this._getBound('right') ? leftBound : p.progress;
 
 	    if (progress === 1) {
 	      progress = p.isBounds ? p.leftBound : 0;
@@ -539,19 +546,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	  MojsPlayer.prototype._reset = function _reset(isPause) {
 	    this._sysTween.reset();
 
-	    if (!isPause) {
-	      // this.timeline.pause();
-	      var p = this._props,
-	          progress = p.progress;
-
-	      var start = progress,
-	          leftBound = p.isBounds ? p.leftBound : 0;
-
-	      while (start - p.precision >= leftBound) {
-	        start -= p.precision;
-	        this.timeline.setProgress(start);
-	      }
-	    }
+	    // if ( !isPause ) {
+	    //   const p        = this._props,
+	    //         progress = p.progress;
+	    //
+	    //   let   start = progress,
+	    //         leftBound = (p.isBounds) ? p.leftBound : 0;
+	    //
+	    //   // while ( (start - p.precision) >= leftBound ) {
+	    //   //   start -= p.precision;
+	    //   //   this.timeline.setProgress( start );
+	    //   // }
+	    // }
 
 	    this.timeline.reset();
 	  };
@@ -713,13 +719,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this._props.progress = progress;
 	    // if timeline was reset - refresh it's state
 	    // by incremental updates until progress (0 always)
-	    if (!this.timeline._prevTime && progress > 0) {
-	      var start = 0;
-	      do {
-	        this.timeline.setProgress(start);
-	        start += this._props.precision;
-	      } while (start + this._props.precision < progress);
-	    }
+	    // if ( !this.timeline._prevTime && progress > 0 ) {
+	    //   let start = 0;
+	    //   do {
+	    //     this.timeline.setProgress( start );
+	    //     start += this._props.precision;
+	    //   } while ( start + this._props.precision < progress );
+	    // }
+	    // console.log(`timeline.setProgress: ${progress}`);
 	    this.timeline.setProgress(progress);
 
 	    var onProgress = this._props.onProgress;
@@ -3598,7 +3605,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        minBound = p.minBound * this._maxWidth,
 	        maxBound = p.maxBound * this._maxWidth;
 
-	    shift = mojs.h.clamp(shift, minBound, maxBound);
+	    shift = this.clamp(shift, minBound, maxBound);
 	    this._applyShift(shift);
 	    if (isCallback) {
 	      this._onProgress(shift);
@@ -3607,6 +3614,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    return shift;
 	  };
+
+	  /**
+	   * clamp - functiboundson to clamp a `value` between `min` and `max`
+	   *
+	   * @param  {Number} value Value to clamp.
+	   * @param  {Number} min Min bound
+	   * @param  {Number} max Max bound
+	   * @return {Number} Clamped value.
+	   */
+
+
+	  Handle.prototype.clamp = function clamp(value, min, max) {
+	    return Math.min(Math.max(value, min), max);
+	  };
+
 	  /*
 	    Method to apply shift to the DOMElement.
 	    @private
@@ -7041,9 +7063,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// require('css/blocks/handle.postcss.css');
-	// let CLASSES = require('css/blocks/handle.postcss.css.json');
-
 	var Ripple = function (_Module) {
 	  (0, _inherits3.default)(Ripple, _Module);
 
@@ -7082,7 +7101,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this.el.appendChild(this.curtain);
 
-	    this._addRipple();
+	    if (mojs.Shape) {
+	      this._addRipple();
+	    }
 	  };
 	  /*
 	    Method to construct ripple object.
@@ -7120,7 +7141,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    if (p >= .15 && this.isStart && !this.isRelease) {
 	      this.isStart = false;
-	      this.shape.setSpeed(.02);
+
+	      if (mojs.Shape) {
+	        this.shape.setSpeed(.02);
+	      }
 	    }
 	  };
 	  /*
@@ -7134,7 +7158,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    this.isRelease = true;
-	    this.shape.setSpeed(1).play();
+
+	    if (mojs.Shape) {
+	      this.shape.setSpeed(1).play();
+	    }
 	  };
 	  /*
 	    Method that should be run on touch serface hold.
@@ -7148,7 +7175,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        y = e.offsetY != null ? e.offsetY : e.layerY;
 
 	    this.isRelease = false;
-	    this.shape.tune({ x: x, y: y }).replay();
+	    if (mojs.Shape) {
+	      this.shape.tune({ x: x, y: y }).replay();
+	    }
 	  };
 	  /*
 	    Method that should be run on touch serface cancel.
@@ -7161,7 +7190,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return;
 	    }
 	    this.isRelease = true;
-	    this.shape.pause().setSpeed(1).playBackward();
+
+	    if (mojs.Shape) {
+	      this.shape.pause().setSpeed(1).playBackward();
+	    }
 	  };
 
 	  return Ripple;
@@ -8443,7 +8475,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._speed-control_1mxm4_4 {\n  position:       relative;\n  display:        inline-block;\n  height:         40px\n}\n\n._speed-control__slider_1mxm4_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  width:       30px;\n  height:       120px;\n  padding-top:       20px;\n  padding-bottom:       20px;\n  border-top-right-radius:       3px;\n  border-top-left-radius:       3px;\n  background:       #3A0839;\n  -webkit-transform:       translate(-99999999px, -99999999px);\n          transform:       translate(-99999999px, -99999999px);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n\n._speed-control__slider_1mxm4_1:before, ._speed-control__slider_1mxm4_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  height:       1px;\n  background:       #FFF\n}\n\n._speed-control__slider_1mxm4_1:before {\n  left:       5px\n}\n\n._speed-control__slider_1mxm4_1:after {\n  right:       5px\n}\n\n._speed-control__button_1mxm4_1 {\n  border:       1px solid cyan\n}\n\n._speed-control_1mxm4_4._is-on_1mxm4_49 ._speed-control__slider_1mxm4_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n", ""]);
+	exports.push([module.id, "/*$PX:      1/16rem;*/\n\n._speed-control_1jd3z_3 {\n  position:       relative;\n  display:        inline-block;\n  height:         40px\n}\n\n._speed-control__slider_1jd3z_1 {\n  position:       absolute;\n  bottom:       100%;\n  left:       3px;\n  width:       30px;\n  height:       120px;\n  padding-top:       20px;\n  padding-bottom:       20px;\n  border-top-right-radius:       3px;\n  border-top-left-radius:       3px;\n  background:       #3A0839;\n  -webkit-transform:       translate(-99999999px, -99999999px);\n          transform:       translate(-99999999px, -99999999px);\n  -webkit-backface-visibility:       hidden;\n          backface-visibility:       hidden\n}\n\n._speed-control__slider_1jd3z_1:before, ._speed-control__slider_1jd3z_1:after {\n  content:       '';\n  position:       absolute;\n  top:       50%;\n  width:       3px;\n  height:       1px;\n  background:       #FFF\n}\n\n._speed-control__slider_1jd3z_1:before {\n  left:       5px\n}\n\n._speed-control__slider_1jd3z_1:after {\n  right:       5px\n}\n\n._speed-control__button_1jd3z_1 {\n  border:       1px solid cyan\n}\n\n._speed-control_1jd3z_3._is-on_1jd3z_48 ._speed-control__slider_1jd3z_1 {\n  -webkit-transform:       translate(0, 0);\n          transform:       translate(0, 0)\n}\n", ""]);
 
 	// exports
 
@@ -8453,10 +8485,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports) {
 
 	module.exports = {
-		"speed-control": "_speed-control_1mxm4_4",
-		"speed-control__slider": "_speed-control__slider_1mxm4_1",
-		"speed-control__button": "_speed-control__button_1mxm4_1",
-		"is-on": "_is-on_1mxm4_49"
+		"speed-control": "_speed-control_1jd3z_3",
+		"speed-control__slider": "_speed-control__slider_1jd3z_1",
+		"speed-control__button": "_speed-control__button_1jd3z_1",
+		"is-on": "_is-on_1jd3z_48"
 	};
 
 /***/ },
