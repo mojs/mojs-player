@@ -50,7 +50,7 @@ class MojsPlayer extends Module {
 
     this._play = this._play.bind(this);
 
-    this.revision = '0.43.19';
+    this.revision = '0.44.00';
 
     let str = this._fallbackTo( this._o.name, this._defaults.name );
     str += ( str === this._defaults.name ) ? '' : `__${this._defaults.name}`;
