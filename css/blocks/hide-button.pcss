@@ -1,0 +1,28 @@
+@import "../variables.pcss";
+
+$hide-button-width: 22px;
+$hide-button-height: 16px;
+$hide-button-icon-width: 8px;
+$hide-button-icon-height: 8px;
+
+.hide-button {
+  width: $hide-button-width;
+  height: $hide-button-height;
+  background: $purple;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
+  &__icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: $hide-button-icon-width;
+    height: $hide-button-icon-height;
+    margin-top: 1px;
+    transform: translate(-50%, -50%);
+  }
+
+  &.is-hidden &__icon {
+    transform: translate(-50%, -65%) rotate(180deg);
+  }
+}

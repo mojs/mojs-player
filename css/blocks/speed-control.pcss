@@ -1,0 +1,56 @@
+@import "../variables.pcss";
+
+$speed-control-height: 40px;
+$speed-control-padding: 20px;
+$speed-control-translate-size: -99999999px;
+$speed-control-shift: 5px;
+
+.speed-control {
+  position: relative;
+  display: inline-block;
+  height: $speed-control-height;
+
+  &__slider {
+    position: absolute;
+    bottom: 100%;
+    left: 3px;
+    width: 30px;
+    height: calc((80px + (2 * $speed-control-padding)));
+    padding-top: $speed-control-padding;
+    padding-bottom: $speed-control-padding;
+    border-top-right-radius: $border-radius;
+    border-top-left-radius: $border-radius;
+    background: $purple;
+    transform: translate(
+      $speed-control-translate-size,
+      $speed-control-translate-size
+    );
+    backface-visibility: hidden;
+
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 3px;
+      height: 1px;
+      background: $white;
+    }
+
+    &:before {
+      left: $speed-control-shift;
+    }
+
+    &:after {
+      right: $speed-control-shift;
+    }
+  }
+
+  &__button {
+    border: 1px solid cyan;
+  }
+
+  &.is-on &__slider {
+    transform: translate(0, 0);
+  }
+}

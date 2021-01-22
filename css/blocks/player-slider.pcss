@@ -1,0 +1,19 @@
+@import "../variables.pcss";
+
+$player-slider-height: 40px;
+
+.player-slider {
+  height: $player-slider-height;
+
+  > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+  }
+
+  .slider {
+    z-index: 1;
+    height: 100%;
+  }
+}

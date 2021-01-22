@@ -1,0 +1,18 @@
+@import "../variables.pcss";
+
+$label-button-font-size: 9px;
+$label-button-letter-spacing: 0.5px;
+
+.label-button {
+  font-family: Arial, sans-serif;
+  font-size: $label-button-font-size;
+  letter-spacing: $label-button-letter-spacing;
+  color: white;
+
+  &__label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

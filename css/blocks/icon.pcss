@@ -1,0 +1,39 @@
+@import "../variables.pcss";
+
+$icon-default-size: 12px;
+$icon-x2-size: 16px;
+
+.icon {
+  position: relative;
+  width: $icon-default-size;
+  height: $icon-default-size;
+  cursor: pointer;
+
+  > svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    fill: inherit;
+
+    > use {
+      fill: inherit;
+    }
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  &.is-x2 {
+    width: $icon-x2-size;
+    height: $icon-x2-size;
+  }
+}

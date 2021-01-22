@@ -1,0 +1,99 @@
+@import "../variables.pcss";
+
+$handle-size: 13px;
+$handle-dound-size: 9px;
+$handle-dound-inner-size: 40px;
+
+.handle {
+  width: $handle-size;
+  height: $handle-size;
+  cursor: pointer;
+  transform: translateX(0);
+  backface-visibility: hidden;
+
+  &__inner,
+  &__shadow {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  &__inner {
+    background: #fff;
+  }
+
+  &__shadow {
+    box-shadow: 1px 1px 2px black;
+    opacity: 0.35;
+    z-index: 0;
+  }
+
+  &:hover &__inner,
+  &:hover &__shadow {
+    transform: scale(1.1);
+  }
+
+  &:active &__inner {
+    transform: scale(1.2);
+  }
+
+  &:active &__shadow {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+
+  &.is-bound {
+    width: $handle-dound-size;
+    height: calc(($handle-dound-size + 1px) * 2);
+    margin-left: calc($handle-dound-size * -1);
+    margin-top: calc(($handle-dound-size + 1px) * -1);
+  }
+
+  &.is-bound &__inner {
+    background: $orange;
+
+    &:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      margin-top: calc($handle-dound-inner-size / 2 * -1);
+      width: 1px;
+      height: $handle-dound-inner-size;
+      background: $orange;
+    }
+  }
+
+  &.is-bound &__inner,
+  &.is-bound &__shadow {
+    border-top-left-radius: $border-radius;
+    border-bottom-left-radius: $border-radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &.is-inversed {
+    margin-left: 0;
+  }
+
+  &.is-inversed &__shadow {
+    box-shadow: -1px 1px 2px black;
+  }
+
+  &.is-inversed &__inner {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+
+    &:after {
+      right: auto;
+      left: 0;
+    }
+  }
+}

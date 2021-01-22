@@ -1,0 +1,24 @@
+@import "../variables.pcss";
+
+.opacity-switch {
+  opacity: 0.5;
+
+  .icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+  &.is-on {
+    opacity: 1;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}

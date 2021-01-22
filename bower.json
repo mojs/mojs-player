@@ -1,32 +1,12 @@
 {
   "name": "mojs-player",
-  "version": "0.44.00",
+  "version": "0.45.0",
   "description": "Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.",
   "main": "build/mojs-player.min.js",
-  "authors": [
-    "Oleg Solomka"
-  ],
+  "authors": ["Oleg Solomka"],
   "license": "MIT",
-  "keywords": [
-    "motion",
-    "effects",
-    "animation",
-    "motion",
-    "graphics",
-    "player"
-  ],
+  "keywords": ["motion", "effects", "animation", "motion", "graphics", "player"],
   "homepage": "https://github.com/legomushroom/mojs-player",
-  "moduleType": [
-    "amd",
-    "node",
-    "es6",
-    "globals"
-  ],
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ]
+  "moduleType": ["amd", "node", "es6", "globals"],
+  "ignore": ["**/.*", "node_modules", "bower_components", "test", "tests"]
 }

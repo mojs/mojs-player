@@ -1,0 +1,79 @@
+@import "../variables.pcss";
+
+$track-height: 40px;
+
+.track {
+  position: relative;
+  height: 100%;
+
+  &__track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: $white;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: calc(-$track-height / 2);
+      width: 100%;
+      height: $track-height;
+      cursor: pointer;
+    }
+  }
+
+  &__track-progress {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -1px;
+    height: 3px;
+    width: 0.0625em;
+    background: $white;
+    z-index: 1;
+    transform-origin: left center;
+
+    &:after {
+      position: absolute;
+      left: 0;
+      top: calc(-$track-height / 2);
+      width: 100%;
+      height: $track-height;
+      cursor: pointer;
+      backface-visibility: hidden;
+    }
+  }
+
+  &__ripple {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  &.is-inversed {
+    left: auto;
+    right: 0;
+  }
+
+  &.is-inversed &__track-progress {
+    transform-origin: right center;
+  }
+
+  &.is-bound &__track-progress {
+    background: $orange;
+  }
+
+  &.is-y &__track {
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 1px;
+  }
+}
