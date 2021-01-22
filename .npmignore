@@ -4,7 +4,10 @@ lib/
 js/
 vendor/
 .editorconfig
+.browserslistrc
 index.html
 bower.json
-gulpfile.js
+gulpfile.babel.js
 webpack.config.js
+postcss.config.js
+babel.config.js

@@ -1,34 +1,33 @@
-var path = require('path');
-var webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+  mode: "production",
   watch:   true,
-  context: __dirname + "/",
   entry: [
-    __dirname + '/js/mojs-player.babel.js'
+    __dirname + '/js/mojs-player.js'
   ],
   module: {
-    loaders: [
-      { test: /\.(json)$/, exclude: /node_modules/, loaders: ['json-loader'] },
-      { test: /\.(jsx|es6.js|babel.js|.js)$/,
+    rules: [
+      { test: /\.(js)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: [ 'es2015-loose', 'babel-preset-stage-2' ],
-          plugins: [ 'transform-runtime' ]
-        }
+        use: 'babel-loader',
       },
-      { test: /\.jade$/, loaders: ['jade'] },
-      { test: /\.(postcss.css)$/,  loader: "style-loader!css-loader!postcss-loader" },
-      { test: /\.html$/, loader: 'raw-loader' },
-      {
-        test: /\.(eot|woff|ttf|svg|png|jpg|wav|mp3)$/,
-        loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]',
-      }
+      { test: /\.(pcss)$/,
+        use: [
+          'style-loader',
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: {
+                localIdentName: "[local]___[hash:base64:5]"
+              },
+            },
+          },
+          'postcss-loader',
+        ],
+      },
     ]
-  },
-  postcss: function () {
-    return [ require('precss'), require('postcss-cssnext'), require('postcss-modules') ];
   },
   output: {
     path:           __dirname + '/build',
@@ -38,14 +37,12 @@ module.exports = {
     libraryTarget:  'umd',
     umdNamedDefine: true
   },
-  plugins: [],
-  resolve: {
-    root: [ path.resolve('./') ],
-    moduleDirectories: ['node_modules'],
-    target: 'node',
-    extensions: [
-      '', '.js', '.es6', '.babel.js', '.coffee',
-      '.postcss.css', '.css', '.json'
-    ]
-  }
+  optimization: {
+    minimize: false,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
+  },
 };
