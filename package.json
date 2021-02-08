@@ -7,7 +7,10 @@
   "scripts": {
     "start": "webpack"
   },
-  "main": "build/mojs-player.js",
+  "source": "js/mojs-player.babel.js",
+  "main": "build/mojs-player.min.js",
+  "browser": "build/mojs-player.min.js",
+  "unpkg": "build/mojs-player.min.js",
   "keywords": [
     "motion",
     "graphics",
