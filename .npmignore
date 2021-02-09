@@ -2,7 +2,6 @@ mockups/
 css/
 lib/
 js/
-vendor/
 .editorconfig
 index.html
 bower.json
