@@ -15,7 +15,7 @@
     "graphics",
     "player"
   ],
-  "homepage": "https://github.com/legomushroom/mojs-player",
+  "homepage": "https://github.com/mojs/mojs-player",
   "moduleType": [
     "amd",
     "node",
