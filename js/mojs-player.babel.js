@@ -221,7 +221,7 @@ class MojsPlayer extends Module {
       className:  CLASSES[ `${ className }__mojs-logo` ],
       icon:       'mojs',
       target:     '_blank',
-      link:       'https://github.com/legomushroom/mojs-player',
+      link:       'https://github.com/mojs/mojs-player',
       title:      'mo • js',
       prefix:     this._props.prefix
     });
