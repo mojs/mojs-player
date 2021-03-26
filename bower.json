@@ -1,7 +1,7 @@
 {
   "name": "mojs-player",
   "version": "1.0.0",
-  "description": "Player controls for [mojs](mojs.io). Intended to help you to craft `mojs` animation sequences.",
+  "description": "Player controls for [mojs](mojs.github.io). Intended to help you to craft `mojs` animation sequences.",
   "main": "build/mojs-player.min.js",
   "authors": [
     "Oleg Solomka"
