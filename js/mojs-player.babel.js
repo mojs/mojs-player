@@ -18,7 +18,7 @@ let CLASSES = require('../css/blocks/mojs-player.postcss.css.json');
 class MojsPlayer extends Module {
   constructor ( o ) {
     if ( typeof mojs === 'undefined' ) {
-      throw new Error(`MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/legomushroom/mojs ] `);
+      throw new Error(`MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/mojs/mojs ] `);
     }
     super( o );
   }
