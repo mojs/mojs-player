@@ -79,7 +79,7 @@ gulp.task('get-current-version', function(e){
   .pipe(plumber())
   .pipe(jeditor(function (json) {
     currentVersion = json.version;
-    credits = '/*! \n\t:: MojsPlayer :: Player controls for [mojs](mojs.github.io). Intended to help you to craft `mojs` animation sequences.\n\tOleg Solomka @LegoMushroom 2016 MIT\n\t' + currentVersion + ' \n*/\n\n'
+    credits = '/*! \n\t:: MojsPlayer :: Player controls for [mojs](mojs.github.io). Intended to help you to craft `mojs` animation sequences.\n\tOleg Solomka @LegoMushroom 2021 MIT\n\t' + currentVersion + ' \n*/\n\n'
     return json;
   }))
 });
