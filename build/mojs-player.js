@@ -147,7 +147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    (0, _classCallCheck3.default)(this, MojsPlayer);
 
 	    if (typeof mojs === 'undefined') {
-	      throw new Error('MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/legomushroom/mojs ] ');
+	      throw new Error('MojsPlayer relies on mojs^0.225.2, please include it before player initialization. [ https://github.com/mojs/mojs ] ');
 	    }
 	    return (0, _possibleConstructorReturn3.default)(this, _Module.call(this, o));
 	  }
