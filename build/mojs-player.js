@@ -181,7 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    this._play = this._play.bind(this);
 
-	    this.revision = '1.0.0';
+	    this.revision = '1.0.1';
 
 	    var str = this._fallbackTo(this._o.name, this._defaults.name);
 	    str += str === this._defaults.name ? '' : '__' + this._defaults.name;
