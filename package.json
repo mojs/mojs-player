@@ -36,7 +36,7 @@
   "homepage": "https://github.com/mojs/mojs-player",
   "engines": {
     "node": "^20",
-    "npm": "^9"
+    "npm": "^10"
   },
   "dependencies": {
     "classlist-polyfill": "^1.0.2",
