@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/mojs/mojs-player",
   "engines": {
-    "node": "^20",
+    "node": "^24",
     "npm": "^11"
   },
   "dependencies": {
